@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#F8F9FA;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#212529}
+  *{box-sizing:border-box;font-variant-numeric:tabular-nums}
+  a{color:#0D6EFD}a:hover{color:#171A1F}
+</style>
+</helmet>
+
+<div style="min-height:100vh;padding:28px 32px 60px;">
+  <h1 style="font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.5px;color:#212529;margin:0;">Subscriptions</h1>
+  <div style="font-size:13px;font-weight:400;line-height:1.5;color:#6C757D;margin-top:4px;">All 12 tracked subscriptions with contract, usage, and ownership details.</div>
+
+  <div style="margin-top:20px;background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;overflow-x:auto;">
+    <div style="min-width:1360px;">
+      <div style="display:grid;grid-template-columns:160px 130px 110px 120px 110px 100px 110px 110px 150px 150px 1fr;border-bottom:1px solid #DEE2E6;background:#F8F9FA;">
+        <sc-for list="{{ headers }}" as="h" hint-placeholder-count="11">
+          <div style="padding:10px 14px;font-size:11px;font-weight:600;line-height:1.4;color:#6C757D;text-transform:uppercase;letter-spacing:0.03em;white-space:nowrap;">{{ h }}</div>
+        </sc-for>
+      </div>
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="12">
+        <div style="display:grid;grid-template-columns:160px 130px 110px 120px 110px 100px 110px 110px 150px 150px 1fr;border-bottom:1px solid #DEE2E6;align-items:center;">
+          <div style="padding:12px 14px;font-size:13px;font-weight:600;line-height:1.5;color:#212529;white-space:nowrap;">{{ r.vendor }}</div>
+          <div style="padding:12px 14px;font-size:13px;font-weight:400;line-height:1.5;color:#6C757D;white-space:nowrap;">{{ r.category }}</div>
+          <div style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#212529;white-space:nowrap;">{{ r.costLabel }}</div>
+          <div style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#212529;white-space:nowrap;">{{ r.renewalDateLabel }}</div>
+          <div style="padding:12px 14px;font-size:12px;">
+            <span style="font-weight:500;padding:3px 8px;border-radius:4px;background:{{ r.typeBg }};color:{{ r.typeFg }};white-space:nowrap;">{{ r.renewalType }}</span>
+          </div>
+          <div style="padding:12px 14px;font-size:13px;font-weight:400;color:#212529;white-space:nowrap;">{{ r.noticePeriodLabel }}</div>
+          <div style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#212529;white-space:nowrap;">{{ r.seatsTotalLabel }}</div>
+          <div style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:{{ r.utilColor }};white-space:nowrap;">{{ r.seatsActiveLabel }}</div>
+          <div style="padding:12px 14px;font-size:13px;font-weight:500;color:{{ r.ownerColor }};white-space:nowrap;">{{ r.ownerLabel }}</div>
+          <div style="padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:{{ r.priceColor }};white-space:nowrap;">{{ r.priceLabel }}</div>
+          <div style="padding:12px 14px;font-size:12px;font-weight:400;line-height:1.4;color:#6C757D;">{{ r.paymentHistory }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;font-size:11px;color:#6C757D;">
+    <span>🟢 Utilization/price healthy</span>
+    <span>🟡 Watch (utilization &lt;60% or price increase)</span>
+    <span>🔴 Needs attention (unassigned, departed owner, or steep increase)</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RAW = [
+  {vendor:"Salesforce",category:"CRM",cost:180000,renewalDate:"Sept 28, 2026",renewalType:"Auto-Renew",noticePeriod:"30 days",seatsTotal:100,seatsActive:47,activeLabel:null,owner:"John Martinez",priceChangePct:15,priceChangeAmt:23400,paymentHistory:"Auto-billed monthly; no issues"},
+  {vendor:"Slack",category:"Communication",cost:45000,renewalDate:"Oct 1, 2026",renewalType:"Auto-Renew",noticePeriod:"30 days",seatsTotal:150,seatsActive:89,activeLabel:null,owner:null,priceChangePct:8,priceChangeAmt:3200,paymentHistory:"Auto-billed monthly; flagged for negotiation last year"},
+  {vendor:"Datadog",category:"Monitoring",cost:65000,renewalDate:"Oct 5, 2026",renewalType:"Auto-Renew",noticePeriod:"60 days",seatsTotal:50,seatsActive:34,activeLabel:null,owner:"Emma Chen",priceChangePct:0,priceChangeAmt:0,paymentHistory:"Auto-billed monthly; locked-in discount until Jan 2026"},
+  {vendor:"GitHub Enterprise",category:"Dev Tools",cost:72000,renewalDate:"Nov 15, 2026",renewalType:"Auto-Renew",noticePeriod:"45 days",seatsTotal:150,seatsActive:120,activeLabel:null,owner:"Rahul Verma",priceChangePct:5,priceChangeAmt:3600,paymentHistory:"Annual prepay; no disputes"},
+  {vendor:"Figma",category:"Design",cost:25000,renewalDate:"Nov 2, 2026",renewalType:"Manual",noticePeriod:"30 days",seatsTotal:20,seatsActive:8,activeLabel:null,owner:"Sara Patel",priceChangePct:12,priceChangeAmt:2400,paymentHistory:"Annual invoice; paid on time"},
+  {vendor:"Notion",category:"Documentation",cost:9000,renewalDate:"Dec 1, 2026",renewalType:"Manual",noticePeriod:"14 days",seatsTotal:100,seatsActive:200,activeLabel:"200+",owner:null,priceChangePct:0,priceChangeAmt:0,paymentHistory:"Team subscription; no payment issues"},
+  {vendor:"Adobe Creative Cloud",category:"Design Tools",cost:38000,renewalDate:"Dec 10, 2026",renewalType:"Auto-Renew",noticePeriod:"60 days",seatsTotal:25,seatsActive:18,activeLabel:null,owner:"Sara Patel",priceChangePct:7,priceChangeAmt:2100,paymentHistory:"Monthly billing; multiple POs across teams"},
+  {vendor:"Okta",category:"Security",cost:52000,renewalDate:"Dec 20, 2026",renewalType:"Auto-Renew",noticePeriod:"90 days",seatsTotal:250,seatsActive:189,activeLabel:null,owner:"Michael Torres",departed:true,priceChangePct:18,priceChangeAmt:7800,paymentHistory:"Auto-billed; last renegotiation pending since June"},
+  {vendor:"Jira Cloud",category:"Project Mgmt",cost:35000,renewalDate:"Jan 8, 2027",renewalType:"Auto-Renew",noticePeriod:"30 days",seatsTotal:200,seatsActive:145,activeLabel:null,owner:"Dev Team Lead",priceChangePct:10,priceChangeAmt:3000,paymentHistory:"Annual prepay; stable relationship"},
+  {vendor:"Stripe",category:"Payments",cost:12000,renewalDate:"Oct 15, 2026",renewalType:"Month-to-Month",noticePeriod:"30 days",seatsTotal:null,seatsActive:null,activeLabel:"Active",owner:"Finance Team",priceChangePct:null,priceChangeAmt:0,paymentHistory:"Usage-based; last month $985 in processing fees"},
+  {vendor:"Microsoft 365",category:"Productivity",cost:48000,renewalDate:"Feb 1, 2027",renewalType:"Auto-Renew",noticePeriod:"60 days",seatsTotal:250,seatsActive:201,activeLabel:null,owner:"IT Director",priceChangePct:6,priceChangeAmt:2500,paymentHistory:"Volume licensing; EA terms under review"},
+  {vendor:"Looker",category:"Analytics",cost:28000,renewalDate:"Mar 15, 2027",renewalType:"Auto-Renew",noticePeriod:"90 days",seatsTotal:15,seatsActive:12,activeLabel:null,owner:"Analytics Lead",priceChangePct:-3,priceChangeAmt:-840,paymentHistory:"Annual contract; early commitment for 2027 lock"}
+];
+const money = n => "$" + Math.abs(Math.round(n)).toLocaleString("en-US");
+
+class Component extends DCLogic {
+  renderVals() {
+    const rows = RAW.map(base => {
+      const unassigned = !base.owner;
+      const departed = !!base.departed;
+      const util = (base.seatsTotal && base.seatsActive != null) ? Math.round((base.seatsActive / base.seatsTotal) * 100) : null;
+      const isTypeAuto = base.renewalType === "Auto-Renew";
+      return {
+        vendor: base.vendor, category: base.category,
+        costLabel: money(base.cost) + "/yr",
+        renewalDateLabel: base.renewalDate,
+        renewalType: base.renewalType,
+        typeBg: isTypeAuto ? "#FFE5CC" : base.renewalType === "Manual" ? "#E9ECEF" : "#D4EDDA",
+        typeFg: isTypeAuto ? "#FD7E14" : base.renewalType === "Manual" ? "#6C757D" : "#28A745",
+        noticePeriodLabel: base.noticePeriod,
+        seatsTotalLabel: base.seatsTotal != null ? base.seatsTotal : "N/A",
+        seatsActiveLabel: base.activeLabel || base.seatsActive,
+        utilColor: util == null ? "#212529" : util < 60 ? "#FD7E14" : util > 150 ? "#FD7E14" : "#28A745",
+        ownerLabel: unassigned ? "⚠️ Unassigned" : departed ? `🚨 ${base.owner} (Departed)` : base.owner,
+        ownerColor: unassigned || departed ? "#DC3545" : "#212529",
+        priceLabel: base.priceChangePct == null ? "Per-transaction" : base.priceChangePct === 0 ? "0% (flat)" : `${base.priceChangePct > 0 ? "+" : ""}${base.priceChangePct}% (${base.priceChangeAmt >= 0 ? "+" : "-"}$${(Math.abs(base.priceChangeAmt)/1000).toFixed(1)}K)`,
+        priceColor: base.priceChangePct == null ? "#6C757D" : base.priceChangePct >= 10 ? "#DC3545" : base.priceChangePct > 0 ? "#FD7E14" : base.priceChangePct < 0 ? "#28A745" : "#212529",
+        paymentHistory: base.paymentHistory
+      };
+    });
+
+    return {
+      headers: ["Vendor","Category","Annual Cost","Renewal Date","Renewal Type","Notice Period","Seats Purchased","Seats Active","Owner","YoY Price Change","Payment History"],
+      rows
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #F8F9FA; font-family: 'IBM Plex Sans', -apple-system, sans-serif; }
+  * { box-sizing: border-box; }
+  a { color: #0D6EFD; }
+  a:hover { color: #0B5ED7; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:grid;grid-template-columns:220px minmax(0,1fr);background:#F5F5FA;">
+  <nav style="background:#FFFFFF;border-right:1px solid #DEE2E6;padding:20px 0;display:flex;flex-direction:column;gap:24px;position:sticky;top:0;height:100vh;">
+    <div style="display:flex;align-items:center;gap:8px;padding:0 20px;">
+      <div style="width:20px;height:20px;border-radius:5px;background:#4F46E5;"></div>
+      <div style="font-size:18px;font-weight:600;color:#212529;">Trellis</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px;padding:0 12px;font-size:13px;">
+      <button onClick="{{ goOverview }}" style="text-align:left;padding:9px 12px;border:none;border-radius:6px;background:{{ overviewNavBg }};color:{{ overviewNavColor }};font-weight:{{ overviewNavWeight }};cursor:pointer;">Overview</button>
+      <button onClick="{{ goInbox }}" style="text-align:left;padding:9px 12px;border:none;border-radius:6px;background:{{ inboxNavBg }};color:{{ inboxNavColor }};font-weight:{{ inboxNavWeight }};cursor:pointer;">Renewal Inbox</button>
+      <div style="padding:9px 12px;color:#ADB5BD;">Owners</div>
+      <div style="padding:9px 12px;color:#ADB5BD;">Reports</div>
+    </div>
+  </nav>
+
+  <div style="min-width:0;">
+    <div style="background:#FFFFFF;border-bottom:1px solid #DEE2E6;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
+      <div style="flex:1;max-width:340px;position:relative;">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#ADB5BD;font-size:13px;">⌕</span>
+        <input placeholder="Search vendors, owners…" style="width:100%;padding:9px 12px 9px 32px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;font-size:13px;color:#212529;"/>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span style="color:#6C757D;font-size:16px;">🔔</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#4F46E5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;">PM</div>
+          <div style="font-size:13px;font-weight:500;color:#212529;">Portfolio Mgr</div>
+        </div>
+      </div>
+    </div>
+
+  <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1280px;width:100%;margin:0 auto;padding:32px 24px 60px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+        <div>
+          <h1 style="font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.5px;color:#212529;margin:0;">Renewal Overview</h1>
+          <div style="font-size:14px;font-weight:400;line-height:1.5;color:#6C757D;margin-top:6px;">Your subscription portfolio at a glance · 12 tracked renewals</div>
+        </div>
+        <div style="background:#F8D7DA;color:#DC3545;padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;white-space:nowrap;">⚠ {{ urgentSumLabel }} at risk</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:24px;">
+        <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="6">
+          <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div style="font-size:12px;font-weight:400;line-height:1.4;color:#6C757D;">{{ m.label }}</div>
+              <div style="width:28px;height:28px;border-radius:6px;background:{{ m.iconBg }};color:{{ m.color }};display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">{{ m.icon }}</div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;line-height:1.3;color:#212529;margin-top:10px;">{{ m.value }}</div>
+            <div style="font-size:12px;font-weight:500;line-height:1.4;color:{{ m.color }};margin-top:4px;">{{ m.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:16px;margin-top:24px;">
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;">Needs Attention</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#6C757D;"><span style="width:8px;height:8px;border-radius:50%;background:#DC3545;"></span>Action required</div>
+          </div>
+          <div style="display:flex;flex-direction:column;margin-top:8px;">
+            <sc-for list="{{ needsAttentionRows }}" as="r" hint-placeholder-count="4">
+              <div onClick="{{ r.goDetail }}" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #E9ECEF;cursor:pointer;gap:12px;">
+                <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                  <div style="width:32px;height:32px;border-radius:6px;background:#E9ECEF;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#6C757D;flex-shrink:0;">{{ r.initial }}</div>
+                  <div style="min-width:0;">
+                    <div style="font-size:14px;font-weight:500;color:#212529;">{{ r.vendor }}</div>
+                    <div style="font-size:11px;color:#6C757D;">{{ r.category }} · {{ r.dateLabel }}</div>
+                  </div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#212529;">{{ r.costLabel }}</div>
+                  <div style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:{{ r.badgeBg }};color:{{ r.badgeFg }};display:inline-block;margin-top:2px;">{{ r.badgeLabel }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;">Upcoming Renewals</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#6C757D;"><span style="width:8px;height:8px;border-radius:50%;background:#28A745;"></span>On track</div>
+          </div>
+          <div style="display:flex;flex-direction:column;margin-top:8px;">
+            <sc-for list="{{ upcomingRows }}" as="r" hint-placeholder-count="4">
+              <div onClick="{{ r.goDetail }}" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #E9ECEF;cursor:pointer;gap:12px;">
+                <div style="min-width:0;">
+                  <div style="font-size:14px;font-weight:500;color:#212529;">{{ r.vendor }}</div>
+                  <div style="font-size:11px;color:#6C757D;">{{ r.category }}</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#212529;">{{ r.costLabel }}</div>
+                  <div style="font-size:11px;color:#6C757D;margin-top:2px;">{{ r.dateLabel }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px;margin-top:16px;">
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;">Seat Utilization</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">Average across 11 seat-based tools</div>
+          <div style="display:flex;justify-content:center;margin-top:16px;">
+            <div style="width:160px;height:160px;border-radius:50%;background:conic-gradient(#4F46E5 {{ gaugeDeg }}deg, #E9ECEF 0deg);display:flex;align-items:center;justify-content:center;">
+              <div style="width:118px;height:118px;border-radius:50%;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                <div style="font-size:26px;font-weight:600;color:#212529;">{{ gaugeLabel }}</div>
+                <div style="font-size:11px;color:#6C757D;">{{ gaugeSub }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;">Renewal Spend by Month</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#6C757D;"><span style="width:8px;height:8px;border-radius:50%;background:#4F46E5;"></span>Annual cost due</div>
+          </div>
+          <svg viewBox="0 0 600 180" style="width:100%;height:180px;margin-top:8px;">
+            <polyline points="{{ chartPoints }}" fill="none" stroke="#4F46E5" stroke-width="2.5"/>
+            <sc-for list="{{ chartDots }}" as="p" hint-placeholder-count="7">
+              <circle cx="{{ p.x }}" cy="{{ p.y }}" r="3.5" fill="#4F46E5"/>
+            </sc-for>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#6C757D;padding:0 4px;">
+            <sc-for list="{{ chartLabels }}" as="l" hint-placeholder-count="7"><span>{{ l }}</span></sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;background:#E9ECEF;border-radius:8px;padding:16px;font-size:12px;font-weight:400;line-height:1.4;color:#6C757D;">
+        Total portfolio includes 12 subscriptions. <a href="#" onClick="{{ goInboxLink }}">View Renewal Inbox</a> to identify which renewals need your immediate attention.
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isInbox }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1280px;width:100%;margin:0 auto;padding:32px 24px 60px;">
+      <h1 style="font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.5px;color:#212529;margin:0;">Renewal Inbox</h1>
+      <div style="font-size:14px;font-weight:400;line-height:1.5;color:#6C757D;margin-top:6px;">Prioritized queue: which renewals need attention, why, and can you still act?</div>
+
+      <div style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;">
+        <sc-for list="{{ filterPills }}" as="p" hint-placeholder-count="3">
+          <button onClick="{{ p.select }}" style="padding:8px 16px;border-radius:4px;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};font-size:13px;font-weight:500;cursor:pointer;">{{ p.label }}</button>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div style="font-size:16px;font-weight:600;line-height:1.3;color:{{ activeGroup.color }};">{{ activeGroup.emoji }} {{ activeGroup.title }}</div>
+        <div style="font-size:12px;font-weight:400;line-height:1.4;color:#6C757D;margin-top:2px;">{{ activeGroup.subheader }}</div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
+          <sc-for list="{{ activeGroup.items }}" as="r" hint-placeholder-count="3">
+            <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;filter:drop-shadow({{ r.shadow }});overflow:hidden;">
+              <div onClick="{{ r.toggle }}" style="padding:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;cursor:pointer;">
+                <div style="min-width:160px;flex:1;">
+                  <div style="font-size:20px;font-weight:600;line-height:1.3;color:#212529;">{{ r.vendor }}</div>
+                  <div style="font-size:11px;font-weight:400;line-height:1.4;color:#6C757D;">{{ r.category }}</div>
+                </div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#212529;min-width:110px;">{{ r.costLabel }}</div>
+                <div style="font-size:13px;font-weight:400;line-height:1.5;color:#212529;min-width:130px;">{{ r.dateLabel }}</div>
+                <div style="font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;background:{{ r.badgeBg }};color:{{ r.badgeFg }};white-space:nowrap;">{{ r.badgeLabel }}</div>
+              </div>
+              <sc-if value="{{ r.expanded }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:0 16px 16px;border-top:1px solid #DEE2E6;padding-top:12px;display:flex;flex-direction:column;gap:8px;">
+                  <sc-if value="{{ r.noticeClosed }}" hint-placeholder-val="{{ false }}">
+                    <div style="background:#FFF3CD;color:#856404;border-radius:4px;padding:10px 12px;font-size:12px;font-weight:400;line-height:1.4;">⚠️ CLOSED — Cannot cancel after {{ r.noticeExpiredLabel }}. Will auto-renew {{ r.renewalDateLabel }}.</div>
+                  </sc-if>
+                  <sc-if value="{{ r.escalated }}" hint-placeholder-val="{{ false }}">
+                    <div style="background:#FFE5CC;color:#FD7E14;border-radius:4px;padding:10px 12px;font-size:12px;font-weight:500;">🚩 Escalated to Finance</div>
+                  </sc-if>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;font-size:13px;font-weight:400;line-height:1.5;color:#212529;">
+                    <div><span style="color:#6C757D;">Owner: </span><span style="color:{{ r.ownerColor }};font-weight:500;">{{ r.ownerLabel }}</span></div>
+                    <div><span style="color:#6C757D;">Price change: </span><span style="color:{{ r.priceColor }};font-family:'IBM Plex Mono',monospace;">{{ r.priceLabel }}</span></div>
+                    <div><span style="color:#6C757D;">Utilization: </span><span style="font-family:'IBM Plex Mono',monospace;color:{{ r.utilColor }};">{{ r.utilLabel }}</span></div>
+                    <div><span style="color:#6C757D;">Renewal type: </span>{{ r.renewalType }}</div>
+                  </div>
+                  <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;" onClick="{{ r.stop }}">
+                    <sc-if value="{{ r.unassigned }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ r.assign }}" style="padding:10px 16px;border-radius:4px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;font-weight:500;cursor:pointer;">Assign</button>
+                    </sc-if>
+                    <sc-if value="{{ r.assigned }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ r.approve }}" disabled="{{ r.approved }}" style="padding:10px 16px;border-radius:4px;border:none;background:#0D6EFD;color:#fff;font-size:13px;font-weight:500;cursor:pointer;opacity:{{ r.approveOpacity }};">{{ r.approveLabel }}</button>
+                      <button onClick="{{ r.escalate }}" style="padding:10px 16px;border-radius:4px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;font-weight:500;cursor:pointer;">Escalate</button>
+                    </sc-if>
+                    <button onClick="{{ r.stop }}" style="padding:10px 16px;border-radius:4px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;font-weight:500;cursor:pointer;">View Details →</button>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ resolved.length }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:24px;">
+          <div style="font-size:16px;font-weight:600;line-height:1.3;color:#28A745;">✅ Resolved</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+            <sc-for list="{{ resolved }}" as="r" hint-placeholder-count="1">
+              <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;color:#6C757D;font-size:13px;">
+                <span>{{ r.vendor }}</span><span style="color:#28A745;">✓ Approved</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="margin-top:24px;background:#E9ECEF;border-radius:8px;padding:16px;">
+        <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;margin-bottom:8px;">Next Steps</div>
+        <div style="font-size:13px;font-weight:400;line-height:1.5;color:#212529;display:flex;flex-direction:column;gap:4px;">
+          <div>• Review Salesforce immediately—notice expired, will auto-renew today</div>
+          <div>• Assign owners to Slack and Notion renewals within 24 hours</div>
+          <div>• Review GitHub and Figma price increases before Oct 15 (60+ days out)</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  </div>
+</div>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#212529;color:#fff;padding:10px 20px;border-radius:4px;font-size:13px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.1));z-index:100;">{{ toast }}</div>
+  </sc-if>
+
+  <sc-if value="{{ assignPickerFor }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeAssignPicker }}" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:60;display:flex;align-items:center;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:320px;background:#FFFFFF;border-radius:8px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.1));padding:20px;">
+        <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;margin-bottom:12px;">Assign Owner</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <sc-for list="{{ teamRoster }}" as="person" hint-placeholder-count="4">
+            <button onClick="{{ person.select }}" style="text-align:left;padding:8px 10px;border-radius:4px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;cursor:pointer;">{{ person.name }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RAW = [
+  {id:1,vendor:"Salesforce",category:"CRM",annualCostINR:14900000,renewalDate:"2026-09-28",daysUntilRenewal:0,renewalType:"Auto-Renew",noticePeriod:30,noticeWindowStatus:"CLOSED",noticeExpiredDate:"2026-08-29",seatsOwned:100,seatsActive:47,owner:"John Martinez",priceChangePercent:15,priceChangeINR:2235000,urgencyLevel:"URGENT"},
+  {id:2,vendor:"Slack",category:"Communication",annualCostINR:3735000,renewalDate:"2026-10-01",daysUntilRenewal:3,renewalType:"Auto-Renew",noticePeriod:30,noticeWindowStatus:"OPEN",noticeExpiredDate:"2026-09-01",seatsOwned:150,seatsActive:89,owner:"UNASSIGNED",priceChangePercent:8,priceChangeINR:298800,urgencyLevel:"URGENT"},
+  {id:3,vendor:"Datadog",category:"Monitoring",annualCostINR:5395000,renewalDate:"2026-10-05",daysUntilRenewal:7,renewalType:"Auto-Renew",noticePeriod:60,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:50,seatsActive:34,owner:"Emma Chen",priceChangePercent:0,priceChangeINR:0,urgencyLevel:"URGENT"},
+  {id:4,vendor:"GitHub Enterprise",category:"Dev Tools",annualCostINR:5976000,renewalDate:"2026-11-15",daysUntilRenewal:48,renewalType:"Auto-Renew",noticePeriod:45,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:150,seatsActive:120,owner:"Rahul Verma",priceChangePercent:5,priceChangeINR:300000,urgencyLevel:"MEDIUM"},
+  {id:5,vendor:"Figma",category:"Design",annualCostINR:2075000,renewalDate:"2026-11-02",daysUntilRenewal:35,renewalType:"Manual",noticePeriod:30,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:20,seatsActive:8,owner:"Sara Patel",priceChangePercent:12,priceChangeINR:240000,urgencyLevel:"MEDIUM"},
+  {id:6,vendor:"Notion",category:"Documentation",annualCostINR:747000,renewalDate:"2026-12-01",daysUntilRenewal:64,renewalType:"Manual",noticePeriod:14,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:100,seatsActive:200,owner:"UNASSIGNED",priceChangePercent:0,priceChangeINR:0,urgencyLevel:"MEDIUM"},
+  {id:7,vendor:"Adobe Creative Cloud",category:"Design Tools",annualCostINR:3154000,renewalDate:"2026-12-10",daysUntilRenewal:73,renewalType:"Auto-Renew",noticePeriod:60,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:25,seatsActive:18,owner:"Sara Patel",priceChangePercent:7,priceChangeINR:210000,urgencyLevel:"UPCOMING"},
+  {id:8,vendor:"Okta",category:"Security",annualCostINR:4316000,renewalDate:"2026-12-20",daysUntilRenewal:83,renewalType:"Auto-Renew",noticePeriod:90,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:250,seatsActive:189,owner:"Michael Torres (DEPARTED)",priceChangePercent:18,priceChangeINR:780000,urgencyLevel:"UPCOMING"},
+  {id:9,vendor:"Jira Cloud",category:"Project Mgmt",annualCostINR:2905000,renewalDate:"2027-01-08",daysUntilRenewal:102,renewalType:"Auto-Renew",noticePeriod:30,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:200,seatsActive:145,owner:"Dev Team Lead",priceChangePercent:10,priceChangeINR:300000,urgencyLevel:"UPCOMING"},
+  {id:10,vendor:"Stripe",category:"Payments",annualCostINR:996000,renewalDate:"2026-10-15",daysUntilRenewal:16,renewalType:"Month-to-Month",noticePeriod:30,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:null,seatsActive:null,owner:"Finance Team",priceChangePercent:0,priceChangeINR:0,urgencyLevel:"MEDIUM"},
+  {id:11,vendor:"Microsoft 365",category:"Productivity",annualCostINR:3984000,renewalDate:"2027-02-01",daysUntilRenewal:126,renewalType:"Auto-Renew",noticePeriod:60,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:250,seatsActive:201,owner:"IT Director",priceChangePercent:6,priceChangeINR:250000,urgencyLevel:"UPCOMING"},
+  {id:12,vendor:"Looker",category:"Analytics",annualCostINR:2324000,renewalDate:"2027-03-15",daysUntilRenewal:168,renewalType:"Auto-Renew",noticePeriod:90,noticeWindowStatus:"OPEN",noticeExpiredDate:null,seatsOwned:15,seatsActive:12,owner:"Analytics Lead",priceChangePercent:-3,priceChangeINR:-70000,urgencyLevel:"UPCOMING"}
+];
+const METRICS = {totalAnnualSpendINR:47708000,urgentRenewalsINR:23795000,mediumRenewalsINR:9819000,upcomingRenewalsINR:14103000,unownedToolsCount:2,unownedToolsCostINR:4482000,toolsWithPriceIncreaseCount:9};
+const ROSTER = ["John Martinez","Emma Chen","Rahul Verma","Sara Patel","Michael Torres","Finance Team","Dev Team Lead","IT Director","Analytics Lead"];
+
+function indianCommas(numAbs) {
+  const s = String(Math.round(numAbs));
+  const last3 = s.length > 3 ? s.slice(-3) : s;
+  let rest = s.length > 3 ? s.slice(0, -3) : "";
+  rest = rest.replace(/\B(?=(\d{2})+(?!\d)$)/g, ",");
+  return rest ? rest + "," + last3 : last3;
+}
+const inrFull = n => (n < 0 ? "-₹" : "₹") + indianCommas(Math.abs(n));
+const inrCr = n => "₹" + (n / 1e7).toFixed(1) + " Cr";
+const inrL = n => (n < 0 ? "-₹" : "+₹") + (Math.abs(n) / 1e5).toFixed(2) + "L";
+const fmtDate = (dateStr, days) => {
+  const label = new Date(dateStr + "T00:00:00").toLocaleDateString("en-US", {month:"short", day:"numeric"});
+  const suffix = days === 0 ? "(TODAY)" : `(${days} days)`;
+  return `${label} ${suffix}`;
+};
+
+class Component extends DCLogic {
+  state = { screen: "overview", expanded: {}, approved: {}, escalated: {}, owners: {}, toast: null, assignPickerFor: null };
+
+  buildRow(base) {
+    const s = this.state;
+    const owner = s.owners[base.id] || base.owner;
+    const unassigned = owner === "UNASSIGNED";
+    const departed = owner.includes("(DEPARTED)");
+    const approved = !!s.approved[base.id];
+    const escalated = !!s.escalated[base.id];
+    const noticeClosed = base.noticeWindowStatus === "CLOSED";
+    const util = base.seatsOwned ? Math.round((base.seatsActive / base.seatsOwned) * 100) : null;
+
+    let badgeLabel, badgeBg, badgeFg;
+    if (unassigned || departed) { badgeLabel = "ASSIGN"; badgeBg = "#F8D7DA"; badgeFg = "#DC3545"; }
+    else if (noticeClosed) { badgeLabel = "CRITICAL"; badgeBg = "#F8D7DA"; badgeFg = "#DC3545"; }
+    else if (base.urgencyLevel === "URGENT") { badgeLabel = "REVIEW"; badgeBg = "#FFF3CD"; badgeFg = "#FD7E14"; }
+    else if (base.urgencyLevel === "MEDIUM") { badgeLabel = "MEDIUM"; badgeBg = "#FFF3CD"; badgeFg = "#FD7E14"; }
+    else { badgeLabel = "ON TRACK"; badgeBg = "#D4EDDA"; badgeFg = "#28A745"; }
+
+    const toggle = () => this.setState(s2 => ({ expanded: { ...s2.expanded, [base.id]: !s2.expanded[base.id] } }));
+    const stop = e => e && e.stopPropagation && e.stopPropagation();
+    const approve = () => { this.setState(s2 => ({ approved: { ...s2.approved, [base.id]: true }, toast: `${base.vendor} approved` })); setTimeout(() => this.setState({ toast: null }), 2200); };
+    const escalate = () => { this.setState(s2 => ({ escalated: { ...s2.escalated, [base.id]: true }, toast: `${base.vendor} escalated to Finance` })); setTimeout(() => this.setState({ toast: null }), 2200); };
+    const assign = () => this.setState({ assignPickerFor: base.id });
+    const goDetail = () => this.setState({ screen: "inbox", expanded: { [base.id]: true } });
+
+    return {
+      id: base.id, vendor: base.vendor, category: base.category,
+      costLabel: inrFull(base.annualCostINR),
+      dateLabel: fmtDate(base.renewalDate, base.daysUntilRenewal),
+      renewalDateLabel: fmtDate(base.renewalDate, base.daysUntilRenewal).split(" (")[0],
+      noticeExpiredLabel: base.noticeExpiredDate ? new Date(base.noticeExpiredDate + "T00:00:00").toLocaleDateString("en-US", {month:"short", day:"numeric"}) : "",
+      renewalType: base.renewalType,
+      badgeLabel, badgeBg, badgeFg,
+      noticeLabel: noticeClosed ? "❌ CLOSED" : "✅ OPEN",
+      noticeBg: noticeClosed ? "#F8D7DA" : "#D4EDDA",
+      noticeFg: noticeClosed ? "#DC3545" : "#28A745",
+      noticeClosed,
+      ownerLabel: unassigned ? "UNASSIGNED" : owner,
+      ownerColor: unassigned ? "#DC3545" : departed ? "#FD7E14" : "#212529",
+      unassigned, assigned: !unassigned, approved, escalated,
+      approveLabel: approved ? "✓ Approved" : "Approve",
+      approveOpacity: approved ? 0.6 : 1,
+      priceLabel: base.priceChangePercent === 0 ? "0%" : `${base.priceChangePercent > 0 ? "+" : ""}${base.priceChangePercent}% (${inrL(base.priceChangeINR)})`,
+      priceColor: base.priceChangePercent > 0 ? "#DC3545" : base.priceChangePercent < 0 ? "#28A745" : "#212529",
+      utilLabel: util != null ? `${base.seatsActive}/${base.seatsOwned} seats (${util}%)` : "Usage-based",
+      utilColor: util != null && util < 75 ? "#FD7E14" : "#28A745",
+      expanded: !!s.expanded[base.id],
+      shadow: s.expanded[base.id] ? "0 4px 8px rgba(0,0,0,0.1)" : "0 2px 4px rgba(0,0,0,0.08)",
+      toggle, stop, approve, escalate, assign, goDetail
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const rows = RAW.map(r => this.buildRow(r));
+    const resolved = rows.filter(r => r.approved);
+    const byLevel = level => rows.filter(r => r.id && !r.approved && RAW.find(x => x.id === r.id).urgencyLevel === level);
+
+    const urgent = byLevel("URGENT"), medium = byLevel("MEDIUM"), upcoming = byLevel("UPCOMING");
+    const groups = {
+      URGENT: { emoji: "🔴", color: "#DC3545", title: "URGENT — Next 30 Days", subheader: `${urgent.length} renewals, ${inrCr(METRICS.urgentRenewalsINR)} at risk • Action required by Sept 30`, items: urgent },
+      MEDIUM: { emoji: "🟡", color: "#FD7E14", title: "MEDIUM — 31-60 Days", subheader: `${medium.length} renewals, ${inrCr(METRICS.mediumRenewalsINR)} • Plan ahead, no immediate action required`, items: medium },
+      UPCOMING: { emoji: "🟢", color: "#28A745", title: "UPCOMING — 60+ Days", subheader: `${upcoming.length} renewals, ${inrCr(METRICS.upcomingRenewalsINR)} • Monitor quarterly forecast`, items: upcoming }
+    };
+    const activeFilter = s.filter || "URGENT";
+    const filterPills = ["URGENT", "MEDIUM", "UPCOMING"].map(f => ({
+      label: f, select: () => this.setState({ filter: f }),
+      bg: activeFilter === f ? "#212529" : "#FFFFFF",
+      fg: activeFilter === f ? "#FFFFFF" : "#212529",
+      border: activeFilter === f ? "#212529" : "#DEE2E6"
+    }));
+
+    const priceUp = RAW.filter(r => r.priceChangeINR > 0);
+    const avgSpike = priceUp.reduce((a, r) => a + r.priceChangeINR, 0) / priceUp.length;
+
+    const urgentBase = RAW.filter(r => r.urgencyLevel === "URGENT");
+    const urgentRows = rows.filter(r => urgentBase.some(b => b.id === r.id));
+
+    const metrics = [
+      { label: "Total Annual Spend", value: inrCr(METRICS.totalAnnualSpendINR), sub: "12 subscriptions", color: "#4F46E5", icon: "$", iconBg: "#EEF2FF" },
+      { label: "URGENT (0-30 days)", value: inrCr(METRICS.urgentRenewalsINR), sub: `${urgentBase.length} renewals`, color: "#DC3545", icon: "🔴", iconBg: "#F8D7DA" },
+      { label: "MEDIUM (31-60 days)", value: inrCr(METRICS.mediumRenewalsINR), sub: `${RAW.filter(r=>r.urgencyLevel==="MEDIUM").length} renewals`, color: "#FD7E14", icon: "🟡", iconBg: "#FFE5CC" },
+      { label: "UPCOMING (60+ days)", value: inrCr(METRICS.upcomingRenewalsINR), sub: `${RAW.filter(r=>r.urgencyLevel==="UPCOMING").length} renewals`, color: "#28A745", icon: "🟢", iconBg: "#D4EDDA" },
+      { label: "Ownership Gaps", value: `${METRICS.unownedToolsCount} tools`, sub: `${inrCr(METRICS.unownedToolsCostINR)} at risk`, color: "#DC3545", icon: "⚠", iconBg: "#F8D7DA" },
+      { label: "Price Spikes", value: `${METRICS.toolsWithPriceIncreaseCount} tools`, sub: `avg ${inrL(avgSpike)}`, color: "#FD7E14", icon: "↗", iconBg: "#FFE5CC" }
+    ];
+
+    const needsAttentionRows = rows.filter(r => ["CRITICAL","ASSIGN","REVIEW"].includes(r.badgeLabel)).slice(0, 4)
+      .map(r => ({ ...r, initial: r.vendor[0], goDetail: () => this.setState({ screen: "inbox", filter: RAW.find(x=>x.id===r.id).urgencyLevel, expanded: { [r.id]: true } }) }));
+    const upcomingRows = rows.filter(r => !["CRITICAL","ASSIGN","REVIEW"].includes(r.badgeLabel)).slice(0, 4)
+      .map(r => ({ ...r, goDetail: () => this.setState({ screen: "inbox", filter: RAW.find(x=>x.id===r.id).urgencyLevel, expanded: { [r.id]: true } }) }));
+
+    const utilVals = RAW.filter(r => r.seatsOwned).map(r => Math.min(100, Math.round((r.seatsActive / r.seatsOwned) * 100)));
+    const avgUtil = Math.round(utilVals.reduce((a,b)=>a+b,0) / utilVals.length);
+
+    const buckets = {};
+    RAW.forEach(r => { const m = r.renewalDate.slice(0,7); buckets[m] = (buckets[m] || 0) + r.annualCostINR; });
+    const months = Object.keys(buckets).sort();
+    const maxBucket = Math.max(...months.map(m => buckets[m]));
+    const chartW = 600, chartH = 160, pad = 10;
+    const chartDots = months.map((m, i) => {
+      const x = pad + (i * (chartW - pad * 2) / (months.length - 1));
+      const y = chartH - pad - (buckets[m] / maxBucket) * (chartH - pad * 2);
+      return { x, y };
+    });
+    const chartPoints = chartDots.map(p => `${p.x},${p.y}`).join(" ");
+    const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const chartLabels = months.map(m => MONTH_NAMES[parseInt(m.slice(5,7),10) - 1]);
+
+    const teamRoster = ROSTER.map(name => ({
+      name,
+      select: () => {
+        const id = s.assignPickerFor;
+        this.setState(s2 => ({ owners: { ...s2.owners, [id]: name }, assignPickerFor: null, toast: `${name} assigned` }));
+        setTimeout(() => this.setState({ toast: null }), 2200);
+      }
+    }));
+
+    return {
+      isOverview: s.screen === "overview",
+      isInbox: s.screen !== "overview",
+      goOverview: () => this.setState({ screen: "overview" }),
+      goInbox: () => this.setState({ screen: "inbox" }),
+      goInboxLink: e => { e.preventDefault(); this.setState({ screen: "inbox" }); },
+      overviewTabColor: s.screen === "overview" ? "#0D6EFD" : "#6C757D",
+      overviewTabBorder: s.screen === "overview" ? "#0D6EFD" : "transparent",
+      inboxTabColor: s.screen === "inbox" ? "#0D6EFD" : "#6C757D",
+      inboxTabBorder: s.screen === "inbox" ? "#0D6EFD" : "transparent",
+      overviewNavBg: s.screen === "overview" ? "#EEF2FF" : "transparent",
+      overviewNavColor: s.screen === "overview" ? "#4F46E5" : "#6C757D",
+      overviewNavWeight: s.screen === "overview" ? 600 : 400,
+      inboxNavBg: s.screen === "inbox" ? "#EEF2FF" : "transparent",
+      inboxNavColor: s.screen === "inbox" ? "#4F46E5" : "#6C757D",
+      inboxNavWeight: s.screen === "inbox" ? 600 : 400,
+      metrics, urgentSumLabel: inrCr(METRICS.urgentRenewalsINR), urgentRows,
+      needsAttentionRows, upcomingRows,
+      gaugeDeg: Math.round(avgUtil * 3.6), gaugeLabel: `${avgUtil}%`, gaugeSub: "avg utilization",
+      chartPoints, chartDots, chartLabels,
+      filterPills, activeGroup: groups[activeFilter],
+      resolved, toast: s.toast,
+      assignPickerFor: s.assignPickerFor,
+      closeAssignPicker: () => this.setState({ assignPickerFor: null }),
+      stopProp: e => e.stopPropagation(),
+      teamRoster
+    };
+  }
+}
+</script>
+</body>
+</html>

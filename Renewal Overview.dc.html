@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#3d5f80">
+  <svg viewBox="0 0 120 56" xmlns="http://www.w3.org/2000/svg">
+    <rect x="18" y="16" width="84" height="6" fill="#fff"/>
+    <rect x="18" y="28" width="60" height="4" fill="#fff" opacity="0.8"/>
+    <rect x="18" y="36" width="50" height="4" fill="#fff" opacity="0.6"/>
+  </svg>
+</template>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#f2f2f3;color:#1d1f20;font-family:Barlow,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#3d5f80;text-decoration:none}a:hover{color:#1d1f20;text-decoration:underline}
+button{font-family:inherit}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #5980a6;outline-offset:2px}
+::selection{background:#d5e0eb}
+</style>
+</helmet>
+
+<div style="display:grid;grid-template-columns:196px minmax(0,1fr);min-height:100vh">
+
+  <nav style="background:#e9e9ea;border-right:1px solid #dcdddf;padding:18px 0;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh">
+    <div style="display:flex;align-items:center;gap:9px;padding:0 18px">
+      <div style="width:14px;height:14px;background:#3d5f80"></div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:21px;letter-spacing:0.01em">Trellis</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1px;padding:0 8px;font-size:14px">
+      <div style="padding:7px 10px;background:#dfe6ee;color:#1d1f20;font-weight:600;border-radius:3px">Renewals</div>
+      <div style="padding:7px 10px;color:#4a4e52">Subscriptions</div>
+      <div style="padding:7px 10px;color:#4a4e52">Vendors</div>
+      <div style="padding:7px 10px;color:#4a4e52">Spend</div>
+      <div style="padding:7px 10px;color:#4a4e52">Owners</div>
+    </div>
+    <div style="margin-top:auto;padding:0 18px;display:flex;flex-direction:column;gap:3px;font-size:12px;color:#62666b">
+      <div style="color:#1d1f20;font-weight:500">Northwind Group</div>
+      <div>214 subscriptions</div>
+      <div>SSO synced 2h ago</div>
+    </div>
+  </nav>
+
+  <main style="min-width:0;padding:22px 32px 64px">
+
+    <header style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid #dcdddf">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="font-size:12px;color:#62666b">Renewals</div>
+        <h1 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:30px;line-height:1.1">Renewal Overview</h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;font-size:13px;color:#62666b">
+        <span>As of Mon, Apr 13, 2026</span>
+        <button style="height:30px;padding:0 12px;border:1px solid #c9cbce;background:transparent;border-radius:3px;font-size:13px;color:#1d1f20;cursor:pointer" style-hover="background:#e6edf4">Export list</button>
+      </div>
+    </header>
+
+    <section style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px 32px;align-items:flex-end;padding:20px 0 22px;border-bottom:1px solid #dcdddf">
+      <div style="display:flex;flex-direction:column;gap:6px;min-width:0;flex:1 1 420px">
+        <div style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#3d5f80">Quarter-end renewal review · Q2 closes Jun 30</div>
+        <div style="display:flex;align-items:flex-start;gap:2px 28px;flex-wrap:wrap;font-family:'Barlow Condensed',sans-serif;font-size:28px;line-height:1.15">
+          <span><span style="font-weight:600">{{ attnCount }} renewals</span> need attention</span>
+          <span style="color:#3a3d40"><span style="font-weight:600;font-variant-numeric:tabular-nums">{{ attnSpend }}</span> annual spend at stake</span>
+        </div>
+        <div style="font-size:14px;color:#3a3d40">{{ attnSplit }} · <span style="color:#1d1f20;font-weight:500">{{ next30 }} decision deadlines fall in the next 30 days</span>, the busiest stretch before quarter-end.</div>
+      </div>
+      <sc-if value="{{ showWeekStrip }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:11px;color:#62666b;display:flex;justify-content:space-between;gap:12px"><span>Decision deadlines by week</span><span>to Jun 30</span></div>
+          <div style="display:flex;align-items:flex-end;gap:3px;height:44px">
+            <sc-for list="{{ weeks }}" as="w" hint-placeholder-count="12">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;width:22px;height:44px" title="{{ w.title }}">
+                <span style="font-size:10px;color:{{ w.countColor }};font-variant-numeric:tabular-nums">{{ w.countLabel }}</span>
+                <div style="width:14px;height:{{ w.h }};background:{{ w.bg }}"></div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:3px;font-size:10px;color:#8b8f94;border-top:1px solid #c9cbce;padding-top:3px">
+            <sc-for list="{{ weeks }}" as="w" hint-placeholder-count="12"><span style="width:22px;text-align:left;white-space:nowrap;overflow:visible">{{ w.label }}</span></sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+
+    <section style="padding-top:26px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <h2 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:21px">Needs attention <span style="color:#8b8f94;font-weight:500">{{ attnCount }}</span></h2>
+          <div style="font-size:13px;color:#62666b">Renewals with signals worth investigating before the decision deadline.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#62666b">
+          <span>Sort</span>
+          <div style="display:flex;border:1px solid #c9cbce;border-radius:3px;overflow:hidden">
+            <sc-for list="{{ sortOpts }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.pick }}" style="height:28px;padding:0 10px;border:none;border-right:1px solid #dcdddf;background:{{ o.bg }};color:{{ o.color }};font-size:12px;font-weight:500;cursor:pointer">{{ o.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <sc-if value="{{ showThresholds }}" hint-placeholder-val="{{ true }}">
+        <div style="font-size:12px;color:#62666b">Surfaced when: seat utilization below 65% · price increase of 8% or more · annual spend of $50K or more raises the weight of other signals. Ownership gaps are shown separately.</div>
+      </sc-if>
+
+      <div style="overflow-x:auto">
+        <div style="min-width:1040px;border-top:1px solid #1d1f20">
+          <div style="display:grid;grid-template-columns:minmax(130px,1fr) minmax(210px,1.9fr) 74px 110px 58px 92px minmax(130px,1fr) 128px;column-gap:16px;padding:8px 12px;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#62666b;border-bottom:1px solid #dcdddf">
+            <span>Subscription</span><span>Why it's surfaced</span><span style="text-align:right">Spend / yr</span><span>Utilization</span><span style="text-align:right">YoY</span><span>Decide by</span><span>Owner</span><span></span>
+          </div>
+          <sc-for list="{{ attn }}" as="r" hint-placeholder-count="8">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(130px,1fr) minmax(210px,1.9fr) 74px 110px 58px 92px minmax(130px,1fr) 128px;column-gap:16px;align-items:center;padding:11px 12px;border-bottom:1px solid #e3e4e6;background:{{ r.rowBg }};cursor:pointer" style-hover="background:#ecf0f4">
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                <span style="font-size:15px;font-weight:600">{{ r.name }}</span>
+                <span style="font-size:12px;color:#8b8f94">{{ r.meta }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:{{ r.tierColor }}"><span style="width:7px;height:7px;background:{{ r.tierDot }};border:1.5px solid {{ r.tierColor }}"></span>{{ r.tier }}</span>
+                <span style="font-size:13px;color:#3a3d40;text-wrap:pretty">{{ r.reason }}</span>
+              </div>
+              <span style="text-align:right;font-size:14px;font-variant-numeric:tabular-nums;font-weight:{{ r.spendW }};color:{{ r.spendC }}">{{ r.spendK }}</span>
+              <div style="display:flex;flex-direction:column;gap:3px">
+                <span style="font-size:14px;font-variant-numeric:tabular-nums;font-weight:{{ r.utilW }};color:{{ r.utilC }}">{{ r.utilPct }}</span>
+                <div style="height:3px;width:72px;background:#dcdddf"><div style="height:3px;width:{{ r.utilBar }};background:{{ r.utilBarC }}"></div></div>
+                <span style="font-size:11px;color:#8b8f94;font-variant-numeric:tabular-nums">{{ r.seatsLabel }}</span>
+              </div>
+              <span style="text-align:right;font-size:14px;font-variant-numeric:tabular-nums;font-weight:{{ r.yoyW }};color:{{ r.yoyC }}">{{ r.yoyLabel }}</span>
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ r.daysC }}">{{ r.daysLabel }}</span>
+                <span style="font-size:11px;color:#8b8f94">{{ r.daysSub }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                <span style="font-size:13px;color:{{ r.ownerC }};font-weight:{{ r.ownerW }}">{{ r.ownerName }}</span>
+                <span style="font-size:11px;color:#8b8f94">{{ r.ownerNote }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                <button onClick="{{ r.open }}" style="height:30px;padding:0 12px;border:1px solid #5980a6;background:transparent;color:#3d5f80;border-radius:3px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#5980a6;color:#fff">{{ r.cta }}</button>
+                <span style="font-size:11px;color:#3d5f80;font-weight:500">{{ r.statusText }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top:36px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <h2 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:21px">Upcoming decisions <span style="color:#8b8f94;font-weight:500">{{ upCount }}</span></h2>
+        <div style="font-size:13px;color:#62666b">Decision deadline within 30 days and no optimization signals. Nothing to investigate, but a decision is approaching.</div>
+      </div>
+      <div style="overflow-x:auto">
+        <div style="min-width:1040px;border-top:1px solid #1d1f20">
+          <sc-for list="{{ up }}" as="r" hint-placeholder-count="9">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(130px,1fr) minmax(210px,1.9fr) 74px 110px 58px 92px minmax(130px,1fr) 128px;column-gap:16px;align-items:center;padding:8px 12px;border-bottom:1px solid #e3e4e6;background:{{ r.rowBg }};cursor:pointer" style-hover="background:#ecf0f4">
+              <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                <span style="font-size:14px;font-weight:600">{{ r.name }}</span>
+                <span style="font-size:12px;color:#8b8f94">{{ r.meta }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                <span style="font-size:12px;font-weight:600;color:{{ r.tierColor }}">{{ r.tier }}</span>
+                <span style="font-size:12px;color:#62666b">{{ r.reason }}</span>
+              </div>
+              <span style="text-align:right;font-size:13px;font-variant-numeric:tabular-nums;color:#3a3d40">{{ r.spendK }}</span>
+              <span style="font-size:13px;font-variant-numeric:tabular-nums;color:#3a3d40">{{ r.utilPct }} <span style="font-size:11px;color:#8b8f94">{{ r.seatsLabel }}</span></span>
+              <span style="text-align:right;font-size:13px;font-variant-numeric:tabular-nums;color:#3a3d40">{{ r.yoyLabel }}</span>
+              <div style="display:flex;flex-direction:column;gap:1px">
+                <span style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ r.daysC }}">{{ r.daysLabel }}</span>
+                <span style="font-size:11px;color:#8b8f94">{{ r.daysSub }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                <span style="font-size:13px;color:{{ r.ownerC }};font-weight:{{ r.ownerW }}">{{ r.ownerName }}</span>
+                <span style="font-size:11px;color:#8b8f94">{{ r.ownerNote }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+                <button onClick="{{ r.open }}" style="height:28px;padding:0 10px;border:1px solid transparent;background:transparent;color:#3d5f80;border-radius:3px;font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:#5980a6">{{ r.cta }}</button>
+                <span style="font-size:11px;color:#3d5f80;font-weight:500">{{ r.statusText }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:36px">
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <h2 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:19px;color:#3a3d40">Decision window closed <span style="color:#8b8f94;font-weight:500">{{ closedCount }}</span></h2>
+          <div style="font-size:13px;color:#62666b">Notice deadlines have passed; these renew on current terms. Findings can inform the next cycle.</div>
+        </div>
+        <div style="border-top:1px solid #8b8f94">
+          <sc-for list="{{ closed }}" as="r" hint-placeholder-count="2">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,2.4fr) auto;gap:14px;align-items:baseline;padding:9px 4px;border-bottom:1px solid #e3e4e6;background:{{ r.rowBg }};cursor:pointer" style-hover="background:#ecf0f4">
+              <span style="font-size:14px;font-weight:600;color:#3a3d40">{{ r.name }}</span>
+              <span style="font-size:13px;color:#62666b;font-variant-numeric:tabular-nums">{{ r.closedLine }}</span>
+              <span style="font-size:13px;color:#3d5f80;font-weight:500">View</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <h2 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:19px;color:#3a3d40">On track <span style="color:#8b8f94;font-weight:500">195</span></h2>
+          <div style="font-size:13px;color:#62666b">No current reason for intervention. Nearest deadlines shown.</div>
+        </div>
+        <div style="border-top:1px solid #8b8f94">
+          <sc-for list="{{ track }}" as="r" hint-placeholder-count="5">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,2.4fr) auto;gap:14px;align-items:baseline;padding:8px 4px;border-bottom:1px solid #e3e4e6;background:{{ r.rowBg }};cursor:pointer" style-hover="background:#ecf0f4">
+              <span style="font-size:14px;font-weight:500;color:#3a3d40">{{ r.name }}</span>
+              <span style="font-size:13px;color:#62666b;font-variant-numeric:tabular-nums">{{ r.trackLine }}</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#3d7253"><span style="width:6px;height:6px;background:#4f8a66"></span>On track</span>
+            </div>
+          </sc-for>
+          <div style="padding:9px 4px;font-size:13px"><a href="#">View all 195 on-track renewals</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ close }}" style="position:fixed;inset:0;background:rgba(29,31,32,0.22)"></div>
+  <aside style="position:fixed;top:0;right:0;bottom:0;width:min(600px,100vw);background:#f8f8f9;border-left:1px solid #c9cbce;box-shadow:-8px 0 24px rgba(29,31,32,0.08);overflow-y:auto;display:flex;flex-direction:column">
+
+    <div style="position:sticky;top:0;z-index:2;background:#f8f8f9;border-bottom:1px solid #dcdddf;padding:10px 24px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#62666b">
+      <span>Renewal review · {{ d.groupLabel }}</span>
+      <button onClick="{{ close }}" style="height:28px;padding:0 10px;border:1px solid #c9cbce;background:transparent;border-radius:3px;font-size:12px;color:#1d1f20;cursor:pointer" style-hover="background:#e6edf4">Close · Esc</button>
+    </div>
+
+    <div style="padding:20px 24px 18px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid #dcdddf">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <h2 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:32px;line-height:1.05">{{ d.name }}</h2>
+          <span style="font-size:13px;color:#62666b">{{ d.cat }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span style="display:flex;align-items:center;gap:6px;padding:3px 8px;background:{{ d.tierBg }};color:{{ d.tierColor }};font-size:12px;font-weight:600;border-radius:3px">{{ d.tier }}</span>
+          <span style="font-size:12px;color:#3d5f80;font-weight:500">{{ d.statusText }}</span>
+        </div>
+      </div>
+      <div style="font-size:18px;font-variant-numeric:tabular-nums"><span style="font-weight:600">{{ d.acvFull }}</span> <span style="color:#62666b">/ year</span></div>
+      <div style="font-size:13px;color:#3a3d40;font-variant-numeric:tabular-nums">{{ d.evidence }}</div>
+    </div>
+
+    <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px;border-bottom:1px solid #dcdddf">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Decision deadline</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:34px;line-height:1;color:{{ d.headColor }};font-variant-numeric:tabular-nums">{{ d.headline }}</div>
+        <div style="font-size:14px;color:#3a3d40;text-wrap:pretty;max-width:52ch">{{ d.influence }}</div>
+      </div>
+      <div style="position:relative;height:84px;margin:4px 6px 0">
+        <sc-for list="{{ d.segs }}" as="s" hint-placeholder-count="2">
+          <div style="position:absolute;top:38px;height:6px;left:{{ s.left }};width:{{ s.width }};background:{{ s.bg }}"></div>
+          <div style="position:absolute;top:50px;left:{{ s.left }};width:{{ s.width }};text-align:center;font-size:11px;color:{{ s.color }};white-space:nowrap;overflow:hidden">{{ s.label }}</div>
+        </sc-for>
+        <sc-for list="{{ d.marks }}" as="m" hint-placeholder-count="3">
+          <div style="position:absolute;top:{{ m.tickTop }};left:{{ m.pct }};width:2px;height:{{ m.tickH }};margin-left:-1px;background:{{ m.color }}"></div>
+          <div style="position:absolute;top:{{ m.labelTop }};left:{{ m.pct }};transform:{{ m.tx }};display:flex;flex-direction:column;gap:1px;white-space:nowrap;text-align:{{ m.align }}">
+            <span style="font-size:12px;font-weight:{{ m.weight }};color:{{ m.color }}">{{ m.label }}</span>
+            <span style="font-size:11px;color:#62666b;font-variant-numeric:tabular-nums">{{ m.date }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #dcdddf;border-bottom:1px solid #dcdddf">
+        <div style="padding:9px 0;display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#62666b">{{ d.renewalWord }}</span><span style="font-size:14px;font-weight:500">{{ d.renewalFull }}</span></div>
+        <div style="padding:9px 12px;display:flex;flex-direction:column;gap:2px;border-left:1px solid #dcdddf"><span style="font-size:11px;color:#62666b">Notice period</span><span style="font-size:14px;font-weight:500">{{ d.notice }} days</span></div>
+        <div style="padding:9px 12px;display:flex;flex-direction:column;gap:2px;border-left:1px solid #dcdddf"><span style="font-size:11px;color:#62666b">Renewal type</span><span style="font-size:14px;font-weight:500">{{ d.type }}</span></div>
+      </div>
+    </div>
+
+    <div style="padding:20px 24px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #dcdddf">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Why it's surfaced</div>
+      <div style="display:flex;flex-direction:column">
+        <sc-for list="{{ d.signals }}" as="s" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:10px 120px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid #e3e4e6;align-items:start">
+            <span style="width:8px;height:8px;margin-top:6px;background:{{ s.dot }};border:1.5px solid {{ s.dotBorder }}"></span>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:12px;color:#62666b">{{ s.label }}</span>
+              <span style="font-size:18px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ s.valueC }}">{{ s.value }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;padding-top:2px">
+              <span style="font-size:13px;color:#1d1f20;font-variant-numeric:tabular-nums">{{ s.detail }}</span>
+              <sc-if value="{{ s.hasBar }}" hint-placeholder-val="{{ false }}">
+                <div style="height:4px;background:#dcdddf;max-width:260px"><div style="height:4px;width:{{ s.bar }};background:{{ s.barC }}"></div></div>
+              </sc-if>
+              <span style="font-size:12px;color:#62666b;text-wrap:pretty">{{ s.note }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-size:12px;color:#8b8f94">Thresholds: utilization below 65% · price increase of 8% or more · spend of $50K or more. Trellis surfaces signals; the renewal decision stays with your team.</div>
+    </div>
+
+    <div style="padding:20px 24px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #dcdddf">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Who can help</div>
+      <sc-if value="{{ d.hasOwner }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;background:#dfe6ee;color:#3d5f80;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;border-radius:3px">{{ d.initials }}</div>
+          <div style="display:flex;flex-direction:column;gap:1px">
+            <span style="font-size:15px;font-weight:600">{{ d.ownerName }} <span style="font-weight:400;color:#62666b">· Owner</span></span>
+            <span style="font-size:12px;color:#62666b">{{ d.ownerRole }}</span>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ d.noOwner }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:12px;background:#f6efe3;border-radius:3px">
+          <span style="font-size:14px;font-weight:600;color:#8a5b14">{{ d.ownerProblem }}</span>
+          <span style="font-size:13px;color:#3a3d40">{{ d.ownerProblemNote }}</span>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px">
+            <span>Assign owner</span>
+            <select onChange="{{ assign }}" style="height:30px;border:1px solid #c9cbce;background:#fff;border-radius:3px;font-family:inherit;font-size:13px;padding:0 6px">
+              <option value="">Choose a person…</option>
+              <sc-for list="{{ people }}" as="p" hint-placeholder-count="6"><option value="{{ p.name }}">{{ p.label }}</option></sc-for>
+            </select>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="padding:20px 24px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid #dcdddf">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Next step</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <sc-if value="{{ d.canSeat }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ openSeat }}" style="height:34px;padding:0 14px;border:1px solid #3d5f80;background:#3d5f80;color:#fff;border-radius:3px;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#2f4b66">Review seat requirements</button>
+        </sc-if>
+        <button onClick="{{ openContact }}" style="height:34px;padding:0 14px;border:1px solid #5980a6;background:transparent;color:#3d5f80;border-radius:3px;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#e6edf4">Contact owner</button>
+        <button onClick="{{ markReviewing }}" style="height:34px;padding:0 14px;border:1px solid #c9cbce;background:transparent;color:#1d1f20;border-radius:3px;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#e6edf4">{{ d.reviewLabel }}</button>
+      </div>
+      <button onClick="{{ markRenew }}" style="align-self:flex-start;border:none;background:none;padding:0;font-size:13px;color:#3d5f80;cursor:pointer" style-hover="text-decoration:underline">Reviewed, renew as contracted</button>
+
+      <sc-if value="{{ composerOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid #c9cbce;background:#fff;border-radius:3px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#62666b"><span>To: <span style="color:#1d1f20;font-weight:500">{{ composerTo }}</span></span><span>{{ composerKind }}</span></div>
+          <textarea value="{{ composerText }}" onChange="{{ onComposer }}" rows="6" style="width:100%;border:1px solid #dcdddf;border-radius:3px;padding:8px;font-family:inherit;font-size:13px;line-height:1.45;color:#1d1f20;resize:vertical"></textarea>
+          <div style="display:flex;justify-content:flex-end;gap:8px">
+            <button onClick="{{ cancelComposer }}" style="height:30px;padding:0 12px;border:1px solid #c9cbce;background:transparent;border-radius:3px;font-size:13px;cursor:pointer">Cancel</button>
+            <button onClick="{{ sendComposer }}" style="height:30px;padding:0 12px;border:1px solid #3d5f80;background:#3d5f80;color:#fff;border-radius:3px;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#2f4b66">Send request</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ needOwnerHint }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:13px;color:#8a5b14">Assign an owner above before sending a request.</div>
+      </sc-if>
+
+      <div style="display:flex;flex-direction:column;gap:6px;padding-top:4px">
+        <div style="font-size:12px;color:#62666b">Activity</div>
+        <sc-for list="{{ d.activity }}" as="a" hint-placeholder-count="2">
+          <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;font-size:13px"><span style="color:#8b8f94;font-variant-numeric:tabular-nums">{{ a.when }}</span><span style="color:#3a3d40">{{ a.text }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="padding:14px 24px 32px;display:flex;flex-direction:column;gap:10px">
+      <button onClick="{{ toggleHistory }}" style="align-self:flex-start;border:none;background:none;padding:0;font-size:13px;font-weight:500;color:#1d1f20;cursor:pointer">{{ historyLabel }}</button>
+      <sc-if value="{{ showHistory }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;border-top:1px solid #dcdddf">
+          <sc-for list="{{ d.history }}" as="h" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:110px 1fr auto;gap:12px;padding:7px 0;border-bottom:1px solid #e3e4e6;font-size:13px;font-variant-numeric:tabular-nums"><span style="color:#62666b">{{ h.date }}</span><span style="color:#3a3d40">{{ h.note }}</span><span style="font-weight:500">{{ h.amount }}</span></div>
+          </sc-for>
+          <div style="display:grid;grid-template-columns:110px 1fr;gap:12px;padding:7px 0;font-size:13px"><span style="color:#62666b">Category</span><span>{{ d.cat }}</span></div>
+          <div style="display:grid;grid-template-columns:110px 1fr;gap:12px;padding:7px 0;font-size:13px"><span style="color:#62666b">Seats</span><span>{{ d.seatsFull }}</span></div>
+        </div>
+      </sc-if>
+    </div>
+  </aside>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultSort&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Priority&quot;,&quot;Days to decide&quot;,&quot;Annual spend&quot;],&quot;default&quot;:&quot;Priority&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showWeekStrip&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showThresholds&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Transparency&quot;}}">
+const TODAY = new Date(2026, 3, 13);
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const addD = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const fD = d => MON[d.getMonth()] + ' ' + d.getDate();
+const fDW = d => WD[d.getDay()] + ', ' + fD(d);
+const fDY = d => fD(d) + ', ' + d.getFullYear();
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+const kf = n => '$' + (Math.round(n / 100) / 10).toString() + 'K';
+const C = { ink:'#1d1f20', ink2:'#3a3d40', muted:'#62666b', faint:'#8b8f94', line:'#dcdddf', accent:'#5980a6', accent7:'#3d5f80',
+  amber:'#8a5b14', amberDot:'#c98a2e', amberTint:'#f6efe3', rust:'#a0412b', rustTint:'#f7e9e5', green:'#3d7253', grey:'#6b6f74', greyTint:'#e9e9ea' };
+const PEOPLE = { 'Rahul Mehta':'Sales Operations', 'Priya Shah':'IT · Collaboration tools', 'Amit Patel':'IT · Workplace', 'Elena Rossi':'Finance · BI', 'Marcus Lee':'PMO', 'Wei Zhang':'Engineering', 'Jordan Blake':'Sales', 'Hana Kim':'Customer Support', 'Dana Whitfield':'Marketing Ops' };
+
+const RAW = [
+  { id:'hubspot', name:'HubSpot', cat:'Marketing', acv:54000, seats:500, active:305, yoy:15, days:5, notice:90, type:'Auto-renew', owner:'Dana Whitfield', os:'left', g:'attn', tier:'rec', rank:1, reason:'Material price increase + low utilization; owner has left' },
+  { id:'salesforce', name:'Salesforce', cat:'CRM', acv:180000, seats:1000, active:420, yoy:12, days:18, notice:60, type:'Auto-renew', owner:'Rahul Mehta', os:'active', g:'attn', tier:'rec', rank:2, reason:'High annual spend + low seat utilization + 12% price increase' },
+  { id:'tableau', name:'Tableau', cat:'Analytics', acv:62000, seats:150, active:107, yoy:18, days:22, notice:60, type:'Auto-renew', owner:'Elena Rossi', os:'active', g:'attn', tier:'rec', rank:3, reason:'18% price increase on a high-spend contract' },
+  { id:'slack', name:'Slack', cat:'Collaboration', acv:96000, seats:500, active:290, yoy:8, days:24, notice:60, type:'Auto-renew', owner:'Priya Shah', os:'active', g:'attn', tier:'rec', rank:4, reason:'Low utilization + material price increase' },
+  { id:'docusign', name:'DocuSign', cat:'Legal', acv:21000, seats:150, active:78, yoy:9, days:27, notice:30, type:'Auto-renew', owner:null, os:'none', g:'attn', tier:'rec', rank:5, reason:'Low utilization + 9% price increase' },
+  { id:'notion', name:'Notion', cat:'Productivity', acv:32000, seats:300, active:114, yoy:2, days:31, notice:30, type:'Auto-renew', owner:null, os:'none', g:'attn', tier:'soon', rank:6, reason:'Low utilization' },
+  { id:'miro', name:'Miro', cat:'Collaboration', acv:13000, seats:200, active:94, yoy:6, days:35, notice:30, type:'Auto-renew', owner:'Priya Shah', os:'active', g:'attn', tier:'soon', rank:7, reason:'Low utilization' },
+  { id:'asana', name:'Asana', cat:'Project management', acv:28000, seats:400, active:176, yoy:0, days:40, notice:30, type:'Manual', owner:'Marcus Lee', os:'active', g:'attn', tier:'soon', rank:8, reason:'Low utilization' },
+
+  { id:'jira', name:'Jira', cat:'Engineering', acv:38000, seats:500, active:455, yoy:3, days:9, notice:30, type:'Auto-renew', owner:'Wei Zhang', os:'active', g:'up', reason:'Healthy utilization, stable price' },
+  { id:'calendly', name:'Calendly', cat:'Sales', acv:7200, seats:100, active:88, yoy:0, days:11, notice:30, type:'Auto-renew', owner:'Jordan Blake', os:'active', g:'up', reason:'Healthy utilization, no price change' },
+  { id:'1password', name:'1Password', cat:'Security', acv:9600, seats:200, active:184, yoy:0, days:12, notice:30, type:'Manual', owner:'Wei Zhang', os:'active', g:'up', reason:'Manual renewal: won’t renew without approval' },
+  { id:'zoom', name:'Zoom', cat:'Communication', acv:18000, seats:250, active:220, yoy:1, days:14, notice:30, type:'Auto-renew', owner:'Amit Patel', os:'active', g:'up', reason:'Healthy utilization, stable price' },
+  { id:'loom', name:'Loom', cat:'Communication', acv:6000, seats:80, active:68, yoy:4, days:17, notice:30, type:'Auto-renew', owner:'Priya Shah', os:'active', g:'up', reason:'Healthy utilization, stable price' },
+  { id:'gworkspace', name:'Google Workspace', cat:'Productivity', acv:72000, seats:1000, active:940, yoy:4, days:20, notice:60, type:'Auto-renew', owner:'Amit Patel', os:'active', g:'up', reason:'Large contract; utilization and price in range' },
+  { id:'zendesk', name:'Zendesk', cat:'Support', acv:26400, seats:48, active:41, yoy:5, days:26, notice:30, type:'Month-to-month', owner:'Hana Kim', os:'active', g:'up', reason:'Month-to-month: notice needed before next billing cycle' },
+  { id:'grammarly', name:'Grammarly', cat:'Productivity', acv:8400, seats:150, active:131, yoy:3, days:28, notice:30, type:'Auto-renew', owner:'Hana Kim', os:'active', g:'up', reason:'Healthy utilization, stable price' },
+  { id:'okta', name:'Okta', cat:'Security', acv:44000, seats:1150, active:1080, yoy:6, days:29, notice:60, type:'Auto-renew', owner:'Dana Whitfield', os:'left', g:'up', reason:'No usage or price signals; owner needs reassigning' },
+
+  { id:'datadog', name:'Datadog', cat:'Observability', acv:84000, seats:90, active:58, yoy:7, days:-12, notice:30, type:'Auto-renew', owner:'Wei Zhang', os:'active', g:'closed' },
+  { id:'gong', name:'Gong', cat:'Sales', acv:40000, seats:60, active:52, yoy:5, days:-49, notice:60, type:'Auto-renew', owner:'Jordan Blake', os:'active', g:'closed' },
+
+  { id:'adobe', name:'Adobe Creative Cloud', cat:'Design', acv:31200, seats:60, active:54, yoy:3, days:47, notice:30, type:'Auto-renew', owner:'Priya Shah', os:'active', g:'track' },
+  { id:'dropbox', name:'Dropbox', cat:'Storage', acv:12000, seats:100, active:92, yoy:0, days:52, notice:30, type:'Auto-renew', owner:'Amit Patel', os:'active', g:'track' },
+  { id:'github', name:'GitHub', cat:'Engineering', acv:50400, seats:250, active:240, yoy:4, days:58, notice:30, type:'Auto-renew', owner:'Wei Zhang', os:'active', g:'track' },
+  { id:'linear', name:'Linear', cat:'Engineering', acv:14400, seats:70, active:65, yoy:0, days:64, notice:30, type:'Auto-renew', owner:'Wei Zhang', os:'active', g:'track' },
+  { id:'figma', name:'Figma', cat:'Design', acv:45000, seats:150, active:145, yoy:2, days:75, notice:30, type:'Auto-renew', owner:'Priya Shah', os:'active', g:'track' },
+];
+
+const STATUS = { reviewing:'Reviewing · you', awaiting:'Waiting on owner', renew:'Reviewed · renew as contracted' };
+const SORTS = ['Priority', 'Days to decide', 'Annual spend'];
+
+class Component extends DCLogic {
+  state = { sel: null, status: {}, owners: {}, activity: {}, composer: null, sort: null, showHistory: false, needOwner: false };
+
+  componentDidMount() {
+    this.onKey = e => { if (e.key === 'Escape') this.setState({ sel: null, composer: null }); };
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); }
+
+  derive(r) {
+    const deadline = addD(TODAY, r.days);
+    const renewal = addD(deadline, r.notice);
+    const util = Math.round(r.active / r.seats * 100);
+    const prev = r.acv / (1 + r.yoy / 100);
+    const assigned = this.state.owners[r.id];
+    const owner = assigned || r.owner;
+    const os = assigned ? 'active' : r.os;
+    const closed = r.days < 0;
+    const soon = !closed && r.days <= 7;
+    return { ...r, deadline, renewal, util, prev, delta: r.acv - prev, owner, os, closed, soon,
+      fUtil: util < 65, fYoy: r.yoy >= 8, fSpend: r.acv >= 50000 };
+  }
+
+  row(x) {
+    const hi = x.g === 'attn';
+    const tierMap = {
+      rec: ['Review recommended', C.amber, C.amberDot, C.amberTint],
+      soon: ['Review soon', C.amber, 'transparent', C.amberTint],
+      up: ['Decision due soon', C.accent7, C.accent, '#e6edf4'],
+      closed: ['Decision window closed', C.grey, C.grey, C.greyTint],
+      track: ['On track', C.green, C.green, '#e5efe9'],
+    };
+    const t = tierMap[x.g === 'attn' ? x.tier : x.g];
+    const ownerName = x.os === 'none' ? 'No owner assigned' : x.os === 'left' ? 'Owner unavailable' : x.owner;
+    const ownerNote = x.os === 'none' ? 'Assign before deadline' : x.os === 'left' ? x.owner + ' · left Mar 2026' : PEOPLE[x.owner];
+    const st = this.state.status[x.id];
+    return {
+      id: x.id, name: x.name,
+      meta: x.cat + ' · ' + x.type + ' · ' + x.notice + '-day notice',
+      tier: t[0], tierColor: t[1], tierDot: t[2],
+      reason: x.reason,
+      spendK: kf(x.acv),
+      spendW: hi && x.fSpend ? 600 : 400, spendC: hi && x.fSpend ? C.ink : C.ink2,
+      utilPct: x.util + '%', utilBar: x.util + '%',
+      utilW: hi && x.fUtil ? 600 : 400, utilC: hi && x.fUtil ? C.amber : C.ink2, utilBarC: x.fUtil ? C.amberDot : '#9fb3c7',
+      seatsLabel: x.active.toLocaleString('en-US') + ' / ' + x.seats.toLocaleString('en-US'),
+      yoyLabel: (x.yoy > 0 ? '+' : x.yoy < 0 ? '−' : '') + Math.abs(x.yoy) + '%',
+      yoyW: hi && x.fYoy ? 600 : 400, yoyC: hi && x.fYoy ? C.amber : C.ink2,
+      daysLabel: x.closed ? 'Closed' : x.days === 1 ? '1 day' : x.days + ' days',
+      daysSub: x.closed ? Math.abs(x.days) + ' days ago' : (x.soon ? 'Due soon · ' : '') + fD(x.deadline),
+      daysC: x.closed ? C.grey : x.soon ? C.rust : C.ink,
+      ownerName, ownerNote, ownerC: x.os === 'active' ? C.ink2 : C.amber, ownerW: x.os === 'active' ? 400 : 600,
+      cta: x.g === 'attn' ? 'Review renewal' : 'View renewal',
+      statusText: st ? STATUS[st] : '',
+      rowBg: this.state.sel === x.id ? '#e6edf4' : 'transparent',
+      closedLine: kf(x.acv) + ' · ' + x.util + '% util · +' + x.yoy + '% YoY · notice deadline passed ' + Math.abs(x.days) + ' days ago · renews ' + fD(x.renewal),
+      trackLine: money(x.acv) + '/year · ' + x.util + '% utilization · +' + x.yoy + '% YoY · ' + x.days + ' days to decide',
+      open: e => { e && e.stopPropagation && e.stopPropagation(); this.setState({ sel: x.id, composer: null, showHistory: false, needOwner: false }); },
+    };
+  }
+
+  drawer(x) {
+    const tierMap = { rec: 'Review recommended', soon: 'Review soon', up: 'Decision due soon', closed: 'Decision window closed', track: 'On track' };
+    const tk = x.g === 'attn' ? x.tier : x.g;
+    const tier = tierMap[tk];
+    const tierColor = tk === 'rec' || tk === 'soon' ? C.amber : tk === 'up' ? C.accent7 : tk === 'track' ? C.green : C.grey;
+    const tierBg = tk === 'rec' || tk === 'soon' ? C.amberTint : tk === 'up' ? '#e6edf4' : tk === 'track' ? '#e5efe9' : C.greyTint;
+    const daysTxt = x.closed ? 'window closed' : x.days + ' days to decide';
+    const renewWord = x.type === 'Month-to-month' ? 'next billing cycle' : 'renewal';
+
+    let influence;
+    if (x.closed) influence = `The ${x.notice}-day notice deadline was ${fDY(x.deadline)}; it passed ${Math.abs(x.days)} days ago. ${x.name} renews ${fD(x.renewal)} on current terms. Findings can still inform the next cycle.`;
+    else if (x.type === 'Manual') influence = `Manual renewal: it won't renew without approval. Confirm the decision by ${fDW(x.deadline)} to respect the ${x.notice}-day notice period before ${fD(x.renewal)}.`;
+    else if (x.type === 'Month-to-month') influence = `Month-to-month: give notice by ${fDW(x.deadline)} to change the plan before the ${fD(x.renewal)} billing cycle.`;
+    else influence = `Send notice by ${fDW(x.deadline)} to change seats or terms. After that, ${x.name} auto-renews on ${fD(x.renewal)} on current terms.`;
+
+    let segs, marks;
+    const mk = (label, date, pct, color, weight, top) => {
+      const tx = pct < 12 ? 'translateX(-2px)' : pct > 88 ? 'translateX(calc(-100% + 2px))' : 'translateX(-50%)';
+      const align = pct < 12 ? 'left' : pct > 88 ? 'right' : 'center';
+      return { label, date, pct: pct + '%', color, weight, tx, align,
+        labelTop: top ? '0px' : '52px', tickTop: top ? '30px' : '34px', tickH: top ? '16px' : '14px' };
+    };
+    if (!x.closed) {
+      const p = x.days / (x.days + x.notice) * 100;
+      const dc = x.soon ? C.rust : C.accent7;
+      segs = [
+        { left: '0%', width: p + '%', bg: x.soon ? C.rust : C.accent, color: dc, label: p > 18 ? 'Decision window · ' + x.days + 'd' : '' },
+        { left: p + '%', width: (100 - p) + '%', bg: 'repeating-linear-gradient(90deg,#c9cbce 0 4px,transparent 4px 7px)', color: C.muted, label: 'Notice period · ' + x.notice + 'd' },
+      ];
+      marks = [
+        mk('Today', fD(TODAY), 0, C.ink2, 500, false),
+        mk('Decision deadline', fDW(x.deadline), p, dc, 600, true),
+        mk(x.type === 'Month-to-month' ? 'Next billing' : 'Renewal', fD(x.renewal), 100, C.ink2, 500, false),
+      ];
+    } else {
+      const p = Math.abs(x.days) / x.notice * 100;
+      segs = [
+        { left: '0%', width: p + '%', bg: '#b9bcc0', color: C.muted, label: p > 22 ? 'Closed ' + Math.abs(x.days) + 'd ago' : '' },
+        { left: p + '%', width: (100 - p) + '%', bg: 'repeating-linear-gradient(90deg,#c9cbce 0 4px,transparent 4px 7px)', color: C.muted, label: 'Renews in ' + (x.notice - Math.abs(x.days)) + 'd' },
+      ];
+      marks = [
+        mk('Decision deadline', fD(x.deadline), 0, C.grey, 600, true),
+        mk('Today', fD(TODAY), p, C.ink, 600, false),
+        mk('Renewal', fD(x.renewal), 100, C.ink2, 500, true),
+      ];
+    }
+
+    const inactive = x.seats - x.active;
+    const sig = (flag, label, value, detail, note, bar) => ({
+      label, value, detail, note, hasBar: bar != null, bar: (bar || 0) + '%', barC: flag ? C.amberDot : '#9fb3c7',
+      dot: flag ? C.amberDot : 'transparent', dotBorder: flag ? C.amberDot : '#b9bcc0', valueC: flag ? C.amber : C.ink,
+    });
+    const signals = [
+      sig(x.fUtil, 'Seat utilization', x.util + '%',
+        x.active.toLocaleString('en-US') + ' of ' + x.seats.toLocaleString('en-US') + ' seats active in the last 30 days (SSO)',
+        x.fUtil ? `${inactive.toLocaleString('en-US')} purchased seats (${100 - x.util}%) inactive; review seat requirements with the owner.` : 'Within normal range.', x.util),
+      sig(x.fYoy, 'Price change', (x.yoy > 0 ? '+' : '') + x.yoy + '% YoY',
+        x.yoy === 0 ? money(x.acv) + ', unchanged from last term' : money(x.prev) + ' → ' + money(x.acv) + ' (+' + money(x.delta) + ')',
+        x.fYoy ? 'A material increase. Worth understanding before the terms lock in.' : 'Within normal range.'),
+      sig(x.fSpend, 'Annual spend', kf(x.acv),
+        money(x.acv) + ' per year',
+        x.fSpend ? 'High spend alone isn’t a problem; it raises the weight of the other signals.' : 'Below the $50K high-spend line.'),
+    ];
+
+    const hasOwner = x.os === 'active';
+    const st = this.state.status[x.id];
+    const acts = (this.state.activity[x.id] || []).slice().reverse();
+    const baseAct = x.g === 'attn'
+      ? [{ when: fD(TODAY), text: 'Surfaced for quarter-end review: ' + x.reason.toLowerCase() }]
+      : x.g === 'closed' ? [{ when: fD(x.deadline), text: 'Notice deadline passed with no action recorded' }]
+      : [{ when: fD(TODAY), text: 'Decision deadline within 30 days' }];
+    const history = x.type === 'Month-to-month'
+      ? [{ date: fD(x.renewal) + ', 2026', note: 'Next monthly charge (scheduled)', amount: money(x.acv / 12) },
+         { date: fD(addD(x.renewal, -30)) + ', 2026', note: 'Monthly charge · paid', amount: money(x.acv / 12) }]
+      : [{ date: fDY(x.renewal), note: 'Renewal invoice (scheduled, at quoted price)', amount: money(x.acv) },
+         { date: fD(x.renewal) + ', 2025', note: 'Annual payment · paid', amount: money(x.prev) },
+         { date: fD(x.renewal) + ', 2024', note: 'Annual payment · paid', amount: money(x.prev / 1.06) }];
+
+    return {
+      name: x.name, cat: x.cat, tier, tierColor, tierBg,
+      groupLabel: { attn: 'Needs attention', up: 'Upcoming decision', closed: 'Window closed', track: 'On track' }[x.g],
+      statusText: st ? STATUS[st] : 'Not started',
+      acvFull: money(x.acv),
+      evidence: kf(x.acv) + ' annual spend · ' + x.util + '% utilization · ' + (x.yoy > 0 ? '+' : '') + x.yoy + '% YoY · ' + daysTxt,
+      headline: x.closed ? 'Decision window closed' : x.days + ' days remaining',
+      headColor: x.closed ? C.grey : x.soon ? C.rust : C.ink,
+      influence, segs, marks,
+      renewalWord: x.type === 'Month-to-month' ? 'Next billing cycle' : 'Renewal date',
+      renewalFull: fDY(x.renewal), notice: x.notice, type: x.type,
+      signals,
+      hasOwner, noOwner: !hasOwner,
+      ownerName: x.owner, ownerRole: PEOPLE[x.owner] + (this.state.owners[x.id] ? ' · assigned today' : ''),
+      initials: x.owner ? x.owner.split(' ').map(s => s[0]).join('') : '',
+      ownerProblem: x.os === 'none' ? 'No owner assigned' : 'Owner unavailable',
+      ownerProblemNote: x.os === 'none'
+        ? 'Nobody is accountable for this renewal. Assign someone who can confirm how the tool is used.'
+        : x.owner + ' (' + PEOPLE[x.owner] + ') left the company in Mar 2026. Reassign so someone can speak to usage before the deadline.',
+      canSeat: x.fUtil && !x.closed,
+      reviewLabel: st === 'reviewing' ? 'Reviewing ✓' : 'Mark as reviewing',
+      activity: acts.concat(baseAct),
+      history,
+      seatsFull: x.seats.toLocaleString('en-US') + ' purchased · ' + x.active.toLocaleString('en-US') + ' active (30 days)',
+    };
+  }
+
+  log(id, text, status) {
+    this.setState(s => ({
+      activity: { ...s.activity, [id]: [ ...(s.activity[id] || []), { when: 'Just now', text } ] },
+      status: status ? { ...s.status, [id]: status } : s.status,
+    }));
+  }
+
+  renderVals() {
+    const all = RAW.map(r => this.derive(r));
+    const sort = this.state.sort || this.props.defaultSort || 'Priority';
+    const sorter = sort === 'Days to decide' ? (a, b) => a.days - b.days : sort === 'Annual spend' ? (a, b) => b.acv - a.acv : (a, b) => a.rank - b.rank;
+    const attnD = all.filter(x => x.g === 'attn').sort(sorter);
+    const attn = attnD.map(x => this.row(x));
+    const up = all.filter(x => x.g === 'up').sort((a, b) => a.days - b.days).map(x => this.row(x));
+    const closed = all.filter(x => x.g === 'closed').map(x => this.row(x));
+    const track = all.filter(x => x.g === 'track').map(x => this.row(x));
+
+    const rec = attnD.filter(x => x.tier === 'rec').length;
+    const next30 = all.filter(x => x.days >= 0 && x.days <= 30).length;
+    const qEnd = new Date(2026, 5, 30);
+    const counts = [];
+    for (let i = 0; i < 12; i++) {
+      const s = addD(TODAY, i * 7), e = addD(TODAY, i * 7 + 6);
+      const n = all.filter(x => x.days >= 0 && x.deadline >= s && x.deadline <= e && x.deadline <= qEnd).length;
+      counts.push({ i, s, n });
+    }
+    const max = Math.max(...counts.map(c => c.n), 1);
+    const weeks = counts.map(c => ({
+      h: Math.max(2, Math.round(c.n / max * 30)) + 'px',
+      bg: c.i * 7 <= 30 ? C.accent : '#b9bcc0',
+      countLabel: c.n || '',
+      countColor: c.i * 7 <= 30 ? C.accent7 : C.faint,
+      label: c.i % 2 === 0 ? fD(c.s) : '',
+      title: 'Week of ' + fD(c.s) + ': ' + c.n + ' deadlines',
+    }));
+
+    const selX = all.find(x => x.id === this.state.sel);
+    const d = selX ? this.drawer(selX) : null;
+    const comp = this.state.composer;
+    const first = selX && selX.owner ? selX.owner.split(' ')[0] : '';
+
+    const openComposer = kind => {
+      if (!selX) return;
+      if (selX.os !== 'active') { this.setState({ needOwner: true, composer: null }); return; }
+      const text = kind === 'seat'
+        ? `Hi ${first}, ${selX.name} ${selX.type === 'Auto-renew' ? 'auto-renews' : 'renews'} on ${fD(selX.renewal)} and our notice deadline is ${fD(selX.deadline)}. SSO shows ${selX.active.toLocaleString('en-US')} of ${selX.seats.toLocaleString('en-US')} seats active in the last 30 days. Could you confirm how many seats your team needs for the next term? If the number changes, we need to notify ${selX.name} by ${fD(selX.deadline)}.`
+        : `Hi ${first}, ${selX.name} is up for renewal on ${fD(selX.renewal)} (decision deadline ${fD(selX.deadline)}). Do you have 15 minutes this week to review it together?`;
+      this.setState({ composer: { kind, text }, needOwner: false });
+    };
+
+    return {
+      attn, up, closed, track,
+      attnCount: attn.length,
+      attnSpend: kf(attnD.reduce((s, x) => s + x.acv, 0)),
+      attnSplit: rec + ' review recommended · ' + (attn.length - rec) + ' review soon',
+      next30, weeks,
+      upCount: up.length, closedCount: closed.length,
+      showWeekStrip: this.props.showWeekStrip ?? true,
+      showThresholds: this.props.showThresholds ?? true,
+      sortOpts: SORTS.map(o => ({ label: o, bg: o === sort ? '#1d1f20' : 'transparent', color: o === sort ? '#fff' : C.ink2, pick: () => this.setState({ sort: o }) })),
+      drawerOpen: !!d, d: d || {},
+      close: () => this.setState({ sel: null, composer: null }),
+      people: Object.keys(PEOPLE).filter(n => n !== 'Dana Whitfield').map(n => ({ name: n, label: n + ' · ' + PEOPLE[n] })),
+      assign: e => {
+        const v = e.target.value; if (!v || !selX) return;
+        this.setState(s => ({ owners: { ...s.owners, [selX.id]: v }, needOwner: false }));
+        this.log(selX.id, 'Owner assigned: ' + v);
+      },
+      openSeat: () => openComposer('seat'),
+      openContact: () => openComposer('general'),
+      composerOpen: !!comp, composerText: comp ? comp.text : '', composerTo: selX ? selX.owner : '',
+      composerKind: comp && comp.kind === 'seat' ? 'Seat requirements request' : 'Message',
+      needOwnerHint: this.state.needOwner,
+      onComposer: e => { const t = e.target.value; this.setState(s => ({ composer: { ...s.composer, text: t } })); },
+      cancelComposer: () => this.setState({ composer: null }),
+      sendComposer: () => {
+        this.log(selX.id, (comp.kind === 'seat' ? 'Asked ' + selX.owner + ' to confirm seat requirements' : 'Messaged ' + selX.owner) + ', reply requested by ' + fD(addD(selX.deadline, -3)), 'awaiting');
+        this.setState({ composer: null });
+      },
+      markReviewing: () => selX && this.log(selX.id, 'You started reviewing this renewal', 'reviewing'),
+      markRenew: () => selX && this.log(selX.id, 'Reviewed, renew as contracted. No changes requested.', 'renew'),
+      showHistory: this.state.showHistory,
+      historyLabel: (this.state.showHistory ? '− ' : '+ ') + 'Contract & payment history',
+      toggleHistory: () => this.setState(s => ({ showHistory: !s.showHistory })),
+    };
+  }
+}
+</script>
+</body>
+</html>

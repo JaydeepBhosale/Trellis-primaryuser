@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#F8F9FA;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#212529}
+  *{box-sizing:border-box}
+  a{color:#0D6EFD}a:hover{color:#171A1F}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <div style="background:#FFFFFF;border-bottom:1px solid #DEE2E6;padding:0 32px;display:flex;gap:4px;">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+      <button onClick="{{ t.select }}" style="padding:14px 4px;margin-right:24px;border:none;background:none;font-size:13px;font-weight:500;cursor:pointer;color:{{ t.color }};border-bottom:2px solid {{ t.border }};">{{ t.label }}</button>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{ screen }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:1400px;width:100%;margin:0 auto;padding:28px 32px 60px;" hint-key="calendar">
+    <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ true }}">
+      <h1 style="font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.5px;color:#212529;margin:0;">Quarterly Decision Calendar</h1>
+      <div style="font-size:13px;font-weight:400;line-height:1.5;color:#6C757D;margin-top:4px;">Decision deadlines by week. Plan ahead, no surge moments. Today: Sept 29, 2026</div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px;">
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;">
+          <div style="font-size:11px;font-weight:400;line-height:1.4;color:#6C757D;">This Week</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:#DC3545;margin-top:4px;">{{ thisWeekCount }} decisions · {{ thisWeekSpendLabel }}</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">Due within 7 days</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;">
+          <div style="font-size:11px;font-weight:400;line-height:1.4;color:#6C757D;">Next 2 Weeks</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:#FD7E14;margin-top:4px;">{{ next2WeeksCount }} decisions · {{ next2WeeksSpendLabel }}</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">Due in 7-13 days</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;">
+          <div style="font-size:11px;font-weight:400;line-height:1.4;color:#6C757D;">This Quarter</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:#212529;margin-top:4px;">{{ quarterCount }} renewals · {{ quarterSpendLabel }}</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">Spread across weeks</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;">
+        <sc-for list="{{ colorFilters }}" as="f" hint-placeholder-count="5">
+          <button onClick="{{ f.select }}" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:4px;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};font-size:12px;font-weight:500;cursor:pointer;">
+            <span style="width:8px;height:8px;border-radius:50%;background:{{ f.dot }};"></span>{{ f.label }}
+          </button>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:16px;overflow-x:auto;background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;">
+        <div style="display:grid;grid-template-columns:140px repeat(7,140px);min-width:1120px;">
+          <div style="padding:10px 12px;font-size:11px;font-weight:600;color:#6C757D;border-bottom:1px solid #DEE2E6;border-right:1px solid #DEE2E6;background:#F8F9FA;">Subscription</div>
+          <sc-for list="{{ weekLabels }}" as="w" hint-placeholder-count="7">
+            <div style="padding:10px 12px;font-size:11px;font-weight:600;color:#6C757D;border-bottom:1px solid #DEE2E6;border-right:1px solid #DEE2E6;background:#F8F9FA;text-align:center;">{{ w }}</div>
+          </sc-for>
+
+          <sc-for list="{{ calendarRows }}" as="row" hint-placeholder-count="12">
+            <div style="padding:12px;font-size:13px;font-weight:500;color:#212529;border-bottom:1px solid #DEE2E6;border-right:1px solid #DEE2E6;">{{ row.vendor }}</div>
+            <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="7">
+              <div onClick="{{ c.open }}" style="padding:8px;border-bottom:1px solid #DEE2E6;border-right:1px solid #DEE2E6;cursor:{{ c.cursor }};">
+                <sc-if value="{{ c.active }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:{{ c.bg }};border-radius:6px;padding:8px;height:100%;">
+                    <div style="font-size:12px;font-weight:600;color:{{ c.fg }};">{{ c.dueLabel }}</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:{{ c.fg }};margin-top:2px;">{{ c.costLabel }}</div>
+                    <div style="font-size:10px;color:{{ c.fg }};margin-top:2px;">{{ c.tag }}</div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;font-size:12px;color:#6C757D;">
+        <span>🔴 Due this week</span><span>🟠 Due 1-2 weeks</span><span>🟡 Due 3-4 weeks</span><span>🟢 Due 5+ weeks</span><span>⚫ Deadline passed</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isThisWeek }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.5px;color:#212529;margin:0;">Decisions Due This Week</h1>
+      <div style="font-size:13px;color:#6C757D;margin-top:4px;">Sept 29: 1 decision due today. Review and lock in your decision.</div>
+
+      <div style="margin-top:16px;background:#E9ECEF;border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.5;color:#212529;">
+        ⚠️ Notice: Salesforce decision deadline was Aug 29 (31 days ago). Notice period is now CLOSED. You cannot cancel this renewal. However, you can approve/escalate to flag the +15% price increase for negotiation next year.
+      </div>
+
+      <div style="margin-top:20px;background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-size:20px;font-weight:600;line-height:1.3;color:#212529;">Salesforce</div>
+            <div style="font-size:12px;color:#6C757D;margin-top:2px;">CRM · Auto-Renew</div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#212529;">₹1.49 Cr</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px;font-size:13px;">
+          <div><div style="color:#6C757D;font-size:11px;">Renewal date</div><div style="margin-top:2px;">Sept 28 (TODAY)</div></div>
+          <div><div style="color:#6C757D;font-size:11px;">Decision deadline</div><div style="margin-top:2px;color:#DC3545;">Aug 29 (PASSED)</div></div>
+          <div><div style="color:#6C757D;font-size:11px;">Owner</div><div style="margin-top:2px;">John Martinez</div></div>
+          <div><div style="color:#6C757D;font-size:11px;">Notice window</div><div style="margin-top:2px;color:#DC3545;">❌ CLOSED</div></div>
+          <div><div style="color:#6C757D;font-size:11px;">Price change</div><div style="margin-top:2px;color:#DC3545;">+15% (+₹22.35L)</div></div>
+          <div><div style="color:#6C757D;font-size:11px;">Utilization</div><div style="margin-top:2px;color:#FD7E14;">47/100 seats (47%)</div></div>
+          <div><div style="color:#6C757D;font-size:11px;">Renewal type</div><div style="margin-top:2px;">Auto-Renew</div></div>
+        </div>
+        <sc-if value="{{ salesforceStatus }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:12px;font-size:13px;font-weight:600;color:#28A745;">{{ salesforceStatus }}</div>
+        </sc-if>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+          <button onClick="{{ approveSalesforce }}" style="padding:10px 16px;border-radius:6px;border:none;background:#0D6EFD;color:#fff;font-size:13px;font-weight:500;cursor:pointer;">Approve</button>
+          <button onClick="{{ escalateSalesforce }}" style="padding:10px 16px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;font-weight:500;cursor:pointer;">Escalate</button>
+          <button style="padding:10px 16px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;font-weight:500;cursor:pointer;">Review Full Details</button>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;">Coming up: Sept 1-7</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+          <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;font-size:13px;">
+            <span>Slack — ₹3.74 Cr</span><span style="color:#DC3545;">Unassigned — need owner</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;font-size:13px;">
+            <span>Stripe — ₹1.0 Cr</span><span style="color:#6C757D;">Flat, routine</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;background:#E9ECEF;border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.6;color:#212529;">
+        Decisions made this quarter: {{ decidedCount }}/12<br/>
+        Budget impact locked in: {{ lockedSpendLabel }}<br/>
+        Pending owner reviews: 2 (Slack, Notion)
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTracking }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.5px;color:#212529;margin:0;">Decision Tracking — Q3 2026</h1>
+
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px;">
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:14px;">
+          <div style="font-size:11px;color:#6C757D;">✓ Decided</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#28A745;margin-top:4px;">{{ decidedCount }}</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">{{ lockedSpendLabel }} locked</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:14px;">
+          <div style="font-size:11px;color:#6C757D;">⏳ Pending decision</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#FD7E14;margin-top:4px;">4</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">₹15.1 Cr awaiting review</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:14px;">
+          <div style="font-size:11px;color:#6C757D;">⌛ Not yet due</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#212529;margin-top:4px;">7</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">₹29.1 Cr</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:14px;">
+          <div style="font-size:11px;color:#6C757D;">✗ Missed</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:#212529;margin-top:4px;">0</div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <div style="font-size:16px;font-weight:600;color:#212529;">Decisions made</div>
+        <div style="margin-top:8px;background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;padding:12px 16px;font-size:13px;">
+          <sc-if value="{{ decidedCount }}" hint-placeholder-val="{{ false }}">
+            <span>✓ Sept 28: Salesforce — {{ salesforceStatus }}</span>
+          </sc-if>
+          <sc-if value="{{ decidedCount }}" hint-placeholder-val="{{ true }}" b-negate="true">
+            <span style="color:#6C757D;">No decisions recorded yet.</span>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div style="font-size:16px;font-weight:600;color:#212529;">Pending</div>
+        <div style="margin-top:8px;background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;display:flex;flex-direction:column;">
+          <div style="padding:10px 16px;border-bottom:1px solid #DEE2E6;font-size:13px;">⏳ Due Sept 1-7: Slack (₹3.74 Cr) — Waiting for owner review request</div>
+          <div style="padding:10px 16px;border-bottom:1px solid #DEE2E6;font-size:13px;">⏳ Due Sept 15: Stripe (₹1.0 Cr) — Routine, low impact</div>
+          <div style="padding:10px 16px;border-bottom:1px solid #DEE2E6;font-size:13px;">⏳ Due Sept 21: Okta (₹4.3 Cr) — Departed owner, need reassignment</div>
+          <div style="padding:10px 16px;font-size:13px;">⏳ Due Oct 1-3: GitHub, Figma (₹8.0 Cr) — Price increases need review</div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;background:#E9ECEF;border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.6;color:#212529;">
+        Q3 locked spend: {{ lockedSpendLabel }}<br/>
+        Q3 pending: ₹15.1 Cr (awaiting decisions)<br/>
+        Q4+ committed: ₹29.1 Cr (decisions not yet due)<br/>
+        Total annual: ₹47.7 Cr
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+</div>
+
+<sc-if value="{{ detail }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeDetail }}" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:60;display:flex;align-items:center;justify-content:center;">
+    <div onClick="{{ stopProp }}" style="width:400px;background:#FFFFFF;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.12);padding:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font-size:20px;font-weight:600;line-height:1.3;color:#212529;">{{ detail.vendor }}</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">{{ detail.category }}</div>
+        </div>
+        <button onClick="{{ closeDetail }}" style="background:none;border:none;color:#6C757D;font-size:13px;cursor:pointer;">Close ✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;margin-top:14px;">
+        <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Annual cost</span><span style="font-family:'IBM Plex Mono',monospace;">{{ detail.costLabel }}</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Decision deadline</span><span>{{ detail.deadlineLabel }}</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Notice window</span><span style="color:{{ detail.noticeColor }};">{{ detail.noticeLabel }}</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Owner</span><span style="color:{{ detail.ownerColor }};">{{ detail.ownerLabel }}</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Price change</span><span style="color:{{ detail.priceColor }};">{{ detail.priceLabel }}</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Utilization</span><span>{{ detail.utilLabel }}</span></div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RAW = [
+  {id:1,vendor:"Salesforce",category:"CRM",annualCostINR:14900000,decisionDeadline:"2026-08-29",noticeWindowStatus:"CLOSED",owner:"John Martinez",priceChangePercent:15,seatsOwned:100,seatsActive:47},
+  {id:2,vendor:"Slack",category:"Communication",annualCostINR:3735000,decisionDeadline:"2026-09-01",noticeWindowStatus:"CLOSED",owner:"UNASSIGNED",priceChangePercent:8,seatsOwned:150,seatsActive:89},
+  {id:3,vendor:"Datadog",category:"Monitoring",annualCostINR:5395000,decisionDeadline:"2026-08-06",noticeWindowStatus:"CLOSED",owner:"Emma Chen",priceChangePercent:0,seatsOwned:50,seatsActive:34},
+  {id:4,vendor:"GitHub Enterprise",category:"Dev Tools",annualCostINR:5976000,decisionDeadline:"2026-10-01",noticeWindowStatus:"OPEN",owner:"Rahul Verma",priceChangePercent:5,seatsOwned:150,seatsActive:120},
+  {id:5,vendor:"Figma",category:"Design",annualCostINR:2075000,decisionDeadline:"2026-10-03",noticeWindowStatus:"OPEN",owner:"Sara Patel",priceChangePercent:12,seatsOwned:20,seatsActive:8},
+  {id:6,vendor:"Notion",category:"Documentation",annualCostINR:747000,decisionDeadline:"2026-11-17",noticeWindowStatus:"OPEN",owner:"UNASSIGNED",priceChangePercent:0,seatsOwned:100,seatsActive:200},
+  {id:7,vendor:"Adobe Creative Cloud",category:"Design Tools",annualCostINR:3154000,decisionDeadline:"2026-10-11",noticeWindowStatus:"OPEN",owner:"Sara Patel",priceChangePercent:7,seatsOwned:25,seatsActive:18},
+  {id:8,vendor:"Okta",category:"Security",annualCostINR:4316000,decisionDeadline:"2026-09-21",noticeWindowStatus:"CLOSED",owner:"Michael Torres (DEPARTED)",priceChangePercent:18,seatsOwned:250,seatsActive:189},
+  {id:9,vendor:"Jira Cloud",category:"Project Mgmt",annualCostINR:2905000,decisionDeadline:"2026-12-09",noticeWindowStatus:"OPEN",owner:"Dev Team Lead",priceChangePercent:10,seatsOwned:200,seatsActive:145},
+  {id:10,vendor:"Stripe",category:"Payments",annualCostINR:996000,decisionDeadline:"2026-09-15",noticeWindowStatus:"CLOSED",owner:"Finance Team",priceChangePercent:0,seatsOwned:null,seatsActive:null},
+  {id:11,vendor:"Microsoft 365",category:"Productivity",annualCostINR:3984000,decisionDeadline:"2026-12-02",noticeWindowStatus:"OPEN",owner:"IT Director",priceChangePercent:6,seatsOwned:250,seatsActive:201},
+  {id:12,vendor:"Looker",category:"Analytics",annualCostINR:2324000,decisionDeadline:"2026-12-15",noticeWindowStatus:"OPEN",owner:"Analytics Lead",priceChangePercent:-3,seatsOwned:15,seatsActive:12}
+];
+const urgencyColorFor = deadlineStr => {
+  const d = daysUntil(deadlineStr);
+  if (d < 0) return "gray";
+  if (d <= 6) return "red";
+  if (d <= 13) return "orange";
+  if (d <= 27) return "yellow";
+  return "green";
+};
+const TODAY = new Date("2026-09-29T00:00:00");
+const COLORS = { red:{bg:"#F8D7DA",fg:"#DC3545"}, orange:{bg:"#FFE5CC",fg:"#FD7E14"}, yellow:{bg:"#FFF3CD",fg:"#B7791F"}, green:{bg:"#D4EDDA",fg:"#28A745"}, gray:{bg:"#E9ECEF",fg:"#6C757D"} };
+const indianCommas = n => { const s = String(Math.round(Math.abs(n))); const last3 = s.length>3?s.slice(-3):s; let rest = s.length>3?s.slice(0,-3):""; rest = rest.replace(/\B(?=(\d{2})+(?!\d)$)/g, ","); return (n<0?"-":"") + "₹" + (rest?rest+","+last3:last3); };
+const inrCr = n => "₹" + (n/1e7).toFixed(1) + " Cr";
+const fmtShort = d => new Date(d + "T00:00:00").toLocaleDateString("en-US", {month:"short", day:"numeric"});
+const daysUntil = d => Math.round((new Date(d + "T00:00:00") - TODAY) / 86400000);
+const weekStart = new Date("2026-08-24T00:00:00");
+const WEEK_LABELS = [];
+for (let i=0;i<7;i++){ const s=new Date(weekStart.getTime()+i*7*86400000); WEEK_LABELS.push(s.toLocaleDateString("en-US",{month:"short",day:"numeric"})); }
+
+class Component extends DCLogic {
+  state = { screen: "calendar", filter: null, detailId: null, salesforceStatus: null };
+
+  weekIndexFor(dateStr) {
+    const d = new Date(dateStr + "T00:00:00");
+    let idx = Math.floor((d - weekStart) / (7*86400000));
+    if (idx < 0) idx = 0;
+    if (idx > 6) idx = 6;
+    return idx;
+  }
+
+  buildDetail(base) {
+    const util = base.seatsOwned ? Math.round((base.seatsActive/base.seatsOwned)*100) : null;
+    const days = daysUntil(base.decisionDeadline);
+    return {
+      vendor: base.vendor, category: base.category,
+      costLabel: inrCr(base.annualCostINR),
+      deadlineLabel: days >= 0 ? `${fmtShort(base.decisionDeadline)} (${days}d)` : `${fmtShort(base.decisionDeadline)} (${Math.abs(days)}d ago)`,
+      noticeLabel: base.noticeWindowStatus === "CLOSED" ? "❌ CLOSED" : "✅ OPEN",
+      noticeColor: base.noticeWindowStatus === "CLOSED" ? "#DC3545" : "#28A745",
+      ownerLabel: base.owner === "UNASSIGNED" ? "⚠️ Unassigned" : base.owner,
+      ownerColor: base.owner === "UNASSIGNED" || base.owner.includes("DEPARTED") ? "#DC3545" : "#212529",
+      priceLabel: base.priceChangePercent === 0 ? "0%" : `${base.priceChangePercent > 0 ? "+" : ""}${base.priceChangePercent}%`,
+      priceColor: base.priceChangePercent > 0 ? "#DC3545" : base.priceChangePercent < 0 ? "#28A745" : "#212529",
+      utilLabel: util != null ? `${base.seatsActive}/${base.seatsOwned} (${util}%)` : "Usage-based"
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const filtered = s.filter ? RAW.filter(r => r.urgencyColor === s.filter) : RAW;
+
+    const calendarRows = RAW.map(base => {
+      const cells = WEEK_LABELS.map((_, i) => ({ active: false, cursor: "default" }));
+      const wi = this.weekIndexFor(base.decisionDeadline);
+      const urgency = urgencyColorFor(base.decisionDeadline);
+      const visible = !s.filter || urgency === s.filter;
+      const col = COLORS[urgency];
+      const days = daysUntil(base.decisionDeadline);
+      cells[wi] = {
+        active: visible, cursor: "pointer",
+        bg: col.bg, fg: col.fg,
+        dueLabel: days === 0 ? "Due TODAY" : days > 0 ? `Due ${fmtShort(base.decisionDeadline)}` : `${Math.abs(days)}d ago`,
+        costLabel: inrCr(base.annualCostINR),
+        tag: base.noticeWindowStatus === "CLOSED" ? "CLOSED" : base.owner === "UNASSIGNED" ? "UNASSIGNED" : base.owner.includes("DEPARTED") ? "DEPARTED" : "",
+        open: () => this.setState({ detailId: base.id })
+      };
+      return { vendor: base.vendor, cells };
+    });
+
+    const FILTERS = [
+      { key: "red", label: "Due this week", dot: "#DC3545" },
+      { key: "orange", label: "Due 1-2 weeks", dot: "#FD7E14" },
+      { key: "yellow", label: "Due 3-4 weeks", dot: "#B7791F" },
+      { key: "green", label: "Due 5+ weeks", dot: "#28A745" },
+      { key: "gray", label: "Deadline passed", dot: "#6C757D" }
+    ];
+    const colorFilters = FILTERS.map(f => ({
+      label: f.label, dot: f.dot,
+      select: () => this.setState({ filter: s.filter === f.key ? null : f.key }),
+      bg: s.filter === f.key ? "#212529" : "#FFFFFF",
+      fg: s.filter === f.key ? "#FFFFFF" : "#212529",
+      border: s.filter === f.key ? "#212529" : "#DEE2E6"
+    }));
+
+    const detailBase = s.detailId ? RAW.find(r => r.id === s.detailId) : null;
+
+    const dueThisWeek = RAW.filter(r => { const d = daysUntil(r.decisionDeadline); return d >= 0 && d <= 6; });
+    const dueNext2Weeks = RAW.filter(r => { const d = daysUntil(r.decisionDeadline); return d >= 7 && d <= 13; });
+    const dueThisQuarter = RAW;
+    const sumCost = arr => arr.reduce((a,r) => a + r.annualCostINR, 0);
+
+    const TABS = [
+      { key: "calendar", label: "Calendar" },
+      { key: "thisweek", label: "Due This Week" },
+      { key: "tracking", label: "Decision Tracking" }
+    ];
+    const tabs = TABS.map(t => ({
+      label: t.label, select: () => this.setState({ screen: t.key }),
+      color: s.screen === t.key ? "#0D6EFD" : "#6C757D",
+      border: s.screen === t.key ? "#0D6EFD" : "transparent"
+    }));
+
+    return {
+      tabs, screen: true,
+      isCalendar: s.screen === "calendar", isThisWeek: s.screen === "thisweek", isTracking: s.screen === "tracking",
+      weekLabels: WEEK_LABELS, calendarRows, colorFilters,
+      detail: detailBase ? this.buildDetail(detailBase) : null,
+      closeDetail: () => this.setState({ detailId: null }),
+      stopProp: e => e.stopPropagation(),
+      salesforceStatus: s.salesforceStatus,
+      decidedCount: s.salesforceStatus ? 1 : 0,
+      lockedSpendLabel: s.salesforceStatus ? inrCr(14900000) : "₹0",
+      approveSalesforce: () => this.setState({ salesforceStatus: "✅ Approved — flagged for price negotiation" }),
+      escalateSalesforce: () => this.setState({ salesforceStatus: "🚩 Escalated to CFO" }),
+      thisWeekCount: dueThisWeek.length, thisWeekSpendLabel: inrCr(sumCost(dueThisWeek)),
+      next2WeeksCount: dueNext2Weeks.length, next2WeeksSpendLabel: inrCr(sumCost(dueNext2Weeks)),
+      quarterCount: dueThisQuarter.length, quarterSpendLabel: inrCr(sumCost(dueThisQuarter))
+    };
+  }
+}
+</script>
+</body>
+</html>

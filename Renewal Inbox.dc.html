@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#f2f2f3;color:#1d1f20;font-family:Barlow,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#3d5f80;text-decoration:none}a:hover{color:#1d1f20;text-decoration:underline}
+button,input,textarea{font-family:inherit}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #5980a6;outline-offset:2px}
+::selection{background:#d5e0eb}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <div style="height:52px;border-bottom:1px solid #dcdddf;background:#e9e9ea;display:flex;align-items:center;gap:28px;padding:0 32px">
+    <div style="display:flex;align-items:center;gap:9px">
+      <div style="width:14px;height:14px;background:#3d5f80"></div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:21px">Trellis</div>
+    </div>
+    <div style="display:flex;gap:4px;font-size:14px">
+      <span style="padding:6px 10px;background:#dfe6ee;font-weight:600;border-radius:3px">Renewal Inbox</span>
+      <span style="padding:6px 10px;color:#4a4e52">Subscriptions</span>
+      <span style="padding:6px 10px;color:#4a4e52">Vendors</span>
+      <span style="padding:6px 10px;color:#4a4e52">Spend</span>
+    </div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:#62666b">
+      <span>Northwind Group</span>
+      <div style="width:28px;height:28px;border-radius:3px;background:#3d5f80;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">AR</div>
+    </div>
+  </div>
+
+  <main style="width:100%;max-width:1280px;margin:0 auto;padding:24px 32px 80px">
+    <header style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding-bottom:16px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#3d5f80">Q3 close · {{ todayLabel }}</div>
+        <h1 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:32px;line-height:1.05">Renewal Inbox</h1>
+      </div>
+      <div style="display:flex;gap:0;border:1px solid #c9cbce;border-radius:3px;overflow:hidden">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+          <button onClick="{{ t.pick }}" style="height:34px;padding:0 14px;border:none;border-right:1px solid #dcdddf;background:{{ t.bg }};color:{{ t.color }};font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px">{{ t.label }}<span style="font-weight:500;opacity:0.75;font-variant-numeric:tabular-nums">{{ t.count }}</span></button>
+        </sc-for>
+      </div>
+    </header>
+
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #1d1f20;border-bottom:1px solid #dcdddf">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="padding:12px 16px 12px 0;display:flex;flex-direction:column;gap:2px;border-right:1px solid #e3e4e6">
+          <span style="font-size:12px;color:#62666b">{{ s.label }}</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ s.color }}">{{ s.value }}</span>
+          <span style="font-size:12px;color:#8b8f94">{{ s.sub }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:48px 0;text-align:center;font-size:14px;color:#62666b">{{ emptyText }}</div>
+    </sc-if>
+
+    <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="3">
+      <section style="padding-top:24px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+          <span style="width:9px;height:9px;background:{{ sec.dot }};align-self:center"></span>
+          <h2 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:21px">{{ sec.title }}</h2>
+          <span style="font-size:13px;color:#62666b">{{ sec.sub }}</span>
+          <span style="margin-left:auto;font-size:13px;color:#3a3d40;font-variant-numeric:tabular-nums">{{ sec.total }}</span>
+        </div>
+        <sc-for list="{{ sec.cards }}" as="r" hint-placeholder-count="3">
+          <div onClick="{{ r.open }}" style="position:relative;display:grid;grid-template-columns:minmax(150px,1.2fr) minmax(96px,0.6fr) minmax(130px,0.9fr) minmax(0,1.6fr) minmax(120px,auto);gap:16px;align-items:center;padding:16px;background:{{ r.bg }};border:1px solid {{ r.border }};border-radius:4px;cursor:pointer" style-hover="background:#f9fafb;border-color:#b9c7d6">
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <span style="font-size:16px;font-weight:700">{{ r.name }}</span>
+                <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px;background:{{ r.catBg }};color:{{ r.catFg }}">{{ r.cat }}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;font-size:13px">
+                <span style="width:20px;height:20px;border-radius:3px;background:{{ r.avBg }};color:{{ r.avFg }};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">{{ r.initials }}</span>
+                <span style="color:{{ r.ownerC }};font-weight:{{ r.ownerW }};text-decoration:{{ r.ownerDeco }}">{{ r.ownerName }}</span>
+                <span style="font-size:12px;color:#8b8f94">{{ r.ownerTag }}</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums">{{ r.cost }}</span>
+              <span style="font-size:12px;color:#8b8f94">{{ r.costSub }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:14px;font-weight:500">{{ r.event }}</span>
+              <span style="font-size:12px;font-weight:600;color:{{ r.eventC }}">{{ r.eventSub }}</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ r.badges }}" as="b" hint-placeholder-count="3">
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:3px;background:{{ b.bg }};color:{{ b.fg }};font-size:12px;font-weight:600;white-space:nowrap"><span style="width:6px;height:6px;background:{{ b.fg }}"></span>{{ b.text }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <sc-if value="{{ r.pending }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px">
+                  <button onClick="{{ r.primary }}" style="height:32px;padding:0 12px;border:1px solid #3d5f80;background:#3d5f80;color:#fff;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#2f4b66">{{ r.primaryLabel }}</button>
+                  <button onClick="{{ r.secondary }}" style="height:32px;padding:0 10px;border:1px solid #c9cbce;background:#fff;color:#1d1f20;border-radius:3px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:#e6edf4;border-color:#5980a6">{{ r.secondaryLabel }}</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ r.resolved }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+                  <span style="font-size:13px;font-weight:600;color:{{ r.statusC }}">{{ r.statusText }}</span>
+                  <span style="font-size:12px;color:#62666b">{{ r.statusSub }}</span>
+                </div>
+              </sc-if>
+              <span style="font-size:12px;color:#3d5f80;font-weight:500">{{ r.hint }}</span>
+            </div>
+
+            <sc-if value="{{ r.pickerOpen }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ stop }}" style="position:absolute;right:16px;top:56px;z-index:5;width:280px;background:#fff;border:1px solid #c9cbce;border-radius:4px;box-shadow:0 8px 24px rgba(29,31,32,0.14);padding:8px;display:flex;flex-direction:column;gap:6px;cursor:default">
+                <input value="{{ pickerQ }}" onChange="{{ onPickerQ }}" placeholder="Search people…" autofocus="{{ true }}" style="height:32px;border:1px solid #dcdddf;border-radius:3px;padding:0 8px;font-size:13px">
+                <div style="display:flex;flex-direction:column;max-height:220px;overflow-y:auto">
+                  <sc-for list="{{ pickerPeople }}" as="p" hint-placeholder-count="5">
+                    <button onClick="{{ p.pick }}" style="display:flex;align-items:center;gap:8px;padding:6px;border:none;background:transparent;text-align:left;cursor:pointer;border-radius:3px" style-hover="background:#e6edf4">
+                      <span style="width:22px;height:22px;border-radius:3px;background:#dfe6ee;color:#3d5f80;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">{{ p.initials }}</span>
+                      <span style="display:flex;flex-direction:column"><span style="font-size:13px;font-weight:600">{{ p.name }}</span><span style="font-size:11px;color:#62666b">{{ p.role }}</span></span>
+                    </button>
+                  </sc-for>
+                </div>
+                <button onClick="{{ closePicker }}" style="align-self:flex-end;border:none;background:none;font-size:12px;color:#62666b;cursor:pointer">Cancel</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </section>
+    </sc-for>
+  </main>
+</div>
+
+<sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(29,31,32,0.24)"></div>
+  <aside style="position:fixed;top:0;right:0;bottom:0;width:min(620px,100vw);background:#f8f8f9;border-left:1px solid #c9cbce;box-shadow:-8px 0 24px rgba(29,31,32,0.08);display:flex;flex-direction:column">
+    <div style="flex:1;overflow-y:auto">
+      <div style="padding:20px 24px;display:flex;gap:14px;align-items:flex-start;border-bottom:1px solid #dcdddf">
+        <div style="width:48px;height:48px;border:1px solid #c9cbce;border-radius:4px;background:repeating-linear-gradient(135deg,#eceef0 0 4px,#f6f7f8 4px 8px);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:600;color:#62666b">{{ d.letter }}</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <h2 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:30px;line-height:1">{{ d.name }}</h2>
+            <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px;background:{{ d.catBg }};color:{{ d.catFg }}">{{ d.cat }}</span>
+          </div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:14px;font-variant-numeric:tabular-nums">
+            <span><span style="font-weight:700;font-size:18px">{{ d.cost }}</span> <span style="color:#62666b">/ year</span></span>
+            <span style="color:#3a3d40">{{ d.renewLine }}</span>
+          </div>
+          <span style="font-size:13px;font-weight:600;color:{{ d.statusC }}">{{ d.statusText }}</span>
+        </div>
+        <button onClick="{{ closeDrawer }}" style="height:30px;padding:0 10px;border:1px solid #c9cbce;background:transparent;border-radius:3px;font-size:12px;cursor:pointer" style-hover="background:#e6edf4">Close · Esc</button>
+      </div>
+
+      <sc-if value="{{ d.hasCallout }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:16px 24px 0;padding:12px 14px;background:{{ d.calloutBg }};border-radius:4px;display:flex;flex-direction:column;gap:3px">
+          <span style="font-size:14px;font-weight:700;color:{{ d.calloutFg }}">{{ d.calloutTitle }}</span>
+          <span style="font-size:13px;color:#3a3d40;text-wrap:pretty">{{ d.calloutText }}</span>
+        </div>
+      </sc-if>
+
+      <div style="padding:20px 24px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #dcdddf">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Financial context</div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#62666b">Annual cost</span><span style="font-size:16px;font-weight:600;font-variant-numeric:tabular-nums">{{ d.cost }}</span></div>
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#62666b">Last year</span><span style="font-size:16px;font-weight:600;font-variant-numeric:tabular-nums">{{ d.prev }}</span></div>
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#62666b">YoY change</span><span style="font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ d.yoyC }}">{{ d.yoyLine }}</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;padding-top:4px">
+          <sc-for list="{{ d.history }}" as="h" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:48px minmax(0,1fr) 86px;gap:10px;align-items:center;font-size:13px;font-variant-numeric:tabular-nums">
+              <span style="color:#62666b">{{ h.year }}</span>
+              <div style="height:8px;background:#e3e4e6"><div style="height:8px;width:{{ h.w }};background:{{ h.c }}"></div></div>
+              <span style="text-align:right;font-weight:{{ h.weight }}">{{ h.amount }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ d.hasNegotiation }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:13px;color:#a83a2c;font-weight:500">{{ d.negotiation }}</div>
+        </sc-if>
+      </div>
+
+      <div style="padding:20px 24px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #dcdddf">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Usage context</div>
+        <sc-if value="{{ d.seatBased }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#62666b">Seats purchased</span><span style="font-size:16px;font-weight:600;font-variant-numeric:tabular-nums">{{ d.seats }}</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#62666b">Active, last 30 days</span><span style="font-size:16px;font-weight:600;font-variant-numeric:tabular-nums">{{ d.active }}</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#62666b">Utilization</span><span style="font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ d.utilC }}">{{ d.utilLine }}</span></div>
+          </div>
+          <div style="display:flex;height:10px;background:#e3e4e6;max-width:100%">
+            <sc-for list="{{ d.teams }}" as="t" hint-placeholder-count="3"><div style="height:10px;width:{{ t.w }};background:{{ t.c }};border-right:1px solid #f8f8f9"></div></sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:#3a3d40">
+            <sc-for list="{{ d.teams }}" as="t" hint-placeholder-count="3"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:{{ t.c }}"></span>{{ t.label }}</span></sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ d.hasUsageNote }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:13px;color:{{ d.usageNoteC }};font-weight:500;text-wrap:pretty">{{ d.usageNote }}</div>
+        </sc-if>
+      </div>
+
+      <div style="padding:20px 24px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #dcdddf">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Contract context</div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ d.contract }}" as="c" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:7px 0;border-bottom:1px solid #e7e8e9;font-size:13px">
+              <span style="color:#62666b">{{ c.k }}</span>
+              <span style="color:{{ c.c }};font-weight:{{ c.w }}">{{ c.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:20px 24px 28px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#62666b">Owner context</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;border-radius:3px;background:{{ d.avBg }};color:{{ d.avFg }};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">{{ d.initials }}</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:1px;min-width:0">
+            <span style="font-size:15px;font-weight:600;color:{{ d.ownerC }};text-decoration:{{ d.ownerDeco }}">{{ d.ownerName }}</span>
+            <span style="font-size:12px;color:#62666b">{{ d.ownerMeta }}</span>
+          </div>
+          <span style="font-size:12px;font-weight:600;padding:3px 8px;border-radius:3px;background:{{ d.ownerStatusBg }};color:{{ d.ownerStatusFg }}">{{ d.ownerStatus }}</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-if value="{{ d.hasOwner }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ dRouteOwner }}" style="height:30px;padding:0 12px;border:1px solid #c9cbce;background:#fff;border-radius:3px;font-size:13px;cursor:pointer" style-hover="background:#e6edf4">{{ d.messageLabel }}</button>
+            <button onClick="{{ toggleOthers }}" style="height:30px;padding:0 12px;border:1px solid transparent;background:transparent;color:#3d5f80;border-radius:3px;font-size:13px;cursor:pointer" style-hover="border-color:#5980a6">{{ d.othersLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ d.noOwner }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ dAssign }}" style="height:30px;padding:0 12px;border:1px solid #a83a2c;background:#fff;color:#a83a2c;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#f8e8e4">{{ d.assignLabel }}</button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ d.showOthers }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;border-top:1px solid #dcdddf">
+            <sc-for list="{{ d.others }}" as="o" hint-placeholder-count="2">
+              <button onClick="{{ o.open }}" style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;padding:7px 0;border:none;border-bottom:1px solid #e7e8e9;background:transparent;text-align:left;font-size:13px;cursor:pointer;font-variant-numeric:tabular-nums" style-hover="background:#eef1f4"><span style="font-weight:600">{{ o.name }}</span><span style="color:#62666b">{{ o.when }}</span><span>{{ o.cost }}</span></button>
+            </sc-for>
+            <sc-if value="{{ d.noOthers }}" hint-placeholder-val="{{ false }}"><span style="padding:7px 0;font-size:13px;color:#62666b">No other renewals owned.</span></sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ d.pickerOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:#fff;border:1px solid #c9cbce;border-radius:4px">
+            <input value="{{ pickerQ }}" onChange="{{ onPickerQ }}" placeholder="Search people…" style="height:32px;border:1px solid #dcdddf;border-radius:3px;padding:0 8px;font-size:13px">
+            <sc-for list="{{ pickerPeople }}" as="p" hint-placeholder-count="5">
+              <button onClick="{{ p.pick }}" style="display:flex;align-items:center;gap:8px;padding:6px;border:none;background:transparent;text-align:left;cursor:pointer;border-radius:3px" style-hover="background:#e6edf4">
+                <span style="width:22px;height:22px;border-radius:3px;background:#dfe6ee;color:#3d5f80;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">{{ p.initials }}</span>
+                <span style="font-size:13px;font-weight:600">{{ p.name }}</span><span style="font-size:12px;color:#62666b">{{ p.role }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid #c9cbce;background:#fff;padding:12px 24px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <sc-if value="{{ d.pending }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ dApprove }}" style="height:36px;padding:0 16px;border:1px solid #3d5f80;background:#3d5f80;color:#fff;border-radius:3px;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#2f4b66">{{ d.approveLabel }}</button>
+        <button onClick="{{ dRouteOwner }}" style="height:36px;padding:0 14px;border:1px solid #5980a6;background:#fff;color:#3d5f80;border-radius:3px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:#e6edf4">Route to owner</button>
+        <button onClick="{{ dRouteFinance }}" style="height:36px;padding:0 14px;border:1px solid #5980a6;background:#fff;color:#3d5f80;border-radius:3px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:#e6edf4">Route to Finance</button>
+      </sc-if>
+      <sc-if value="{{ d.resolved }}" hint-placeholder-val="{{ false }}">
+        <span style="font-size:14px;font-weight:600;color:{{ d.statusC }}">{{ d.statusText }}</span>
+        <button onClick="{{ dUndo }}" style="height:32px;padding:0 12px;border:1px solid #c9cbce;background:#fff;border-radius:3px;font-size:13px;cursor:pointer" style-hover="background:#e6edf4">Undo</button>
+      </sc-if>
+      <button onClick="{{ closeDrawer }}" style="margin-left:auto;height:36px;padding:0 12px;border:none;background:transparent;color:#3d5f80;font-size:14px;cursor:pointer" style-hover="text-decoration:underline">Back to inbox</button>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ dialogOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeDialog }}" style="position:fixed;inset:0;z-index:20;background:rgba(29,31,32,0.32)"></div>
+  <div style="position:fixed;z-index:21;top:50%;left:50%;transform:translate(-50%,-50%);width:min(520px,92vw);background:#fff;border:1px solid #c9cbce;border-radius:4px;box-shadow:0 16px 48px rgba(29,31,32,0.2);padding:20px;display:flex;flex-direction:column;gap:12px">
+    <h3 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:22px">{{ dlg.title }}</h3>
+    <div style="font-size:14px;color:#3a3d40;text-wrap:pretty;font-variant-numeric:tabular-nums">{{ dlg.body }}</div>
+    <sc-if value="{{ dlg.isMessage }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:12px;color:#62666b">To: <span style="color:#1d1f20;font-weight:600">{{ dlg.to }}</span></div>
+        <textarea value="{{ dlgText }}" onChange="{{ onDlgText }}" rows="7" style="width:100%;border:1px solid #dcdddf;border-radius:3px;padding:10px;font-size:13px;line-height:1.5;color:#1d1f20;resize:vertical"></textarea>
+      </div>
+    </sc-if>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button onClick="{{ closeDialog }}" style="height:34px;padding:0 14px;border:1px solid #c9cbce;background:#fff;border-radius:3px;font-size:13px;cursor:pointer" style-hover="background:#f2f2f3">Cancel</button>
+      <button onClick="{{ confirmDialog }}" style="height:34px;padding:0 14px;border:1px solid #3d5f80;background:#3d5f80;color:#fff;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#2f4b66">{{ dlg.confirm }}</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;z-index:30;bottom:24px;left:50%;transform:translateX(-50%);background:#1d1f20;color:#fff;border-radius:4px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:16px;font-size:14px;box-shadow:0 8px 24px rgba(29,31,32,0.25)">
+    <span>{{ toastText }}</span>
+    <button onClick="{{ toastUndo }}" style="height:28px;padding:0 10px;border:1px solid #62666b;background:transparent;color:#fff;border-radius:3px;font-size:13px;cursor:pointer" style-hover="background:#3a3d40">Undo</button>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const TODAY = new Date(2026, 8, 23);
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
+const WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const mkD = a => new Date(a[0], a[1], a[2]);
+const addD = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const diff = (a, b) => Math.round((a - b) / 86400000);
+const fD = d => MON[d.getMonth()] + ' ' + d.getDate() + (d.getFullYear() !== 2026 ? ', ' + d.getFullYear() : '');
+const fDW = d => WD[d.getDay()] + ', ' + fD(d);
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+const kf = n => '$' + (Math.round(n / 100) / 10) + 'K';
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+
+const RED = { fg: '#a83a2c', bg: '#f8e8e4' }, ORG = { fg: '#8a5b14', bg: '#f6efe3' }, GRN = { fg: '#3d7253', bg: '#e5efe9' }, GRY = { fg: '#55595e', bg: '#e9e9ea' };
+const CAT = {
+  CRM: ['#e2eaf3', '#34587c'], Communication: ['#e0eeee', '#2f6363'], Monitoring: ['#ebe6f3', '#5a4a80'], Engineering: ['#e6e9ec', '#454c54'],
+  Design: ['#f3e5ec', '#7c3f5c'], Productivity: ['#ecefe0', '#56602a'], Security: ['#f5e6e3', '#843a2e'], Payments: ['#e4efe7', '#33654a'], Analytics: ['#e8e6f5', '#4a4a86'],
+};
+const PEOPLE = {
+  'John Martinez': 'Sales Operations Manager', 'Emma Chen': 'Platform Engineering Lead', 'Rahul Mehta': 'Engineering Manager', 'Sara Kim': 'Design Lead',
+  'Wei Zhang': 'Dev Lead', 'Lena Ortiz': 'Finance Manager', 'Amit Patel': 'IT Director', 'Priya Shah': 'Analytics Lead', 'Michael Torres': 'IT Systems Manager',
+};
+const FIN = 'Finance approvals · Marcus Lee, Controller';
+const TEAMC = ['#3d5f80', '#6f8fae', '#a3b8cc', '#c9d5e1'];
+
+const RAW = [
+  { id: 'salesforce', name: 'Salesforce', cat: 'CRM', acv: 180000, prev: 156600, renew: [2026, 8, 28], type: 'Auto-renew', notice: 30, seats: 100, active: 47, owner: 'John Martinez', teams: [['Sales', 20], ['Customer Success', 18], ['Other', 9]], pay: 'Auto-billed monthly ($15,000/mo), no issues', hist2: 142400 },
+  { id: 'slack', name: 'Slack', cat: 'Communication', acv: 45000, yoy: 5, renew: [2026, 9, 1], type: 'Auto-renew', notice: 30, seats: 150, active: 89, owner: null, os: 'none', teams: [['Engineering', 34], ['Sales', 22], ['Operations', 18], ['Other', 15]], pay: 'Annual invoice; billing dispute resolved Mar 2026' },
+  { id: 'datadog', name: 'Datadog', cat: 'Monitoring', acv: 65000, yoy: 0, renew: [2026, 9, 5], type: 'Auto-renew', notice: 60, seats: 50, active: 34, owner: 'Emma Chen', pre: 'Sept 18', teams: [['Engineering', 22], ['Platform', 12]], pay: 'Annual invoice; $4,200 usage overage billed Jun 2026' },
+  { id: 'github', name: 'GitHub Enterprise', cat: 'Engineering', acv: 72000, yoy: 6, renew: [2026, 10, 15], type: 'Auto-renew', notice: 45, seats: 150, active: 120, owner: 'Rahul Mehta', teams: [['Engineering', 104], ['Data', 16]], pay: 'Annual invoice, paid on time' },
+  { id: 'figma', name: 'Figma', cat: 'Design', acv: 25000, yoy: 4, renew: [2026, 10, 2], type: 'Manual', notice: 30, seats: 20, active: 8, owner: 'Sara Kim', teams: [['Design', 6], ['Product', 2]], pay: 'Annual invoice, paid on time' },
+  { id: 'notion', name: 'Notion', cat: 'Productivity', acv: 9000, yoy: 0, renew: [2026, 11, 1], type: 'Manual', notice: 14, seats: 100, active: 204, owner: null, os: 'none', teams: [['Engineering', 88], ['Operations', 64], ['Product', 52]], pay: 'Annual card payment, paid on time' },
+  { id: 'adobe', name: 'Adobe Creative Cloud', cat: 'Design', acv: 38000, yoy: 7, renew: [2026, 11, 10], type: 'Auto-renew', notice: 60, seats: 25, active: 18, owner: 'Sara Kim', teams: [['Marketing', 12], ['Design', 6]], pay: 'Annual invoice, paid on time' },
+  { id: 'okta', name: 'Okta', cat: 'Security', acv: 52000, yoy: 18, renew: [2026, 11, 20], type: 'Auto-renew', notice: 90, seats: 250, active: 189, owner: 'Michael Torres', os: 'left', teams: [['Company-wide SSO', 189]], pay: 'Annual invoice, paid on time' },
+  { id: 'jira', name: 'Jira', cat: 'Engineering', acv: 35000, yoy: 3, renew: [2027, 0, 8], type: 'Auto-renew', notice: 30, seats: 200, active: 145, owner: 'Wei Zhang', teams: [['Engineering', 110], ['Product', 35]], pay: 'Annual invoice, paid on time' },
+  { id: 'stripe', name: 'Stripe', cat: 'Payments', acv: 12000, yoy: 0, mtm: true, billDay: 15, type: 'Month-to-month', notice: 30, seats: null, owner: 'Lena Ortiz', pay: 'Billed monthly ($1,000/mo), no issues' },
+  { id: 'm365', name: 'Microsoft 365', cat: 'Productivity', acv: 48000, yoy: 5, renew: [2027, 1, 1], type: 'Auto-renew', notice: 60, seats: 250, active: 201, owner: 'Amit Patel', teams: [['Company-wide', 201]], pay: 'Annual invoice, paid on time' },
+  { id: 'looker', name: 'Looker', cat: 'Analytics', acv: 28000, yoy: 4, renew: [2027, 2, 15], type: 'Auto-renew', notice: 90, seats: 15, active: 12, owner: 'Priya Shah', teams: [['Analytics', 8], ['Finance', 4]], pay: 'Annual invoice, paid on time' },
+];
+
+class Component extends DCLogic {
+  state = { tab: 'action', sel: null, status: {}, owners: {}, picker: null, pickerQ: '', dialog: null, toast: null, showOthers: false };
+
+  componentDidMount() {
+    this.onKey = e => {
+      if (e.key !== 'Escape') return;
+      if (this.state.dialog) this.setState({ dialog: null });
+      else if (this.state.picker) this.setState({ picker: null });
+      else this.setState({ sel: null });
+    };
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); clearTimeout(this.tt); }
+
+  derive(r) {
+    let renewal, deadline, lockedCharge = null;
+    if (r.mtm) {
+      const next = new Date(2026, TODAY.getDate() >= r.billDay ? TODAY.getMonth() + 1 : TODAY.getMonth(), r.billDay);
+      renewal = next; deadline = addD(next, -r.notice);
+      if (deadline < TODAY) { lockedCharge = next; renewal = new Date(next.getFullYear(), next.getMonth() + 1, r.billDay); deadline = addD(renewal, -r.notice); }
+    } else { renewal = mkD(r.renew); deadline = addD(renewal, -r.notice); }
+    const prev = r.prev || Math.round(r.acv / (1 + r.yoy / 100) / 100) * 100;
+    const yoy = (r.acv - prev) / prev * 100;
+    const assigned = this.state.owners[r.id];
+    const owner = assigned || r.owner;
+    const os = assigned ? 'active' : (r.os || 'active');
+    const closed = deadline < TODAY;
+    const dDead = diff(deadline, TODAY), dRenew = diff(renewal, TODAY);
+    const nextDays = closed ? dRenew : dDead;
+    const util = r.seats ? Math.round(r.active / r.seats * 100) : null;
+    return { ...r, renewal, deadline, lockedCharge, prev, yoy, yoyR: Math.round(yoy), delta: r.acv - prev, owner, os, closed, dDead, dRenew, nextDays, util,
+      group: nextDays <= 14 ? 'urgent' : nextDays <= 60 ? 'medium' : 'upcoming' };
+  }
+
+  badges(x) {
+    const out = [];
+    if (x.closed && !x.mtm) out.push({ ...RED, text: 'Notice closed ' + fD(x.deadline) });
+    if (x.os === 'none') out.push({ ...RED, text: 'No owner assigned' });
+    if (x.yoyR > 10) out.push({ ...RED, text: 'Price +' + x.yoyR + '% (+' + kf(x.delta) + ')' });
+    if (x.os === 'left') out.push({ ...ORG, text: 'Owner departed' });
+    if (!x.closed && x.dDead <= 14) out.push({ ...ORG, text: 'Notice closes in ' + plural(x.dDead, 'day') });
+    if (x.util != null && x.util < 60) out.push({ ...ORG, text: 'Low utilization (' + x.util + '%)' });
+    if (x.util != null && x.util > 100) out.push({ ...ORG, text: 'Over seat count (' + x.util + '%)' });
+    if (x.mtm) out.push({ ...GRY, text: 'Continuous monthly renewal' });
+    if (x.pre && !this.state.status[x.id]) out.push({ ...GRN, text: 'Owner pre-approved ' + x.pre });
+    if (x.type === 'Auto-renew' && x.closed && x.os !== 'active') out.push({ ...ORG, text: 'Auto-renews without approval' });
+    if (!x.closed && x.dDead > 14 && !x.mtm) out.push({ ...GRN, text: 'Notice open to ' + fD(x.deadline) });
+    if (x.util != null && x.util >= 60 && x.util <= 100) out.push({ ...GRN, text: 'Utilization ' + x.util + '%' });
+    if (x.yoyR === 0) out.push({ ...GRN, text: 'No price change' });
+    return out.slice(0, 3);
+  }
+
+  statusInfo(x) {
+    const s = this.state.status[x.id];
+    if (!s) return null;
+    if (s.kind === 'approved') return { text: x.mtm ? 'Approved to continue' : 'Approved for ' + fD(x.renewal), sub: 'By you · just now', c: GRN.fg };
+    if (s.kind === 'owner') return { text: 'Waiting on ' + s.to.split(' ')[0], sub: 'Decision request sent · just now', c: '#3d5f80' };
+    return { text: 'Escalated to Finance', sub: 'Awaiting Controller approval', c: '#3d5f80' };
+  }
+
+  ownerBits(x) {
+    if (x.os === 'none') return { name: 'Unassigned', tag: '', c: RED.fg, w: 600, deco: 'none', init: '?', avBg: RED.bg, avFg: RED.fg };
+    if (x.os === 'left') return { name: x.owner, tag: 'Departed', c: ORG.fg, w: 500, deco: 'line-through', init: x.owner.split(' ').map(s => s[0]).join(''), avBg: ORG.bg, avFg: ORG.fg };
+    return { name: x.owner, tag: this.state.owners[x.id] ? 'Assigned today' : '', c: '#3a3d40', w: 400, deco: 'none', init: x.owner.split(' ').map(s => s[0]).join(''), avBg: '#dfe6ee', avFg: '#3d5f80' };
+  }
+
+  eventBits(x) {
+    if (x.mtm) return { event: 'Next change: ' + fD(x.renewal) + ' cycle', sub: 'Give notice by ' + fD(x.deadline) + ' · ' + plural(x.dDead, 'day'), c: x.dDead <= 14 ? ORG.fg : '#62666b' };
+    if (x.closed) return { event: 'Renews ' + fD(x.renewal), sub: (x.dRenew <= 14 ? 'In ' : 'In ') + plural(x.dRenew, 'day') + ' · can’t cancel', c: x.dRenew <= 14 ? RED.fg : '#62666b' };
+    return { event: 'Decide by ' + fD(x.deadline), sub: plural(x.dDead, 'day') + ' left · renews ' + fD(x.renewal), c: x.dDead <= 14 ? ORG.fg : '#62666b' };
+  }
+
+  act(kind, x) {
+    if (kind === 'assign') { this.setState({ picker: x.id, pickerQ: '' }); return; }
+    if (kind === 'approve') {
+      const body = x.mtm
+        ? `Stripe continues month to month at $1,000/mo. You can still give notice by ${fD(x.deadline)} to change the ${fD(x.renewal)} cycle.`
+        : x.closed
+          ? `${x.name} ${x.type === 'Auto-renew' ? 'auto-renews' : 'renews'} ${fDW(x.renewal)} at ${money(x.acv)}/yr. The notice window closed ${fD(x.deadline)}, so this records your approval of a renewal that can’t be cancelled this cycle.`
+          : `${x.name} will renew ${fDW(x.renewal)} at ${money(x.acv)}/yr. The notice window is open until ${fD(x.deadline)}; approving closes this item in your inbox.`;
+      this.setState({ dialog: { kind, id: x.id, title: 'Approve ' + x.name + ' renewal?', body, confirm: 'Approve renewal' } });
+      return;
+    }
+    const facts = `${money(x.acv)}/yr` + (x.yoyR ? ` (${x.yoyR > 0 ? '+' : ''}${x.yoyR}% YoY, +${money(x.delta)})` : ', no price change') +
+      (x.util != null ? `, ${x.active} of ${x.seats} seats active (${x.util}%)` : '');
+    const timing = x.mtm ? `month-to-month; notice for the ${fD(x.renewal)} cycle is due ${fD(x.deadline)}`
+      : x.closed ? `renews ${fD(x.renewal)}; the ${x.notice}-day notice window closed ${fD(x.deadline)}, so it can’t be cancelled this cycle`
+      : `renews ${fD(x.renewal)}; notice is due by ${fD(x.deadline)} (${plural(x.dDead, 'day')} left)`;
+    if (kind === 'owner') {
+      if (x.os !== 'active') { this.setState({ picker: x.id, pickerQ: '' }); return; }
+      const first = x.owner.split(' ')[0];
+      const text = `Hi ${first}, ${x.name} ${timing}. Current terms: ${facts}.\n\nCan you confirm by ${fD(addD(TODAY, 2))} whether we should proceed as-is, or whether anything should change (seats, tier, or pricing to raise with the vendor)?`;
+      this.setState({ dialog: { kind, id: x.id, title: 'Route to owner', body: 'Send a decision request. Replies are logged on the renewal.', to: x.owner + ' · ' + PEOPLE[x.owner], confirm: 'Send request', text } });
+      return;
+    }
+    const text = `Escalating ${x.name} for Finance approval.\n\n${facts}. It ${timing}.\nOwner: ${x.os === 'active' ? x.owner : x.os === 'left' ? x.owner + ' (departed)' : 'unassigned'}.` + (x.yoyR > 10 ? `\n\nThe +${x.yoyR}% increase may be worth raising with the vendor.` : '');
+    this.setState({ dialog: { kind: 'finance', id: x.id, title: 'Route to Finance', body: 'Escalate for approval. The item moves to “Waiting on others”.', to: FIN, confirm: 'Send to Finance', text } });
+  }
+
+  toast(text, id, prev) {
+    clearTimeout(this.tt);
+    this.setState({ toast: { text, id, prev } });
+    this.tt = setTimeout(() => this.setState({ toast: null }), 6000);
+  }
+
+  setStatus(id, val, msg) {
+    const prev = this.state.status[id];
+    this.setState(s => { const st = { ...s.status }; if (val) st[id] = val; else delete st[id]; return { status: st, dialog: null }; });
+    if (msg) this.toast(msg, id, prev);
+  }
+
+  card(x) {
+    const ob = this.ownerBits(x), eb = this.eventBits(x), si = this.statusInfo(x);
+    const cat = CAT[x.cat] || ['#e9e9ea', '#3a3d40'];
+    const needOwner = x.os !== 'active';
+    const stop = f => e => { e && e.stopPropagation && e.stopPropagation(); f(); };
+    const primaryKind = needOwner ? 'assign' : 'approve';
+    const secondaryKind = (x.closed || x.yoyR > 10) ? 'finance' : 'owner';
+    return {
+      id: x.id, name: x.name, cat: x.cat, catBg: cat[0], catFg: cat[1],
+      initials: ob.init, avBg: ob.avBg, avFg: ob.avFg, ownerName: ob.name, ownerTag: ob.tag, ownerC: ob.c, ownerW: ob.w, ownerDeco: ob.deco,
+      cost: money(x.acv), costSub: x.mtm ? '$1,000 / month' : 'per year',
+      event: eb.event, eventSub: eb.sub, eventC: eb.c,
+      badges: this.badges(x),
+      pending: !si, resolved: !!si, statusText: si ? si.text : '', statusSub: si ? si.sub : '', statusC: si ? si.c : '',
+      primaryLabel: needOwner ? (x.os === 'left' ? 'Reassign owner' : 'Assign owner') : 'Approve',
+      secondaryLabel: secondaryKind === 'finance' ? 'Route to Finance' : 'Route to owner',
+      primary: stop(() => this.act(primaryKind, x)),
+      secondary: stop(() => this.act(secondaryKind, x)),
+      hint: 'Details →',
+      bg: this.state.sel === x.id ? '#eef2f6' : '#fff', border: this.state.sel === x.id ? '#5980a6' : '#dcdddf',
+      pickerOpen: this.state.picker === x.id && this.state.sel !== x.id,
+      open: () => this.setState({ sel: x.id, picker: null, showOthers: false }),
+    };
+  }
+
+  drawer(x, all) {
+    const ob = this.ownerBits(x), si = this.statusInfo(x);
+    const cat = CAT[x.cat] || ['#e9e9ea', '#3a3d40'];
+    let callout = null;
+    if (x.mtm) callout = { bg: GRY.bg, fg: '#3a3d40', title: 'Continuous monthly renewal', text: `Not a single renewal decision. The ${fD(x.lockedCharge)} charge is locked (notice was due ${fD(addD(x.lockedCharge, -30))}); to change or stop the ${fD(x.renewal)} cycle, give notice by ${fD(x.deadline)}.` };
+    else if (x.closed) callout = { bg: RED.bg, fg: RED.fg, title: 'Notice period closed ' + fDW(x.deadline) + ', can’t cancel', text: `${x.name} ${x.type === 'Auto-renew' ? 'auto-renews' : 'renews'} ${fDW(x.renewal)} on current terms. You can still approve, or route to Finance to raise pricing or seats with the vendor for next term.` };
+    else if (x.dDead <= 14) callout = { bg: ORG.bg, fg: ORG.fg, title: 'Notice closes in ' + plural(x.dDead, 'day') + ' (' + fDW(x.deadline) + ')', text: x.type === 'Manual' ? `Manual renewal: it won’t renew without approval. Decide by ${fD(x.deadline)} to respect the ${x.notice}-day notice period.` : `After ${fD(x.deadline)} the renewal locks in on current terms.` };
+    const h2 = x.hist2 || Math.round(x.prev / 1.05 / 100) * 100;
+    const max = Math.max(x.acv, x.prev, h2);
+    const history = [[2024, h2], [2025, x.prev], [2026, x.acv]].map(([y, v], i) => ({ year: y, amount: money(v), w: (v / max * 100) + '%', c: i === 2 ? (x.yoyR > 10 ? RED.fg : '#3d5f80') : '#a3b8cc', weight: i === 2 ? 600 : 400 }));
+    const yoyLine = x.yoyR === 0 ? 'No change' : (x.delta > 0 ? '+' : '−') + money(Math.abs(x.delta)) + ' (' + (x.yoyR > 0 ? '+' : '') + x.yoyR + '%)';
+    let usageNote = '', usageNoteC = '#3a3d40';
+    if (x.util == null) usageNote = 'Not seat-based: Stripe bills on payment volume, so utilization doesn’t apply.';
+    else if (x.util > 100) { usageNote = `${x.active} active users on ${x.seats} purchased seats. Check true-up terms before renewal; overage may be billed.`; usageNoteC = ORG.fg; }
+    else if (x.util < 50) { usageNote = `Consider downgrading: ${x.seats - x.active} of ${x.seats} seats inactive in the last 30 days. Confirm with the owner before changing the seat count.`; usageNoteC = ORG.fg; }
+    else if (x.util < 60) { usageNote = `Underused: ${x.seats - x.active} of ${x.seats} seats inactive in the last 30 days.`; usageNoteC = ORG.fg; }
+    const teams = (x.teams || []).map((t, i) => ({ label: t[0] + ' (' + t[1] + ')', w: (t[1] / Math.max(x.seats, x.active) * 100) + '%', c: TEAMC[i % 4] }));
+    const contract = [
+      { k: 'Renewal type', v: x.type, c: '#1d1f20', w: 500 },
+      { k: 'Notice period', v: x.notice + ' days', c: '#1d1f20', w: 500 },
+      { k: x.mtm ? 'Next changeable cycle' : 'Renewal date', v: fDW(x.renewal) + (x.mtm ? '' : ' · in ' + plural(x.dRenew, 'day')), c: '#1d1f20', w: 500 },
+      x.closed
+        ? { k: 'Notice window', v: 'Closed, expired ' + fD(x.deadline) + ' (' + plural(-x.dDead, 'day') + ' ago)', c: RED.fg, w: 600 }
+        : { k: 'Notice window', v: 'Open until ' + fDW(x.deadline) + ' · ' + plural(x.dDead, 'day') + ' left', c: x.dDead <= 14 ? ORG.fg : GRN.fg, w: 600 },
+      { k: 'Decision window', v: x.closed ? 'Closed: can’t cancel this cycle' : x.type === 'Manual' ? 'Open: requires approval to renew' : 'Open: can still change or cancel', c: x.closed ? RED.fg : '#1d1f20', w: 500 },
+      { k: 'Payment history', v: x.pay, c: '#1d1f20', w: 400 },
+    ];
+    if (x.pre) contract.push({ k: 'Owner pre-approval', v: x.owner + ' pre-approved on ' + x.pre, c: GRN.fg, w: 500 });
+    const others = x.os === 'active' ? all.filter(o => o.owner === x.owner && o.id !== x.id && o.os === 'active').map(o => ({ name: o.name, when: o.closed ? 'Renews ' + fD(o.renewal) : 'Decide by ' + fD(o.deadline), cost: money(o.acv), open: () => this.setState({ sel: o.id, showOthers: false }) })) : [];
+    const first = x.owner ? x.owner.split(' ')[0] : '';
+    return {
+      letter: x.name[0], name: x.name, cat: x.cat, catBg: cat[0], catFg: cat[1], cost: money(x.acv),
+      renewLine: x.mtm ? 'Month-to-month · next charge ' + fD(x.lockedCharge) : 'Renews ' + fDW(x.renewal) + ' (' + plural(x.dRenew, 'day') + ')',
+      statusText: si ? si.text : 'Needs a decision', statusC: si ? si.c : '#62666b',
+      hasCallout: !!callout, calloutBg: callout ? callout.bg : '', calloutFg: callout ? callout.fg : '', calloutTitle: callout ? callout.title : '', calloutText: callout ? callout.text : '',
+      prev: money(x.prev), yoyLine, yoyC: x.yoyR > 10 ? RED.fg : '#1d1f20', history,
+      hasNegotiation: x.yoyR > 10, negotiation: `Negotiation lever: +${money(x.delta)} over last year. Worth raising before ${x.closed ? 'next term' : fD(x.deadline)}.`,
+      seatBased: x.util != null, seats: x.seats, active: x.active, utilLine: x.util + '%' + (x.util < 60 ? ' · underused' : x.util > 100 ? ' · over' : ''), utilC: x.util < 60 || x.util > 100 ? ORG.fg : GRN.fg,
+      teams, hasUsageNote: !!usageNote, usageNote, usageNoteC,
+      contract,
+      initials: ob.init, avBg: ob.avBg, avFg: ob.avFg, ownerName: ob.name, ownerC: ob.c, ownerDeco: ob.deco,
+      ownerMeta: x.os === 'none' ? 'No one is accountable for this renewal' : x.os === 'left' ? PEOPLE[x.owner] + ' · left the company. Needs reassignment ASAP' : PEOPLE[x.owner] + ' · ' + x.owner.toLowerCase().replace(' ', '.') + '@northwind.co',
+      ownerStatus: x.os === 'none' ? 'Unassigned' : x.os === 'left' ? 'Departed' : 'Active',
+      ownerStatusBg: x.os === 'none' ? RED.bg : x.os === 'left' ? ORG.bg : GRN.bg, ownerStatusFg: x.os === 'none' ? RED.fg : x.os === 'left' ? ORG.fg : GRN.fg,
+      hasOwner: x.os === 'active', noOwner: x.os !== 'active',
+      messageLabel: 'Message ' + first, othersLabel: (this.state.showOthers ? 'Hide ' : 'View ') + first + '’s other renewals (' + others.length + ')',
+      assignLabel: x.os === 'left' ? 'Reassign owner' : 'Assign owner',
+      showOthers: this.state.showOthers && x.os === 'active', others, noOthers: others.length === 0,
+      pickerOpen: this.state.picker === x.id,
+      pending: !si, resolved: !!si,
+      approveLabel: x.mtm ? 'Approve to continue' : 'Approve renewal',
+    };
+  }
+
+  renderVals() {
+    const all = RAW.map(r => this.derive(r));
+    const tab = this.state.tab;
+    const inTab = x => { const s = this.state.status[x.id]; return tab === 'action' ? !s : tab === 'waiting' ? s && s.kind !== 'approved' : s && s.kind === 'approved'; };
+    const counts = { action: 0, waiting: 0, done: 0 };
+    all.forEach(x => { const s = this.state.status[x.id]; counts[!s ? 'action' : s.kind === 'approved' ? 'done' : 'waiting']++; });
+
+    const urgentEnd = addD(TODAY, 14);
+    const defs = [
+      { key: 'urgent', title: 'Urgent', sub: 'Renews or notice closes by ' + fD(urgentEnd), dot: RED.fg },
+      { key: 'medium', title: 'Medium', sub: 'Next deadline in 15–60 days (by ' + fD(addD(TODAY, 60)) + ')', dot: '#c98a2e' },
+      { key: 'upcoming', title: 'Upcoming', sub: '60+ days out', dot: GRN.fg },
+    ];
+    const sections = defs.map(d => {
+      const items = all.filter(x => x.group === d.key && inTab(x)).sort((a, b) => a.nextDays - b.nextDays);
+      return { ...d, cards: items.map(x => this.card(x)), total: plural(items.length, 'renewal') + ' · ' + kf(items.reduce((s, x) => s + x.acv, 0)) };
+    }).filter(s => s.cards.length);
+
+    const urgent = all.filter(x => x.group === 'urgent');
+    const urgentOpen = urgent.filter(x => !this.state.status[x.id]);
+    const noOwner = all.filter(x => x.os !== 'active');
+    const closedSoon = urgent.filter(x => x.closed);
+    const stats = [
+      { label: 'Urgent, next 14 days', value: plural(urgent.length, 'renewal'), sub: fD(TODAY) + ' – ' + fD(urgentEnd) + ' · ' + urgentOpen.length + ' still need action', color: '#1d1f20' },
+      { label: 'Urgent spend', value: kf(urgent.reduce((s, x) => s + x.acv, 0)), sub: 'Annual cost of urgent renewals', color: '#1d1f20' },
+      { label: 'Notice already closed', value: String(closedSoon.length), sub: closedSoon.map(x => x.name).join(', ') + ': can’t cancel', color: RED.fg },
+      { label: 'Owner problems', value: String(noOwner.length), sub: noOwner.map(x => x.name + (x.os === 'left' ? ' (departed)' : '')).join(', ') || 'All renewals owned', color: noOwner.length ? ORG.fg : GRN.fg },
+    ];
+
+    const tabs = [['action', 'Needs action'], ['waiting', 'Waiting on others'], ['done', 'Done']].map(([k, l]) => ({
+      label: l, count: counts[k], bg: tab === k ? '#1d1f20' : '#fff', color: tab === k ? '#fff' : '#3a3d40', pick: () => this.setState({ tab: k, picker: null }),
+    }));
+
+    const selX = all.find(x => x.id === this.state.sel);
+    const d = selX ? this.drawer(selX, all) : null;
+    const dlg = this.state.dialog;
+    const dlgX = dlg ? all.find(x => x.id === dlg.id) : null;
+    const pickX = all.find(x => x.id === this.state.picker);
+    const q = this.state.pickerQ.toLowerCase();
+    const pickerPeople = Object.keys(PEOPLE).filter(n => n !== 'Michael Torres' && (n + PEOPLE[n]).toLowerCase().includes(q)).map(n => ({
+      name: n, role: PEOPLE[n], initials: n.split(' ').map(s => s[0]).join(''),
+      pick: e => { e && e.stopPropagation && e.stopPropagation(); if (!pickX) return; this.setState(s => ({ owners: { ...s.owners, [pickX.id]: n }, picker: null })); this.toast(n + ' now owns ' + pickX.name, null, null); },
+    }));
+
+    return {
+      todayLabel: fDW(TODAY) + ', 2026',
+      tabs, stats, sections,
+      isEmpty: sections.length === 0,
+      emptyText: tab === 'action' ? 'Inbox clear: every renewal is approved or routed.' : tab === 'waiting' ? 'Nothing waiting on owners or Finance.' : 'No approved renewals yet.',
+      stop: e => e.stopPropagation(),
+      pickerQ: this.state.pickerQ, pickerPeople,
+      onPickerQ: e => this.setState({ pickerQ: e.target.value }),
+      closePicker: e => { e && e.stopPropagation && e.stopPropagation(); this.setState({ picker: null }); },
+
+      drawerOpen: !!d, d: d || {},
+      closeDrawer: () => this.setState({ sel: null, picker: null }),
+      dApprove: () => selX && this.act('approve', selX),
+      dRouteOwner: () => selX && this.act('owner', selX),
+      dRouteFinance: () => selX && this.act('finance', selX),
+      dAssign: () => selX && this.setState(s => ({ picker: s.picker === selX.id ? null : selX.id, pickerQ: '' })),
+      dUndo: () => selX && this.setStatus(selX.id, null),
+      toggleOthers: () => this.setState(s => ({ showOthers: !s.showOthers })),
+
+      dialogOpen: !!dlg, dlg: dlg ? { ...dlg, isMessage: dlg.kind !== 'approve' } : {},
+      dlgText: dlg ? dlg.text || '' : '',
+      onDlgText: e => { const t = e.target.value; this.setState(s => ({ dialog: { ...s.dialog, text: t } })); },
+      closeDialog: () => this.setState({ dialog: null }),
+      confirmDialog: () => {
+        if (!dlg || !dlgX) return;
+        if (dlg.kind === 'approve') this.setStatus(dlgX.id, { kind: 'approved' }, dlgX.name + (dlgX.mtm ? ' approved to continue' : ' approved for ' + fD(dlgX.renewal)));
+        else if (dlg.kind === 'owner') this.setStatus(dlgX.id, { kind: 'owner', to: dlgX.owner }, 'Decision request sent to ' + dlgX.owner);
+        else this.setStatus(dlgX.id, { kind: 'finance' }, dlgX.name + ' escalated to Finance');
+      },
+
+      toastOpen: !!this.state.toast, toastText: this.state.toast ? this.state.toast.text : '',
+      toastUndo: () => {
+        const t = this.state.toast; if (!t) return;
+        clearTimeout(this.tt);
+        if (t.id) this.setState(s => { const st = { ...s.status }; if (t.prev) st[t.id] = t.prev; else delete st[t.id]; return { status: st, toast: null }; });
+        else this.setState({ toast: null });
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

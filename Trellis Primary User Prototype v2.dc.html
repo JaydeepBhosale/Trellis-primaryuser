@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Trellis — Primary User Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#F8F9FA;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#171A1F;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#3B6EA8;text-decoration:none}a:hover{color:#2C5687;text-decoration:underline}
+button,input,textarea{font-family:inherit}
+@keyframes drawerIn{from{transform:translateX(32px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+</style>
+</helmet>
+
+<div style="min-width:1440px;min-height:100vh;display:grid;grid-template-columns:232px minmax(0,1fr);background:#F8F9FA;">
+
+  <nav style="position:sticky;top:0;height:100vh;background:#FFFFFF;border-right:1px solid #E5E7EB;display:flex;flex-direction:column;">
+    <div style="padding:26px 24px 20px;font-size:16px;line-height:20px;font-weight:700;letter-spacing:0.08em;color:#171A1F;">TRELLIS</div>
+    <div style="display:flex;flex-direction:column;gap:2px;padding:0 12px;">
+      <div onClick="{{ goRenewals }}" style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-radius:6px;font-size:14px;line-height:18px;cursor:pointer;background:{{ nav.rBg }};font-weight:{{ nav.rW }};color:#171A1F;" style-hover="background:#F1F3F5;">
+        <span>Renewals</span>
+        <span style="min-width:16px;height:16px;border-radius:8px;background:#C73E3E;color:#FFFFFF;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 4px;">6</span>
+      </div>
+      <div onClick="{{ goOverview }}" style="padding:9px 12px;border-radius:6px;font-size:14px;line-height:18px;cursor:pointer;background:{{ nav.oBg }};font-weight:{{ nav.oW }};color:#171A1F;" style-hover="background:#F1F3F5;">Overview</div>
+      <div onClick="{{ goSubs }}" style="padding:9px 12px;border-radius:6px;font-size:14px;line-height:18px;cursor:pointer;background:{{ nav.sBg }};font-weight:{{ nav.sW }};color:#171A1F;" style-hover="background:#F1F3F5;">Subscriptions</div>
+    </div>
+    <div style="margin-top:auto;border-top:1px solid #E5E7EB;padding:16px 24px;display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;border-radius:6px;background:#F1F3F5;color:#3F4650;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;">JB</div>
+      <div style="display:flex;flex-direction:column;min-width:0;">
+        <span style="font-size:13px;line-height:18px;font-weight:600;color:#171A1F;white-space:nowrap;">Jaydeep Bhosale</span>
+        <span style="font-size:11px;line-height:14px;color:#8A919D;white-space:nowrap;">Finance &amp; Procurement</span>
+      </div>
+    </div>
+  </nav>
+
+  <main style="min-width:0;">
+
+    <sc-if value="{{ isRenewals }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:30px 32px 48px;">
+        <div style="padding-bottom:18px;border-bottom:1px solid #E5E7EB;">
+          <h1 style="margin:0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">Renewals</h1>
+          <div style="margin-top:6px;font-size:14px;line-height:20px;color:#3F4650;">Prioritized renewals that need attention before their decision windows close.</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:14px;">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:8px;width:260px;height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#3F4650" stroke-width="1.5"></circle><path d="M11 11l3 3" stroke="#3F4650" stroke-width="1.5" stroke-linecap="round"></path></svg>
+              <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Search vendor, owner or category..." style="border:none;outline:none;flex:1;min-width:0;font-size:13px;color:#171A1F;background:transparent;"/>
+            </label>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Status <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Decision window <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Owner <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Category <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Renewal Type <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+          </div>
+          <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Sort:&nbsp; Priority <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        </div>
+
+        <div style="margin-top:20px;font-size:13px;line-height:18px;font-weight:600;letter-spacing:0.04em;color:#C73E3E;">DECISION WINDOW CLOSING</div>
+        <div style="margin-top:6px;font-size:13px;line-height:18px;color:#3F4650;">Act before the notice period expires.</div>
+        <div style="margin-top:8px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:180px 132px 131px 128px 132px 131px minmax(130px,1fr) 132px;align-items:center;height:48px;padding:0 16px;border-bottom:1px solid #E5E7EB;font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">
+            <span style="padding-left:12px;">VENDOR</span><span>ANNUAL COST</span><span>UTILIZATION</span><span>YOY</span><span>OWNER</span><span>RENEWAL DATE</span><span>DECISION WINDOW</span><span></span>
+          </div>
+          <sc-for list="{{ closingRows }}" as="r" hint-placeholder-count="3">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:180px 132px 131px 128px 132px 131px minmax(130px,1fr) 132px;align-items:center;height:62px;padding:0 16px;border-top:{{ r.border }};cursor:pointer;" style-hover="background:#F8F9FA;">
+              <div style="display:flex;align-items:center;gap:9px;">
+                <div style="width:3px;height:34px;border-radius:2px;background:#C73E3E;flex-shrink:0;"></div>
+                <div style="min-width:0;"><div style="font-size:15px;line-height:18px;font-weight:600;color:#171A1F;white-space:nowrap;">{{ r.name }}</div><div style="font-size:13px;line-height:18px;color:#8A919D;">{{ r.cat }}</div></div>
+              </div>
+              <div style="font-size:17px;line-height:22px;font-weight:600;color:#171A1F;">{{ r.costLabel }}</div>
+              <div><div style="font-size:14px;line-height:18px;color:#171A1F;">{{ r.seatsLabel }}</div><div style="font-size:12px;line-height:16px;color:#8A919D;">{{ r.activeLabel }}</div></div>
+              <div><div style="font-size:14px;line-height:18px;font-weight:{{ r.yoyW }};color:{{ r.yoyC }};">{{ r.yoyLabel }}</div><div style="font-size:12px;line-height:16px;color:#8A919D;">{{ r.typeLabel }}</div></div>
+              <div>
+                <sc-if value="{{ r.hasOwner }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;align-items:center;gap:6px;"><span style="width:22px;height:22px;border-radius:4px;background:#F1F3F5;color:#3F4650;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ r.ownerInitials }}</span><span style="font-size:13px;color:#3F4650;white-space:nowrap;">{{ r.ownerName }}</span></div>
+                </sc-if>
+                <sc-if value="{{ r.noOwner }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:13px;font-weight:600;color:#C73E3E;background:#FDECEC;padding:2px 6px;border-radius:4px;">Unassigned</span>
+                </sc-if>
+              </div>
+              <div style="font-size:14px;line-height:18px;color:#171A1F;">{{ r.renewLabel }}</div>
+              <div><span style="font-size:14px;line-height:18px;font-weight:600;color:#C73E3E;background:#FDECEC;padding:2px 6px;border-radius:4px;">{{ r.decisionLabel }}</span></div>
+              <button onClick="{{ r.open }}" style="height:34px;width:132px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Review</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:28px;font-size:13px;line-height:18px;font-weight:600;letter-spacing:0.04em;color:#B7791F;">REVIEW RECOMMENDED</div>
+        <div style="margin-top:6px;font-size:13px;line-height:18px;color:#3F4650;">Signals suggest these renewals are worth reviewing, but decision time remains.</div>
+        <div style="margin-top:8px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:180px 132px 131px 128px 144px 131px minmax(130px,1fr) 132px;align-items:center;height:48px;padding:0 16px;border-bottom:1px solid #E5E7EB;font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">
+            <span style="padding-left:12px;">VENDOR</span><span>ANNUAL COST</span><span>UTILIZATION</span><span>YOY</span><span>OWNER</span><span>RENEWAL DATE</span><span>DECISION WINDOW</span><span></span>
+          </div>
+          <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="3">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:180px 132px 131px 128px 144px 131px minmax(130px,1fr) 132px;align-items:center;height:62px;padding:0 16px;border-top:{{ r.border }};cursor:pointer;" style-hover="background:#F8F9FA;">
+              <div style="display:flex;align-items:center;gap:9px;">
+                <div style="width:3px;height:34px;border-radius:2px;background:#B7791F;flex-shrink:0;"></div>
+                <div style="min-width:0;"><div style="font-size:15px;line-height:18px;font-weight:600;color:#171A1F;white-space:nowrap;">{{ r.name }}</div><div style="font-size:13px;line-height:18px;color:#8A919D;">{{ r.cat }}</div></div>
+              </div>
+              <div style="font-size:17px;line-height:22px;font-weight:600;color:#171A1F;">{{ r.costLabel }}</div>
+              <div><div style="font-size:14px;line-height:18px;color:#171A1F;">{{ r.seatsLabel }}</div><div style="font-size:12px;line-height:16px;color:#8A919D;">{{ r.activeLabel }}</div></div>
+              <div><div style="font-size:14px;line-height:18px;font-weight:{{ r.yoyW }};color:{{ r.yoyC }};">{{ r.yoyLabel }}</div><div style="font-size:12px;line-height:16px;color:#8A919D;">{{ r.typeLabel }}</div></div>
+              <div>
+                <sc-if value="{{ r.hasOwner }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;align-items:center;gap:6px;"><span style="width:22px;height:22px;border-radius:4px;background:#F1F3F5;color:#3F4650;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ r.ownerInitials }}</span><span style="font-size:13px;color:#3F4650;white-space:nowrap;">{{ r.ownerName }}</span></div>
+                </sc-if>
+                <sc-if value="{{ r.noOwner }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:13px;font-weight:600;color:#C73E3E;background:#FDECEC;padding:2px 6px;border-radius:4px;">Unassigned</span>
+                </sc-if>
+              </div>
+              <div style="font-size:14px;line-height:18px;color:#171A1F;">{{ r.renewLabel }}</div>
+              <div><span style="font-size:11px;line-height:16px;font-weight:600;color:#B7791F;background:#FFF7E6;padding:2px 6px;border-radius:4px;white-space:nowrap;">{{ r.decisionLabel }}</span></div>
+              <sc-if value="{{ r.hasOwner }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ r.open }}" style="height:34px;width:132px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Review</button>
+              </sc-if>
+              <sc-if value="{{ r.noOwner }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ r.openAssign }}" style="height:34px;width:132px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Assign Owner</button>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px;font-size:13px;color:#5F6673;">No renewals match "{{ q }}".</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 24px 48px 32px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:10px;border-bottom:1px solid #E5E7EB;">
+          <div>
+            <h1 style="margin:0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">Overview</h1>
+            <div style="margin-top:6px;font-size:14px;line-height:20px;color:#3F4650;">A snapshot of your software subscription portfolio.</div>
+          </div>
+          <div onClick="{{ refresh }}" style="display:flex;align-items:center;gap:6px;font-size:13px;color:#8A919D;cursor:pointer;padding-top:8px;" style-hover="color:#3F4650;">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>{{ updatedLabel }}</span>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;">
+          <div onClick="{{ goSubs }}" style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;padding:18px 16px;cursor:pointer;" style-hover="border-color:#C5CAD2;box-shadow:0 1px 3px rgba(23,26,31,0.06);">
+            <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">TOTAL SUBSCRIPTIONS</div>
+            <div style="margin-top:2px;font-size:20px;line-height:26px;font-weight:600;color:#171A1F;">246</div>
+            <div style="margin-top:4px;font-size:13px;line-height:18px;color:#2F7D5A;">218 active</div>
+          </div>
+          <div onClick="{{ goSubs }}" style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;padding:18px 16px;cursor:pointer;" style-hover="border-color:#C5CAD2;box-shadow:0 1px 3px rgba(23,26,31,0.06);">
+            <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">ANNUAL CONTRACT VALUE</div>
+            <div style="margin-top:2px;font-size:20px;line-height:26px;font-weight:600;color:#171A1F;">$4.8M</div>
+            <div style="margin-top:4px;font-size:13px;line-height:18px;color:#5F6673;">Across 246 subscriptions</div>
+          </div>
+          <div onClick="{{ goRenewals }}" style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;padding:18px 16px;cursor:pointer;" style-hover="border-color:#C5CAD2;box-shadow:0 1px 3px rgba(23,26,31,0.06);">
+            <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">RENEWING NEXT 90 DAYS</div>
+            <div style="margin-top:2px;font-size:20px;line-height:26px;font-weight:600;color:#171A1F;">31</div>
+            <div style="margin-top:4px;font-size:13px;line-height:18px;color:#E8741C;">12 due this month</div>
+          </div>
+          <div onClick="{{ goRenewals }}" style="background:#FDECEC;border:1px solid #F3C9C9;border-radius:6px;padding:18px 16px;cursor:pointer;" style-hover="border-color:#E3A3A3;">
+            <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">NEED ATTENTION</div>
+            <div style="margin-top:2px;font-size:20px;line-height:26px;font-weight:600;color:#C73E3E;">6</div>
+            <div style="margin-top:4px;font-size:13px;line-height:18px;color:#C73E3E;">3 decision windows closing soon</div>
+          </div>
+        </div>
+
+        <div style="margin-top:26px;display:flex;justify-content:space-between;align-items:baseline;">
+          <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Renewals requiring attention</div>
+          <a href="#" onClick="{{ goRenewalsLink }}" style="font-size:13px;font-weight:500;">View All Renewals</a>
+        </div>
+        <div style="margin-top:8px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:168px 88px 88px 136px 136px 136px 136px minmax(110px,1fr) 96px;align-items:center;height:36px;padding:0 16px;border-bottom:1px solid #E5E7EB;font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">
+            <span>VENDOR</span><span>UTILIZATION</span><span>YOY</span><span>RENEWAL DATE</span><span>RENEWAL TYPE</span><span>NOTICE PERIOD</span><span>DECISION WINDOW</span><span>OWNER</span><span></span>
+          </div>
+          <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="3">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:168px 88px 88px 136px 136px 136px 136px minmax(110px,1fr) 96px;align-items:center;height:51px;padding:0 16px;border-top:{{ r.border }};cursor:pointer;" style-hover="background:#F8F9FA;">
+              <div><div style="font-size:15px;line-height:18px;font-weight:600;color:#171A1F;">{{ r.name }}</div><div style="font-size:11px;line-height:15px;color:#8A919D;">{{ r.sub }}</div></div>
+              <div><div style="font-size:13px;line-height:17px;font-weight:{{ r.utilW }};color:{{ r.utilC }};">{{ r.util }}</div><div style="font-size:10px;line-height:14px;color:#8A919D;">{{ r.seats }}</div></div>
+              <div style="font-size:13px;font-weight:{{ r.yoyW }};color:{{ r.yoyC }};">{{ r.yoy }}</div>
+              <div style="font-size:13px;color:#171A1F;">{{ r.renew }}</div>
+              <div style="font-size:13px;color:#171A1F;">Auto-Renew</div>
+              <div style="font-size:13px;color:#171A1F;">30 Days</div>
+              <div>
+                <sc-if value="{{ r.urgent }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;font-weight:600;color:#C73E3E;background:#FDECEC;padding:2px 6px;border-radius:4px;">{{ r.window }}</span></sc-if>
+                <sc-if value="{{ r.calm }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#171A1F;">{{ r.window }}</span></sc-if>
+              </div>
+              <div>
+                <sc-if value="{{ r.hasOwner }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#171A1F;">{{ r.ownerName }}</span></sc-if>
+                <sc-if value="{{ r.noOwner }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;font-weight:600;color:#C73E3E;background:#FDECEC;padding:2px 6px;border-radius:4px;">Unassigned</span></sc-if>
+              </div>
+              <sc-if value="{{ r.hasOwner }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ r.open }}" style="height:34px;width:92px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Review</button>
+              </sc-if>
+              <sc-if value="{{ r.noOwner }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ r.openAssign }}" style="height:34px;width:90px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Assign</button>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:26px;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Upcoming renewals</div>
+        <div style="margin-top:6px;font-size:14px;line-height:20px;color:#3F4650;">Renewals scheduled over the next 90 days. Select a month to filter the portfolio below.</div>
+        <div style="margin-top:10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;overflow:hidden;">
+          <sc-for list="{{ months }}" as="m" hint-placeholder-count="3">
+            <div onClick="{{ m.go }}" style="display:grid;grid-template-columns:136px minmax(0,1fr) 48px 24px;align-items:center;gap:0;height:46px;padding:0 16px;border-top:{{ m.border }};cursor:pointer;" style-hover="background:#F8F9FA;">
+              <span style="font-size:14px;color:#171A1F;">{{ m.label }}</span>
+              <div style="height:8px;background:#F1F3F5;border-radius:2px;overflow:hidden;"><div style="height:8px;width:{{ m.pct }};background:#3B6EA8;border-radius:2px;"></div></div>
+              <span style="font-size:14px;color:#171A1F;text-align:right;padding-right:10px;">{{ m.count }}</span>
+              <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3.5 2l3 3-3 3" stroke="#171A1F" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;padding:18px 16px;">
+            <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Subscription status</div>
+            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+              <div style="border-left:2px solid #2F7D5A;padding-left:10px;"><div style="font-size:20px;line-height:24px;font-weight:600;">218</div><div style="font-size:13px;color:#5F6673;">Active</div></div>
+              <div style="border-left:2px solid #3B6EA8;padding-left:10px;"><div style="font-size:20px;line-height:24px;font-weight:600;">12</div><div style="font-size:13px;color:#5F6673;">Renewing</div></div>
+              <div style="border-left:2px solid #B7791F;padding-left:10px;"><div style="font-size:20px;line-height:24px;font-weight:600;">6</div><div style="font-size:13px;color:#5F6673;">Under review</div></div>
+              <div style="border-left:2px solid #8A919D;padding-left:10px;"><div style="font-size:20px;line-height:24px;font-weight:600;">6</div><div style="font-size:13px;color:#5F6673;">Cancelled</div></div>
+            </div>
+            <div style="margin-top:16px;height:6px;display:flex;border-radius:2px;overflow:hidden;">
+              <div style="width:88%;background:#2F7D5A;"></div><div style="width:8%;background:#3B6EA8;"></div><div style="width:2.5%;background:#B7791F;"></div><div style="width:1.5%;background:#8A919D;"></div>
+            </div>
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #E5E7EB;display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <a href="#" onClick="{{ goRenewalsLink }}">Review 12 renewing subscriptions →</a>
+              <a href="#" onClick="{{ goRenewalsLink }}">Resolve 6 items under review →</a>
+            </div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;padding:18px 16px;">
+            <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Ownership</div>
+            <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div><div style="font-size:20px;line-height:24px;font-weight:600;">228</div><div style="font-size:13px;color:#5F6673;">Assigned owners</div></div>
+              <div><div style="font-size:20px;line-height:24px;font-weight:600;color:#C73E3E;">18</div><div style="font-size:13px;color:#5F6673;">Unassigned</div></div>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:#3F4650;">7.3% of subscriptions currently have no assigned owner.</div>
+            <a href="#" onClick="{{ goUnassigned }}" style="display:inline-block;margin-top:18px;font-size:13px;">Review unassigned in portfolio →</a>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSubs }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 32px 48px;">
+        <h1 style="margin:0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">All subscriptions</h1>
+        <div style="margin-top:2px;font-size:13px;line-height:18px;color:#8A919D;">246 subscriptions</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px;">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:8px;width:260px;height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#3F4650" stroke-width="1.5"></circle><path d="M11 11l3 3" stroke="#3F4650" stroke-width="1.5" stroke-linecap="round"></path></svg>
+              <input value="{{ subQ }}" onChange="{{ onSubQ }}" placeholder="Search vendor, owner or category..." style="border:none;outline:none;flex:1;min-width:0;font-size:13px;color:#171A1F;background:transparent;"/>
+            </label>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Renewal Date <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Renewal Type <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <sc-if value="{{ ownerFilterOff }}" hint-placeholder-val="{{ true }}">
+              <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Owner <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            </sc-if>
+            <sc-if value="{{ ownerFilterOn }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ clearOwnerFilter }}" style="height:34px;padding:0 12px;border:1px solid #171A1F;border-radius:4px;background:#F1F3F5;font-size:13px;font-weight:500;color:#171A1F;display:flex;align-items:center;gap:8px;cursor:pointer;" style-hover="background:#E5E7EB;">Owner: Unassigned <span style="font-size:14px;line-height:1;">×</span></button>
+            </sc-if>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Category <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0;">
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Sort:&nbsp; Annual Cost <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#3F4650;display:flex;align-items:center;gap:6px;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Filter <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="#3F4650" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:6px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:168px 129px 129px 88px 88px 129px 129px 129px minmax(130px,1fr);align-items:center;height:36px;padding:0 16px;border-bottom:1px solid #E5E7EB;font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">
+            <span>VENDOR</span><span>CATEGORY</span><span>ANNUAL COST</span><span>UTILIZATION</span><span>YOY</span><span>RENEWAL DATE</span><span>RENEWAL TYPE</span><span>NOTICE PERIOD</span><span>OWNER</span>
+          </div>
+          <sc-for list="{{ subRows }}" as="r" hint-placeholder-count="12">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:168px 129px 129px 88px 88px 129px 129px 129px minmax(130px,1fr);align-items:center;height:49px;padding:0 16px;border-top:{{ r.border }};cursor:pointer;" style-hover="background:#F8F9FA;">
+              <span style="font-size:14px;font-weight:600;color:#171A1F;">{{ r.name }}</span>
+              <span style="font-size:14px;color:#171A1F;">{{ r.cat }}</span>
+              <span style="font-size:14px;color:#171A1F;">{{ r.cost }}</span>
+              <div><div style="font-size:14px;line-height:17px;font-weight:{{ r.utilW }};color:{{ r.utilC }};">{{ r.util }}</div><div style="font-size:10px;line-height:14px;color:#8A919D;">{{ r.seats }}</div></div>
+              <span style="font-size:14px;font-weight:{{ r.yoyW }};color:{{ r.yoyC }};">{{ r.yoy }}</span>
+              <span style="font-size:14px;color:#171A1F;">{{ r.renew }}</span>
+              <span style="font-size:14px;color:#171A1F;">{{ r.type }}</span>
+              <span style="font-size:14px;color:#171A1F;">{{ r.notice }}</span>
+              <div>
+                <sc-if value="{{ r.hasOwner }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;align-items:center;gap:6px;"><span style="width:22px;height:22px;border-radius:4px;background:#F1F3F5;color:#3F4650;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ r.ownerInitials }}</span><span style="font-size:13px;color:#3F4650;white-space:nowrap;">{{ r.ownerName }}</span></div>
+                </sc-if>
+                <sc-if value="{{ r.noOwner }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:13px;font-weight:600;color:#C73E3E;background:#FDECEC;padding:2px 6px;border-radius:4px;">Unassigned</span>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noSubResults }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:20px 16px;font-size:13px;color:#5F6673;">No subscriptions match your filters.</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+</div>
+
+<sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+  <div>
+    <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(23,26,31,0.35);z-index:20;animation:fadeIn .18s ease-out;"></div>
+    <aside style="position:fixed;top:0;right:0;bottom:0;width:640px;max-width:100vw;background:#FFFFFF;box-shadow:-8px 0 24px rgba(23,26,31,0.12);z-index:21;display:flex;flex-direction:column;animation:drawerIn .22s ease-out;">
+      <div style="flex:1;overflow-y:auto;">
+        <div style="padding:22px 24px 20px;border-bottom:1px solid #E5E7EB;position:relative;">
+          <div style="font-size:20px;line-height:26px;font-weight:600;color:#171A1F;">{{ d.name }}</div>
+          <div style="font-size:13px;line-height:18px;color:#8A919D;">{{ d.cat }} · {{ d.typeLabel }}</div>
+          <div style="margin-top:10px;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ d.costLabel }} / year</div>
+          <div style="font-size:13px;line-height:18px;color:#3F4650;">Renews {{ d.renewShort }}</div>
+          <button onClick="{{ closeDrawer }}" aria-label="Close" style="position:absolute;top:18px;right:18px;width:32px;height:32px;border:none;background:transparent;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:#F1F3F5;">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#3F4650" stroke-width="1.5" stroke-linecap="round"></path></svg>
+          </button>
+        </div>
+
+        <div style="padding:24px 32px 0;">
+          <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Why review this renewal?</div>
+          <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <sc-if value="{{ d.noOwner }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid #D9DDE3;border-radius:6px;padding:16px;min-height:98px;">
+                <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">OWNER</div>
+                <div style="margin-top:4px;font-size:18px;line-height:24px;font-weight:600;color:#C73E3E;">Unassigned</div>
+              </div>
+            </sc-if>
+            <div style="border:1px solid #D9DDE3;border-radius:6px;padding:16px;min-height:98px;">
+              <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">ANNUAL CONTRACT VALUE</div>
+              <div style="margin-top:4px;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ d.costLabel }}</div>
+              <div style="margin-top:2px;font-size:12px;line-height:16px;font-weight:500;color:{{ d.deltaC }};">{{ d.deltaLabel }}</div>
+            </div>
+            <div style="border:1px solid #D9DDE3;border-radius:6px;padding:16px;min-height:98px;">
+              <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">ACTIVE SEAT UTILIZATION</div>
+              <div style="margin-top:4px;font-size:18px;line-height:24px;font-weight:600;color:{{ d.utilC }};">{{ d.utilLabel }}</div>
+              <div style="margin-top:4px;height:6px;background:#E5E7EB;border-radius:3px;overflow:hidden;"><div style="height:6px;width:{{ d.utilLabel }};background:{{ d.barC }};border-radius:3px;"></div></div>
+              <div style="margin-top:6px;font-size:12px;line-height:16px;color:#5F6673;">{{ d.active }} of {{ d.seats }} seats active</div>
+            </div>
+            <sc-if value="{{ d.hasOwner }}" hint-placeholder-val="{{ true }}">
+              <div style="border:1px solid #D9DDE3;border-radius:6px;padding:16px;min-height:98px;">
+                <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">DECISION WINDOW</div>
+                <div style="margin-top:4px;font-size:18px;line-height:24px;font-weight:600;color:{{ d.windowC }};">{{ d.windowLabel }}</div>
+                <div style="margin-top:4px;font-size:12px;line-height:16px;color:#5F6673;">Until {{ d.notice }} days notice</div>
+              </div>
+            </sc-if>
+            <div style="border:1px solid #D9DDE3;border-radius:6px;padding:16px;min-height:98px;">
+              <div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:#5F6673;">RENEWAL TYPE</div>
+              <div style="margin-top:4px;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ d.typeLabel }}</div>
+              <div style="margin-top:4px;font-size:12px;line-height:16px;color:#5F6673;">on {{ d.renewShort }}</div>
+            </div>
+          </div>
+
+          <div style="margin-top:28px;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Subscription details</div>
+          <div style="margin-top:16px;border:1px solid #D9DDE3;border-radius:6px;overflow:hidden;">
+            <sc-for list="{{ d.details }}" as="row" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:10px 16px;border-top:{{ row.border }};font-size:13px;line-height:18px;">
+                <div style="display:flex;justify-content:space-between;gap:8px;"><span style="color:#8A919D;">{{ row.l1 }}</span><span style="color:{{ row.c1 }};">{{ row.v1 }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:8px;"><span style="color:#8A919D;">{{ row.l2 }}</span><span style="color:#171A1F;">{{ row.v2 }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:24px;font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Subscription owner</div>
+          <sc-if value="{{ d.hasOwner }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:32px;height:32px;border-radius:4px;background:#F1F3F5;color:#3F4650;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;">{{ d.ownerInitials }}</div>
+                <div><div style="font-size:14px;line-height:18px;font-weight:600;color:#171A1F;">{{ d.ownerName }}</div><div style="font-size:12px;line-height:16px;color:#8A919D;">{{ d.ownerDept }} · {{ d.ownerEmail }}</div></div>
+              </div>
+              <button onClick="{{ contactOwner }}" style="height:32px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Contact owner</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ d.noOwner }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;">
+              <span style="font-size:14px;font-weight:600;color:#C73E3E;">No Owner Assigned</span>
+              <button onClick="{{ openAssign }}" style="height:32px;padding:0 12px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:13px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Assign owner</button>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="border-top:1px solid #E5E7EB;padding:18px 32px 24px;min-height:100px;">
+          <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Recent Activity</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:14px;">
+            <sc-for list="{{ d.activity }}" as="a" hint-placeholder-count="0">
+              <div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:26px;height:26px;border-radius:4px;background:#F1F3F5;color:#3F4650;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;">JB</div>
+                  <div style="flex:1;min-width:0;font-size:13px;line-height:18px;color:#8A919D;"><span style="font-weight:600;color:#171A1F;">Jaydeep Bhosale</span> {{ a.verb }} <span style="font-weight:600;color:#171A1F;">{{ a.target }}</span></div>
+                  <span style="font-size:12px;color:#8A919D;white-space:nowrap;">{{ a.time }}</span>
+                </div>
+                <sc-if value="{{ a.msg }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin:8px 0 0 36px;background:#F8F9FA;border:1px solid #E5E7EB;border-radius:6px;padding:10px 12px;font-size:13px;line-height:18px;color:#3F4650;white-space:pre-wrap;">{{ a.msg }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #E5E7EB;padding:14px 24px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;">
+        <sc-if value="{{ d.showAssign }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ openAssign }}" style="height:38px;border:none;border-radius:4px;background:#171A1F;color:#FFFFFF;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#303640;">Assign Owner</button>
+        </sc-if>
+        <sc-if value="{{ d.showAsk }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ openAsk }}" style="height:38px;border:none;border-radius:4px;background:#171A1F;color:#FFFFFF;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#303640;">Ask owner to review</button>
+        </sc-if>
+        <sc-if value="{{ d.showMark }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ markReviewing }}" style="height:38px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;color:#171A1F;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Mark as reviewing</button>
+        </sc-if>
+        <sc-if value="{{ d.underReview }}" hint-placeholder-val="{{ false }}">
+          <button disabled="{{ true }}" style="height:38px;border:none;border-radius:4px;background:#6C737C;color:#FFFFFF;font-size:14px;font-weight:500;cursor:default;">Under Review</button>
+        </sc-if>
+      </div>
+    </aside>
+  </div>
+</sc-if>
+
+<sc-if value="{{ askOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModalBg }}" style="position:fixed;inset:0;background:rgba(23,26,31,0.35);z-index:30;display:flex;align-items:center;justify-content:center;animation:fadeIn .15s ease-out;">
+    <div onClick="{{ stop }}" style="width:600px;max-width:calc(100vw - 32px);background:#FFFFFF;border-radius:8px;box-shadow:0 16px 40px rgba(23,26,31,0.2);overflow:hidden;animation:popIn .18s ease-out;">
+      <div style="padding:20px 24px 16px;border-bottom:1px solid #E5E7EB;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Ask {{ d.ownerFirst }} to review this renewal</div>
+          <button onClick="{{ closeModal }}" aria-label="Close" style="width:30px;height:30px;border:none;background:transparent;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:#F1F3F5;"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#3F4650" stroke-width="1.5" stroke-linecap="round"></path></svg></button>
+        </div>
+        <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;background:#F1F3F5;border-radius:4px;padding:8px 12px;font-size:13px;">
+          <span style="font-weight:600;color:#171A1F;">{{ d.name }} · {{ d.cat }}</span>
+          <span style="font-weight:600;color:#171A1F;">{{ d.costLabel }} / year</span>
+          <span style="color:#5F6673;text-align:right;font-size:12px;">Renews {{ d.renewLabel }}</span>
+        </div>
+      </div>
+      <div style="padding:16px 24px;">
+        <div style="font-size:14px;line-height:20px;font-weight:600;color:#171A1F;">What should {{ d.ownerFirst }} review?</div>
+        <div style="margin-top:6px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#3F4650;">
+          <label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input type="checkbox" style="width:14px;height:14px;margin:0;accent-color:#171A1F;"/>Current subscription is still required</label>
+          <label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input type="checkbox" style="width:14px;height:14px;margin:0;accent-color:#171A1F;"/>We need fewer seats</label>
+          <label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input type="checkbox" style="width:14px;height:14px;margin:0;accent-color:#171A1F;"/>We should discuss pricing or terms</label>
+          <label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input type="checkbox" style="width:14px;height:14px;margin:0;accent-color:#171A1F;"/>We may no longer need this subscription</label>
+          <label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input type="checkbox" style="width:14px;height:14px;margin:0;accent-color:#171A1F;"/>Other</label>
+        </div>
+        <div style="margin-top:14px;font-size:14px;line-height:20px;font-weight:600;color:#171A1F;">Message to {{ d.ownerFirst }}</div>
+        <textarea value="{{ askMsg }}" onChange="{{ onMsg }}" style="margin-top:6px;width:100%;height:120px;padding:10px;border:1px solid #D9DDE3;border-radius:4px;font-size:13px;line-height:18px;color:#171A1F;resize:vertical;outline:none;" style-focus="border-color:#3B6EA8;"></textarea>
+        <label style="margin-top:12px;display:flex;align-items:center;gap:10px;font-size:13px;color:#3F4650;cursor:pointer;"><input type="checkbox" checked="{{ askEmail }}" onChange="{{ toggleEmail }}" style="width:14px;height:14px;margin:0;accent-color:#171A1F;"/>Sent this as e-mail</label>
+      </div>
+      <div style="padding:14px 24px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end;gap:8px;">
+        <button onClick="{{ closeModal }}" style="height:40px;padding:0 16px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:14px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Cancel</button>
+        <button onClick="{{ sendAsk }}" style="height:40px;padding:0 16px;border:none;border-radius:4px;background:#171A1F;font-size:14px;color:#FFFFFF;cursor:pointer;" style-hover="background:#303640;">Send review request</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ assignOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModalBg }}" style="position:fixed;inset:0;background:rgba(23,26,31,0.35);z-index:30;display:flex;align-items:center;justify-content:center;animation:fadeIn .15s ease-out;">
+    <div onClick="{{ stop }}" style="width:600px;max-width:calc(100vw - 32px);background:#FFFFFF;border-radius:8px;box-shadow:0 16px 40px rgba(23,26,31,0.2);overflow:hidden;animation:popIn .18s ease-out;">
+      <div style="padding:20px 24px 16px;border-bottom:1px solid #E5E7EB;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Assign Owner</div>
+          <button onClick="{{ closeModal }}" aria-label="Close" style="width:30px;height:30px;border:none;background:transparent;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:#F1F3F5;"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#3F4650" stroke-width="1.5" stroke-linecap="round"></path></svg></button>
+        </div>
+        <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;background:#F1F3F5;border-radius:4px;padding:8px 12px;font-size:13px;">
+          <span style="font-weight:600;color:#171A1F;">{{ d.name }} · {{ d.cat }}</span>
+          <span style="font-weight:600;color:#171A1F;">{{ d.costLabel }} / year</span>
+          <span style="color:#5F6673;text-align:right;font-size:12px;">Renews {{ d.renewLabel }}</span>
+        </div>
+      </div>
+      <div style="padding:16px 24px;">
+        <div style="font-size:14px;line-height:20px;font-weight:600;color:#171A1F;">Select User to assign as owner</div>
+        <div style="margin-top:8px;display:flex;flex-direction:column;gap:7px;">
+          <sc-for list="{{ users }}" as="u" hint-placeholder-count="5">
+            <div onClick="{{ u.pick }}" style="display:flex;align-items:center;gap:12px;height:38px;padding:0 16px;border:1px solid {{ u.border }};border-radius:4px;cursor:pointer;background:{{ u.bg }};" style-hover="background:#F8F9FA;">
+              <span style="width:16px;height:16px;border-radius:50%;border:1.5px solid {{ u.ring }};display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="width:8px;height:8px;border-radius:50%;background:{{ u.dot }};"></span></span>
+              <span style="font-size:13px;color:#171A1F;">{{ u.name }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="padding:14px 24px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end;gap:8px;">
+        <button onClick="{{ closeModal }}" style="height:40px;padding:0 16px;border:1px solid #D9DDE3;border-radius:4px;background:#FFFFFF;font-size:14px;color:#171A1F;cursor:pointer;" style-hover="background:#F1F3F5;border-color:#C5CAD2;">Cancel</button>
+        <sc-if value="{{ hasPick }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ confirmAssign }}" style="height:40px;padding:0 16px;border:none;border-radius:4px;background:#171A1F;font-size:14px;color:#FFFFFF;cursor:pointer;" style-hover="background:#303640;">Assign Owner</button>
+        </sc-if>
+        <sc-if value="{{ noPick }}" hint-placeholder-val="{{ true }}">
+          <button disabled="{{ true }}" style="height:40px;padding:0 16px;border:none;border-radius:4px;background:#171A1F;opacity:0.4;font-size:14px;color:#FFFFFF;cursor:not-allowed;">Assign Owner</button>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:60;background:#171A1F;color:#FFFFFF;padding:11px 16px 11px 12px;border-radius:6px;box-shadow:0 8px 24px rgba(23,26,31,0.28);display:flex;align-items:center;gap:10px;font-size:13px;line-height:18px;font-weight:500;animation:toastIn .2s ease-out;">
+    <span style="width:18px;height:18px;border-radius:50%;background:#2F7D5A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5.2l2 2 4-4.4" stroke="#FFFFFF" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+    <span>{{ toast }}</span>
+  </div>
+</sc-if>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#171A1F"></rect><text x="50" y="62" font-family="sans-serif" font-size="34" font-weight="700" fill="#FFFFFF" text-anchor="middle">T</text></svg></template>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const USERS = {
+  rm: { name: 'Rahul Mehta', initials: 'RM', dept: 'Sales Operations', email: 'rahul.mehta@example.com' },
+  ns: { name: 'Neha Shah', initials: 'NS', dept: 'Design', email: 'neha.shah@example.com' },
+  aj: { name: 'Amit Joshi', initials: 'AJ', dept: 'Engineering', email: 'amit.joshi@example.com' },
+  kr: { name: 'Kavya Rao', initials: 'KR', dept: 'Operations', email: 'kavya.rao@example.com' },
+  sk: { name: 'Sara Kulkarni', initials: 'SK', dept: 'Design', email: 'sara.kulkarni@example.com' },
+  rp: { name: 'Rohan Patil', initials: 'RP', dept: 'Engineering', email: 'rohan.patil@example.com' },
+  an: { name: 'Arjun Nair', initials: 'AN', dept: 'Engineering', email: 'arjun.nair@example.com' },
+  am: { name: 'Ankit Mehta', initials: 'AM', dept: 'IT', email: 'ankit.mehta@example.com' },
+  ps: { name: 'Priya Shah', initials: 'PS', dept: 'Operations', email: 'priya.shah@example.com' },
+  mj: { name: 'Meera Joshi', initials: 'MJ', dept: 'Marketing', email: 'meera.joshi@example.com' }
+};
+const ASSIGNABLE = ['rm', 'ns', 'aj', 'kr', 'sk'];
+// Master data for drawers
+const V = {
+  sf: { name: 'Salesforce', cat: 'CRM', type: 'Auto-renew', cost: 180000, prev: 156522, yoy: 15, renew: '2026-11-02', notice: 30, deadline: 'Oct 03, 2026', days: 3, seats: 100, active: 47, owner: 'rm' },
+  adobe: { name: 'Adobe Creative Cloud', cat: 'Design', type: 'Auto-renew', cost: 96000, prev: 88889, yoy: 8, renew: '2026-11-04', notice: 30, deadline: 'Oct 05, 2026', days: 5, seats: 120, active: 68, owner: 'ns' },
+  datadog: { name: 'Datadog', cat: 'Monitoring', type: 'Manual', cost: 65000, prev: 63107, yoy: 3, renew: '2026-11-06', notice: 30, deadline: 'Oct 07, 2026', days: 7, seats: 200, active: 182, owner: 'aj' },
+  slack: { name: 'Slack', cat: 'Communication', type: 'Auto-renew', cost: 45000, prev: 43200, yoy: 4, renew: '2026-11-15', notice: 30, deadline: 'Oct 15, 2026', days: 17, seats: 200, active: 152, owner: null },
+  github: { name: 'GitHub Enterprise', cat: 'Developer tools', type: 'Manual', cost: 72000, prev: 72000, yoy: 0, renew: '2026-11-15', notice: 30, deadline: 'Oct 16, 2026', days: 17, seats: 200, active: 185, owner: 'rp' },
+  figma: { name: 'Figma', cat: 'Design', type: 'Manual', cost: 45000, prev: 44118, yoy: 2, renew: '2026-11-30', notice: 30, deadline: 'Oct 31, 2026', days: 32, seats: 100, active: 42, owner: 'sk' },
+  miro: { name: 'Miro', cat: 'Collaboration', type: 'Manual', cost: 31000, prev: 29245, yoy: 6, renew: '2026-11-02', notice: 30, deadline: 'Oct 03, 2026', days: 3, seats: 100, active: 61, owner: 'kr' },
+  jira: { name: 'Jira', cat: 'Developer Tools', type: 'Auto-renew', cost: 38000, prev: 37255, yoy: 2, renew: '2026-11-28', notice: 30, deadline: 'Oct 29, 2026', days: 29, seats: 100, active: 82, owner: 'an' },
+  zoom: { name: 'Zoom', cat: 'Communication', type: 'Auto-renew', cost: 18000, prev: 17822, yoy: 1, renew: '2026-12-08', notice: 30, deadline: 'Nov 08, 2026', days: 39, seats: 100, active: 88, owner: 'am' },
+  notion: { name: 'Notion', cat: 'Productivity', type: 'Auto-renew', cost: 24000, prev: 24000, yoy: 0, renew: '2026-12-12', notice: 30, deadline: 'Nov 12, 2026', days: 43, seats: 100, active: 94, owner: 'ps' },
+  hubspot: { name: 'Hubspot', cat: 'Marketing', type: 'Manual', cost: 54000, prev: 51429, yoy: 5, renew: '2026-12-20', notice: 30, deadline: 'Nov 20, 2026', days: 51, seats: 100, active: 73, owner: 'mj' },
+  onepass: { name: '1Password', cat: 'Security', type: 'Manual', cost: 16000, prev: 15686, yoy: 2, renew: '2027-01-15', notice: 30, deadline: 'Dec 16, 2026', days: 77, seats: 100, active: 89, owner: 'rm' }
+};
+const CLOSING = [{ id: 'sf', label: '3 days' }, { id: 'adobe', label: '5 days' }, { id: 'datadog', label: '7 days' }];
+const REVIEW = [{ id: 'slack', label: '17 days to decide' }, { id: 'github', label: '17 days to decide' }, { id: 'figma', label: '32 days to decide' }];
+// All subscriptions table — values as shown in Figma
+const SUBS = [
+  ['sf', 'Salesforce', 'CRM', '$180,000', '47%', '47/100', '+15%', 'Nov 02, 2026', 'Auto-Renew', '30 Days'],
+  ['adobe', 'Adobe Creative Cloud', 'Design', '$92,000', '68%', '82/120', '+8%', 'Nov 04, 2026', 'Auto-Renew', '30 Days'],
+  ['datadog', 'Datalog', 'Infrastructure', '$65,000', '91%', '182/200', '+3%', 'Nov 06, 2026', 'Manual-Renew', '30 Days'],
+  ['miro', 'Miro', 'Collaboration', '$31,000', '61%', '61/100', '+6%', 'Nov 02, 2026', 'Manual-Renew', '30 Days'],
+  ['figma', 'Figma', 'Design', '$45,000', '42%', '42/100', '+2%', 'Nov 30, 2026', 'Auto-Renew', '30 Days'],
+  ['slack', 'Slack', 'Communication', '$45,000', '76%', '152/200', '+4%', 'Nov 15, 2026', 'Auto-Renew', '30 Days'],
+  ['github', 'GitHub Enterprise', 'Developer Tools', '$72,000', '93%', '186/200', '0%', 'Nov 15, 2026', 'Auto-Renew', '60 Days'],
+  ['jira', 'Jira', 'Developer Tools', '$38,000', '82%', '82/100', '+2%', 'Nov 28, 2026', 'Auto-Renew', '30 Days'],
+  ['zoom', 'Zoom', 'Communication', '$18,000', '88%', '88/200', '+1%', 'Dec 08, 2026', 'Auto-Renew', '30 Days'],
+  ['notion', 'Notion', 'Productivity', '$24,000', '94%', '94/200', '0%', 'Dec 12, 2026', 'Auto-Renew', '30 Days'],
+  ['hubspot', 'Hubspot', 'Marketing', '$54,000', '73%', '73/200', '+5%', 'Dec 20, 2026', 'Manual-Renew', '30 Days'],
+  ['onepass', '1Password', 'Security', '$16,000', '89%', '89/100', '+2%', 'Jan 15, 2027', 'Manual-Renew', '30 Days']
+];
+const OV = [
+  { id: 'sf', sub: 'CRM · $180K/yr', util: '47%', seats: '47/100', utilHot: false, yoy: '+15%', yoyHot: true, renew: 'Nov 02, 2026', window: '3 days', urgent: true },
+  { id: 'figma', sub: 'Design · $45K/yr', util: '42%', seats: '42/100', utilHot: true, yoy: '+2%', yoyHot: false, renew: 'Nov 30, 2026', window: '31 days', urgent: false },
+  { id: 'slack', sub: 'Communication · $45K/yr', util: '76%', seats: '152/200', utilHot: false, yoy: '+4%', yoyHot: false, renew: 'Nov 15, 2026', window: '16 days', urgent: false }
+];
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const ORANGE = '#E8741C';
+
+class Component extends DCLogic {
+  state = { screen: 'renewals', drawerId: null, modal: null, toast: null, q: '', subQ: '', ownerFilter: false, askMsg: '', askEmail: false, pick: null, st: {}, updated: 5 };
+
+  componentDidMount() {
+    this._key = (e) => {
+      if (e.key !== 'Escape') return;
+      if (this.state.modal) this.setState({ modal: null });
+      else if (this.state.drawerId) this.setState({ drawerId: null });
+    };
+    window.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._key); clearTimeout(this._t); }
+
+  toast(msg) {
+    clearTimeout(this._t);
+    this.setState({ toast: null }, () => this.setState({ toast: msg }));
+    this._t = setTimeout(() => this.setState({ toast: null }), 3200);
+  }
+  ownerOf(id) { const s = this.state.st[id]; const k = s && s.owner !== undefined ? s.owner : V[id].owner; return k ? USERS[k] : null; }
+  stOf(id) { return this.state.st[id] || { status: 'none', activity: [] }; }
+  patch(id, fn) { this.setState(s => { const cur = s.st[id] || { status: 'none', activity: [] }; return { st: { ...s.st, [id]: { ...cur, ...fn(cur) } } }; }); }
+  now() { return new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
+  money(n) { return '$' + n.toLocaleString('en-US'); }
+  dLong(iso) { const [y, m, d] = iso.split('-').map(Number); return MON[m - 1] + ' ' + String(d).padStart(2, '0') + ', ' + y; }
+  dShort(iso) { const [y, m, d] = iso.split('-').map(Number); return MON[m - 1] + ' ' + d + ', ' + y; }
+  open(id, modal) { this.setState({ drawerId: id, modal: modal || null, pick: null }); if (modal === 'ask') this.prepAsk(id); }
+  prepAsk(id) {
+    const v = V[id], o = this.ownerOf(id);
+    const first = o ? o.name.split(' ')[0] : 'there';
+    const [, m, d] = v.renew.split('-').map(Number);
+    const msg = `Hi ${first},\n\nWe're reviewing the upcoming ${v.name} renewal and need your business context before we record the next step.\n\n${v.name} renews on ${MON[m - 1]} ${String(d).padStart(2, '0')} for $${Math.round(v.cost / 1000)}K/year. ${v.active} of ${v.seats} seats are currently active, and the annual price is ${v.yoy > 0 ? 'up ' + v.yoy + '%' : 'unchanged'} from the previous contract.\n\nPlease review the subscription and let us know whether the current subscription and seat count are still appropriate, or if there are commercial considerations we should account for.\n\nThanks,\nJaydeep`;
+    this.setState({ askMsg: msg, askEmail: false });
+  }
+
+  rowCommon(id, i) {
+    const v = V[id], o = this.ownerOf(id);
+    return {
+      id, name: v.name, cat: v.cat, border: i === 0 ? 'none' : '1px solid #E5E7EB',
+      hasOwner: !!o, noOwner: !o, ownerName: o ? o.name : '', ownerInitials: o ? o.initials : '',
+      open: (e) => { if (e) e.stopPropagation(); this.open(id); },
+      openAssign: (e) => { if (e) e.stopPropagation(); this.open(id, 'assign'); }
+    };
+  }
+  renewRow(r, i) {
+    const v = V[r.id];
+    return {
+      ...this.rowCommon(r.id, i),
+      costLabel: this.money(v.cost), seatsLabel: `${v.active} / ${v.seats} seats`, activeLabel: `${Math.round(v.active / v.seats * 100)}% active`,
+      yoyLabel: `${v.yoy > 0 ? '+' : ''}${v.yoy}% YoY`, yoyC: v.yoy >= 8 ? '#B7791F' : '#3F4650', yoyW: v.yoy >= 8 ? 600 : 400,
+      typeLabel: v.type, renewLabel: this.dLong(v.renew), decisionLabel: r.label
+    };
+  }
+  match(id, q) {
+    if (!q) return true;
+    const v = V[id], o = this.ownerOf(id), s = q.toLowerCase();
+    return v.name.toLowerCase().includes(s) || v.cat.toLowerCase().includes(s) || (o ? o.name : 'unassigned').toLowerCase().includes(s);
+  }
+
+  drawer() {
+    const id = this.state.drawerId || 'sf', v = V[id], o = this.ownerOf(id), s = this.stOf(id);
+    const util = Math.round(v.active / v.seats * 100), low = util < 50, delta = v.cost - v.prev;
+    const B = (i) => i === 0 ? 'none' : '1px solid #E5E7EB';
+    const details = [
+      ['Vendor', v.name, 'Category', v.cat], ['Contract value', this.money(v.cost) + ' / year', 'Previous value', this.money(v.prev) + ' / year'],
+      ['YoY change', (v.yoy > 0 ? '+' : '') + v.yoy.toFixed(1) + '%', 'Renewal date', this.dLong(v.renew)], ['Renewal type', v.type, 'Notice period', v.notice + ' days'],
+      ['Decision deadline', v.deadline, 'Seats purchased', String(v.seats)], ['Active seats', String(v.active), 'Utilization', util + '%']
+    ].map((r, i) => ({ l1: r[0], v1: r[1], l2: r[2], v2: r[3], c1: r[0] === 'Decision deadline' ? '#C73E3E' : '#171A1F', border: B(i) }));
+    const busy = s.status !== 'none';
+    return {
+      name: v.name, cat: v.cat, typeLabel: v.type, costLabel: this.money(v.cost), renewShort: this.dShort(v.renew), renewLabel: this.dLong(v.renew),
+      deltaLabel: `+$${delta.toLocaleString('en-US')} / +${v.yoy.toFixed(1)}% YoY`, deltaC: v.yoy >= 10 ? ORANGE : '#5F6673',
+      utilLabel: util + '%', utilC: low ? ORANGE : '#171A1F', barC: low ? ORANGE : '#3B6EA8', active: v.active, seats: v.seats,
+      windowLabel: v.days + ' days', windowC: v.days <= 10 ? '#C73E3E' : '#B7791F', notice: v.notice,
+      details, hasOwner: !!o, noOwner: !o,
+      ownerName: o ? o.name : '', ownerFirst: o ? o.name.split(' ')[0] : 'owner', ownerInitials: o ? o.initials : '', ownerDept: o ? o.dept : '', ownerEmail: o ? o.email : '',
+      activity: s.activity,
+      showAssign: !o && !busy, showAsk: !!o && !busy, showMark: !busy, underReview: busy
+    };
+  }
+
+  renderVals() {
+    const { screen, q, subQ } = this.state;
+    const act = (on) => on ? { bg: '#F1F3F5', w: 600 } : { bg: 'transparent', w: 400 };
+    const R = act(screen === 'renewals'), O = act(screen === 'overview'), S = act(screen === 'subs');
+    const go = (sc, extra) => () => this.setState({ screen: sc, drawerId: null, modal: null, ...(extra || {}) });
+    const closingRows = CLOSING.filter(r => this.match(r.id, q)).map((r, i) => this.renewRow(r, i));
+    const reviewRows = REVIEW.filter(r => this.match(r.id, q)).map((r, i) => this.renewRow(r, i));
+    const subRows = SUBS.filter(r => this.match(r[0], subQ) && (!this.state.ownerFilter || !this.ownerOf(r[0]))).map((r, i) => {
+      const hot = parseInt(r[4]) < 50;
+      return { ...this.rowCommon(r[0], i), name: r[1], cat: r[2], cost: r[3], util: r[4], seats: r[5], yoy: r[6], renew: r[7], type: r[8], notice: r[9],
+        utilC: hot ? ORANGE : '#171A1F', utilW: hot ? 600 : 400, yoyC: r[6] === '+15%' ? ORANGE : '#171A1F', yoyW: r[6] === '+15%' ? 600 : 400 };
+    });
+    const ovRows = OV.map((r, i) => ({ ...this.rowCommon(r.id, i), ...r, utilC: r.utilHot ? ORANGE : '#171A1F', utilW: r.utilHot ? 600 : 400, yoyC: r.yoyHot ? ORANGE : '#171A1F', yoyW: r.yoyHot ? 600 : 400, calm: !r.urgent }));
+    const months = [['October 2026', 12, '100%'], ['November 2026', 8, '67%'], ['December 2026', 11, '92%']].map((m, i) => ({
+      label: m[0], count: m[1], pct: m[2], border: i === 0 ? 'none' : '1px solid #E5E7EB', go: go('subs', { ownerFilter: false, subQ: '' })
+    }));
+    const d = this.drawer();
+    const users = ASSIGNABLE.map(k => { const on = this.state.pick === k; return { name: USERS[k].name, border: on ? '#171A1F' : '#D9DDE3', bg: on ? '#F8F9FA' : '#FFFFFF', ring: on ? '#171A1F' : '#8A919D', dot: on ? '#171A1F' : 'transparent', pick: () => this.setState({ pick: k }) }; });
+    const id = this.state.drawerId;
+
+    return {
+      nav: { rBg: R.bg, rW: R.w, oBg: O.bg, oW: O.w, sBg: S.bg, sW: S.w },
+      isRenewals: screen === 'renewals', isOverview: screen === 'overview', isSubs: screen === 'subs',
+      goRenewals: go('renewals'), goOverview: go('overview'), goSubs: go('subs', { ownerFilter: false }),
+      goRenewalsLink: (e) => { e.preventDefault(); go('renewals')(); },
+      goUnassigned: (e) => { e.preventDefault(); go('subs', { ownerFilter: true, subQ: '' })(); },
+      clearOwnerFilter: () => this.setState({ ownerFilter: false }),
+      ownerFilterOn: this.state.ownerFilter, ownerFilterOff: !this.state.ownerFilter,
+      q, subQ, onQ: (e) => this.setState({ q: e.target.value }), onSubQ: (e) => this.setState({ subQ: e.target.value }),
+      closingRows, reviewRows, noResults: !closingRows.length && !reviewRows.length, subRows, noSubResults: !subRows.length, ovRows, months,
+      updatedLabel: this.state.updated === 0 ? 'Updated just now' : `Last updated ${this.state.updated} min ago`,
+      refresh: () => { this.setState({ updated: 0 }); this.toast('Portfolio data refreshed'); },
+      drawerOpen: !!id, d, closeDrawer: () => this.setState({ drawerId: null, modal: null }),
+      askOpen: this.state.modal === 'ask', assignOpen: this.state.modal === 'assign',
+      closeModal: () => this.setState({ modal: null }), closeModalBg: () => this.setState({ modal: null }), stop: (e) => e.stopPropagation(),
+      openAsk: () => { this.prepAsk(id); this.setState({ modal: 'ask' }); },
+      openAssign: () => this.setState({ modal: 'assign', pick: null }),
+      askMsg: this.state.askMsg, onMsg: (e) => this.setState({ askMsg: e.target.value }),
+      askEmail: this.state.askEmail, toggleEmail: () => this.setState(s => ({ askEmail: !s.askEmail })),
+      sendAsk: () => {
+        const o = this.ownerOf(id), msg = this.state.askMsg.trim();
+        this.patch(id, c => ({ status: 'requested', activity: [...c.activity, { verb: 'asked owner to review', target: '', msg, time: this.now() }] }));
+        this.setState({ modal: null });
+        this.toast(`Review request sent to ${o.name}${this.state.askEmail ? ' by email' : ''}`);
+      },
+      markReviewing: () => {
+        this.patch(id, c => ({ status: 'reviewing', activity: [...c.activity, { verb: 'marked this renewal as', target: 'under review', msg: '', time: this.now() }] }));
+        this.toast(`${V[id].name} marked as under review`);
+      },
+      users, hasPick: !!this.state.pick, noPick: !this.state.pick,
+      confirmAssign: () => {
+        const k = this.state.pick, u = USERS[k];
+        this.patch(id, c => ({ owner: k, activity: [...c.activity, { verb: 'assigned a new owner', target: u.name, msg: '', time: this.now() }] }));
+        this.setState({ modal: null, pick: null });
+        this.toast(`${u.name} assigned as owner of ${V[id].name}`);
+      },
+      contactOwner: () => { const o = this.ownerOf(id); this.toast(`Email draft opened for ${o.name}`); },
+      toast: this.state.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

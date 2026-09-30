@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#F8F9FA;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#171A1F;-webkit-font-smoothing:antialiased}
+  *{box-sizing:border-box;font-variant-numeric:tabular-nums}
+  a{color:#3B6EA8;text-decoration:none}a:hover{color:#171A1F;text-decoration:underline}
+  @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</helmet>
+
+<div style="width:1440px;min-height:1024px;position:relative;background:#F8F9FA;">
+  <div style="display:grid;grid-template-columns:232px minmax(0,1fr);">
+
+    <nav style="background:#FFFFFF;border-right:1px solid #E5E7EB;padding:24px 0;display:flex;flex-direction:column;gap:28px;height:1024px;">
+      <div style="padding:0 24px;font-size:16px;font-weight:700;letter-spacing:0.04em;color:#171A1F;">TRELLIS</div>
+      <div style="display:flex;flex-direction:column;gap:2px;padding:0 12px;font-size:14px;">
+        <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ goOverview }}" style="padding:9px 12px;background:#F1F3F5;color:#171A1F;font-weight:600;border-radius:6px;cursor:pointer;">Overview</div>
+        </sc-if>
+        <sc-if value="{{ isInbox }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ goOverview }}" style="padding:9px 12px;color:#3F4650;font-weight:400;cursor:pointer;" style-hover="background:#F8F9FA;border-radius:6px;">Overview</div>
+        </sc-if>
+        <sc-if value="{{ isInbox }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ goInbox }}" style="padding:9px 12px;background:#F1F3F5;color:#171A1F;font-weight:600;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+            <span>Renewal Inbox</span>
+            <span style="background:#C73E3E;color:#fff;font-size:11px;font-weight:600;border-radius:8px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px;">{{ needAttentionCount }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ goInbox }}" style="padding:9px 12px;color:#3F4650;font-weight:400;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" style-hover="background:#F8F9FA;border-radius:6px;">
+            <span>Renewal Inbox</span>
+            <span style="background:#C73E3E;color:#fff;font-size:11px;font-weight:600;border-radius:8px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px;">{{ needAttentionCount }}</span>
+          </div>
+        </sc-if>
+        <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Subscriptions</div>
+        <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Reports</div>
+        <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Settings</div>
+      </div>
+      <div style="margin-top:auto;padding:16px 24px;border-top:1px solid #E5E7EB;display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:32px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;">JB</div>
+        <div style="display:flex;flex-direction:column;gap:1px;min-width:0;">
+          <span style="font-size:13px;font-weight:600;color:#171A1F;white-space:nowrap;">Jaydeep Bhosale</span>
+          <span style="font-size:11px;color:#8A919D;white-space:nowrap;">Finance &amp; Procurement</span>
+        </div>
+      </div>
+    </nav>
+
+    <main style="min-width:0;padding:28px 32px 48px;">
+
+      <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <header style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:1px solid #E5E7EB;">
+            <div>
+              <h1 style="margin:0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">Overview</h1>
+              <div style="margin-top:4px;font-size:14px;line-height:20px;color:#5F6673;">A snapshot of your software subscription portfolio.</div>
+            </div>
+            <div style="font-size:13px;color:#8A919D;">↻ Last updated 5 min ago</div>
+          </header>
+
+          <section style="margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;">
+            <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;padding:16px;">
+              <div style="font-size:13px;color:#5F6673;">Annual contract value</div>
+              <div style="margin-top:6px;font-size:26px;font-weight:600;color:#171A1F;">$4.8M</div>
+              <div style="margin-top:4px;font-size:12px;color:#8A919D;">Across 246 subscriptions</div>
+            </div>
+            <div onClick="{{ goInbox }}" style="cursor:pointer;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;padding:16px;" style-hover="border-color:#3B6EA8;">
+              <div style="font-size:13px;color:#5F6673;">Renewing next 90 days</div>
+              <div style="margin-top:6px;font-size:26px;font-weight:600;color:#171A1F;">31</div>
+              <div style="margin-top:4px;font-size:12px;color:#8A919D;">12 due this month</div>
+            </div>
+            <div onClick="{{ goInbox }}" style="cursor:pointer;background:#FDECEC;border:1px solid #F3C9C9;border-radius:8px;padding:16px;" style-hover="border-color:#C73E3E;">
+              <div style="font-size:13px;color:#7A2E2E;">Need attention</div>
+              <div style="margin-top:6px;font-size:26px;font-weight:600;color:#C73E3E;">{{ needAttentionCount }}</div>
+              <div style="margin-top:4px;font-size:12px;color:#7A2E2E;">3 decision windows closing soon</div>
+            </div>
+          </section>
+
+          <section style="margin-top:28px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Renewals requiring attention</div>
+              <a href="#" onClick="{{ goInboxLink }}" style="font-size:13px;font-weight:500;">View All Renewals</a>
+            </div>
+            <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+              <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.7fr 1fr 0.9fr 0.9fr;gap:12px;padding:10px 16px;border-bottom:1px solid #E5E7EB;font-size:11px;font-weight:600;color:#8A919D;text-transform:uppercase;letter-spacing:0.03em;">
+                <span>Vendor</span><span>Utilization</span><span>YoY</span><span>Renewal Date</span><span>Decision window</span><span>Owner</span>
+              </div>
+              <sc-for list="{{ attentionRows }}" as="row" hint-placeholder-count="3">
+                <div onClick="{{ row.openDrawer }}" style="display:grid;grid-template-columns:1.6fr 0.8fr 0.7fr 1fr 0.9fr 0.9fr;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid #E5E7EB;cursor:pointer;" style-hover="background:#F8F9FA;">
+                  <div>
+                    <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">{{ row.vendor }}</div>
+                    <div style="font-size:12px;color:#8A919D;">{{ row.category }} · {{ row.costLabel }}/yr</div>
+                  </div>
+                  <div style="font-size:13px;color:#171A1F;">{{ row.utilPct }}%</div>
+                  <div style="font-size:13px;font-weight:500;color:{{ row.yoyColor }};">{{ row.yoyLabel }}</div>
+                  <div style="font-size:13px;color:#3F4650;">{{ row.renewalDateLabel }}</div>
+                  <div><span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:{{ row.decisionBg }};color:{{ row.decisionColor }};">{{ row.decisionLabel }}</span></div>
+                  <div style="font-size:13px;color:#3F4650;">{{ row.ownerName }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isInbox }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <header style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:1px solid #E5E7EB;">
+            <div>
+              <h1 style="margin:0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">Renewals</h1>
+              <div style="margin-top:4px;font-size:14px;line-height:20px;color:#5F6673;">Prioritized renewals that need attention before their decision windows close.</div>
+            </div>
+          </header>
+
+          <section style="padding-top:14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <input placeholder="Search vendor, owner or category…" style="width:240px;height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:6px;background:#FFFFFF;font-size:13px;color:#171A1F;font-family:inherit;"/>
+              <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Decision window ▾</button>
+              <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Owner ▾</button>
+              <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Category ▾</button>
+            </div>
+            <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Sort: Priority ▾</button>
+          </section>
+
+          <section style="padding-top:20px;">
+            <div style="font-size:13px;font-weight:600;color:#C73E3E;text-transform:uppercase;letter-spacing:0.03em;">Decision window closing</div>
+            <div style="margin-top:2px;font-size:13px;color:#5F6673;">Act before the notice period expires.</div>
+            <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+              <sc-for list="{{ closingRows }}" as="row" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:4px 190px 130px repeat(2,1fr) 150px 90px;gap:16px;align-items:center;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+                  <div style="width:4px;height:32px;border-radius:2px;background:#C73E3E;"></div>
+                  <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">{{ row.vendor }}</div><div style="font-size:13px;color:#8A919D;">{{ row.category }}</div></div>
+                  <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ row.costLabel }}</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+                  <div><div style="font-size:14px;color:#171A1F;">{{ row.seatsLabel }}</div><div style="font-size:12px;color:#8A919D;">{{ row.utilPct }}% active</div></div>
+                  <div><div style="font-size:14px;font-weight:500;color:{{ row.yoyColor }};">{{ row.yoyLabel }}</div><div style="font-size:12px;color:#8A919D;">{{ row.renewalTypeLabel }}</div></div>
+                  <div><span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:{{ row.decisionBg }};color:{{ row.decisionColor }};">{{ row.decisionLabel }}</span><div style="margin-top:3px;font-size:12px;color:#8A919D;">{{ row.ownerName }}</div></div>
+                  <button onClick="{{ row.openDrawer }}" style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">Review</button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="padding-top:24px;">
+            <div style="font-size:13px;font-weight:600;color:#B7791F;text-transform:uppercase;letter-spacing:0.03em;">Review recommended</div>
+            <div style="margin-top:2px;font-size:13px;color:#5F6673;">Signals suggest these renewals are worth reviewing, but decision time remains.</div>
+            <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+              <sc-for list="{{ reviewRows }}" as="row" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:4px 190px 130px repeat(2,1fr) 150px 90px;gap:16px;align-items:center;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+                  <div style="width:4px;height:32px;border-radius:2px;background:#B7791F;"></div>
+                  <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">{{ row.vendor }}</div><div style="font-size:13px;color:#8A919D;">{{ row.category }}</div></div>
+                  <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ row.costLabel }}</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+                  <div><div style="font-size:14px;color:#171A1F;">{{ row.seatsLabel }}</div><div style="font-size:12px;color:#8A919D;">{{ row.utilPct }}% active</div></div>
+                  <div><div style="font-size:14px;font-weight:500;color:{{ row.yoyColor }};">{{ row.yoyLabel }}</div><div style="font-size:12px;color:#8A919D;">{{ row.renewalTypeLabel }}</div></div>
+                  <div><span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:{{ row.decisionBg }};color:{{ row.decisionColor }};">{{ row.decisionLabel }}</span><div style="margin-top:3px;font-size:12px;color:{{ row.ownerColor }};">{{ row.ownerName }}</div></div>
+                  <button onClick="{{ row.openDrawer }}" style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">{{ row.actionLabel }}</button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="padding-top:24px;">
+            <div style="font-size:13px;font-weight:600;color:#5F6673;text-transform:uppercase;letter-spacing:0.03em;">Upcoming</div>
+            <div style="margin-top:2px;font-size:13px;color:#5F6673;">No immediate review signals.</div>
+            <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+              <sc-for list="{{ upcomingRows }}" as="row" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:4px 190px 130px repeat(2,1fr) 150px 90px;gap:16px;align-items:center;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+                  <div style="width:4px;height:32px;border-radius:2px;background:#D9DDE3;"></div>
+                  <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">{{ row.vendor }}</div><div style="font-size:13px;color:#8A919D;">{{ row.category }}</div></div>
+                  <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ row.costLabel }}</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+                  <div><div style="font-size:14px;color:#171A1F;">{{ row.seatsLabel }}</div><div style="font-size:12px;color:#8A919D;">{{ row.utilPct }}% active</div></div>
+                  <div><div style="font-size:14px;font-weight:500;color:#3F4650;">{{ row.yoyLabel }}</div><div style="font-size:12px;color:#8A919D;">{{ row.renewalTypeLabel }}</div></div>
+                  <div><span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#F1F3F5;color:#5F6673;">{{ row.decisionLabel }}</span><div style="margin-top:3px;font-size:12px;color:#8A919D;">{{ row.ownerName }}</div></div>
+                  <button onClick="{{ row.openDrawer }}" style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">View</button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+    </main>
+  </div>
+
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(23,26,31,0.28);z-index:20;"></div>
+      <aside style="position:fixed;top:0;right:0;bottom:0;width:640px;background:#FFFFFF;border-left:1px solid #E5E7EB;box-shadow:-8px 0 24px rgba(23,26,31,0.10);display:flex;flex-direction:column;overflow-y:auto;z-index:21;">
+        <div style="padding:20px 24px;border-bottom:1px solid #E5E7EB;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div style="font-size:20px;line-height:26px;font-weight:600;color:#171A1F;">{{ selected.vendor }}</div>
+              <div style="margin-top:2px;font-size:13px;color:#8A919D;">{{ selected.category }} · {{ selected.renewalTypeLabel }}</div>
+            </div>
+            <span onClick="{{ closeDrawer }}" style="font-size:18px;color:#8A919D;cursor:pointer;">×</span>
+          </div>
+          <div style="margin-top:10px;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ selected.costLabel }} / year</div>
+          <div style="margin-top:2px;font-size:13px;color:#5F6673;">Renews {{ selected.renewalDateLabel }}</div>
+        </div>
+
+        <div style="padding:16px 24px;border-bottom:1px solid #E5E7EB;">
+          <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Why this needs attention</div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="font-weight:600;color:#171A1F;">{{ selected.costLabel }} annual commitment</span><span style="color:#5F6673;">Current contract value</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="font-weight:600;color:#171A1F;">{{ selected.utilPct }}% utilization</span><span style="color:#5F6673;">{{ selected.seatsLabel }} active</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="font-weight:600;color:{{ selected.yoyColor }};">{{ selected.yoyLabel }} price change</span><span style="color:#5F6673;">vs previous ACV</span></div>
+          </div>
+        </div>
+
+        <div style="padding:16px 24px;border-bottom:1px solid #E5E7EB;">
+          <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Seat utilization</div>
+          <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">{{ selected.seatsLabel }} active</span>
+            <span style="font-size:14px;font-weight:600;color:#171A1F;">{{ selected.utilPct }}%</span>
+          </div>
+          <div style="margin-top:8px;height:8px;background:#F1F3F5;border-radius:2px;"><div style="height:8px;width:{{ selected.utilPct }}%;background:#3B6EA8;border-radius:2px;"></div></div>
+        </div>
+
+        <div style="padding:16px 24px;border-bottom:1px solid #E5E7EB;">
+          <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Owner</div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:10px;">
+            <div style="width:32px;height:32px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;">{{ selected.ownerInitials }}</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#171A1F;">{{ selected.ownerName }}</div>
+              <div style="font-size:12px;color:#8A919D;">Subscription owner</div>
+            </div>
+          </div>
+        </div>
+
+        <sc-if value="{{ selected.askedReview }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 24px;border-bottom:1px solid #E5E7EB;">
+            <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Recent activity</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;gap:10px;">
+                <div style="width:26px;height:26px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;">JB</div>
+                <div style="min-width:0;flex:1;background:#F8F9FA;border:1px solid #E5E7EB;border-radius:8px;padding:8px 10px;font-size:12px;line-height:17px;color:#3F4650;">Asked {{ selected.ownerName }} to review before recording a decision.</div>
+              </div>
+              <sc-if value="{{ selected.ownerResponded }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:10px;">
+                  <div style="width:26px;height:26px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;">{{ selected.ownerInitials }}</div>
+                  <div style="min-width:0;flex:1;background:#EAF6F0;border:1px solid #CDE9DA;border-radius:8px;padding:8px 10px;font-size:12px;line-height:17px;color:#204F38;">{{ selected.ownerName }} responded: "Still needed, but we can reduce seats at renewal."</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ selected.waitingOnOwner }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12px;color:#8A919D;">Waiting on {{ selected.ownerName }}'s response…</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="padding:16px 24px;">
+          <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Next step</div>
+          <div style="margin-top:4px;font-size:13px;line-height:19px;color:#5F6673;">{{ selected.nextStepText }}</div>
+        </div>
+
+        <div style="position:sticky;bottom:0;background:#FFFFFF;border-top:1px solid #E5E7EB;padding:14px 24px;display:flex;gap:8px;">
+          <sc-if value="{{ selected.ownerResponded }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ openDecisionModal }}" style="flex:1;height:38px;border:none;background:#171A1F;color:#FFFFFF;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#303640;">Record decision</button>
+          </sc-if>
+          <sc-if value="{{ selected.canAsk }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ openAskModal }}" style="flex:1;height:38px;border:none;background:#171A1F;color:#FFFFFF;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#303640;">Ask owner to review</button>
+          </sc-if>
+          <button onClick="{{ closeDrawer }}" style="height:38px;padding:0 16px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#F1F3F5;">Close</button>
+        </div>
+      </aside>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ askModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(23,26,31,0.4);display:flex;align-items:center;justify-content:center;z-index:30;">
+      <div style="width:520px;background:#FFFFFF;border:1px solid #D9DDE3;border-radius:10px;box-shadow:0 12px 32px rgba(23,26,31,0.18);overflow:hidden;">
+        <div style="padding:20px 24px 16px;border-bottom:1px solid #E5E7EB;">
+          <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Ask {{ selected.ownerName }} to review</div>
+          <div style="margin-top:2px;font-size:13px;line-height:18px;color:#5F6673;">Collect business context before recording the next step for {{ selected.vendor }}.</div>
+        </div>
+        <div style="padding:16px 24px;">
+          <textarea style="width:100%;min-height:110px;padding:10px;border:1px solid #D9DDE3;border-radius:6px;background:#FFFFFF;font-family:inherit;font-size:13px;line-height:18px;color:#171A1F;resize:vertical;">Hi {{ selected.ownerName }}, we're reviewing the {{ selected.vendor }} renewal and need your business context before recording a decision. Please confirm if the seat count and terms still fit your team's needs.</textarea>
+        </div>
+        <div style="padding:14px 24px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end;gap:8px;">
+          <button onClick="{{ closeModal }}" style="height:38px;padding:0 16px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;">Cancel</button>
+          <button onClick="{{ sendAskRequest }}" style="height:38px;padding:0 16px;border:none;background:#171A1F;color:#FFFFFF;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;">Send review request</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ decisionModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(23,26,31,0.4);display:flex;align-items:center;justify-content:center;z-index:30;">
+      <div style="width:480px;background:#FFFFFF;border:1px solid #D9DDE3;border-radius:10px;box-shadow:0 12px 32px rgba(23,26,31,0.18);overflow:hidden;">
+        <div style="padding:20px 24px 16px;border-bottom:1px solid #E5E7EB;">
+          <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Record renewal decision</div>
+          <div style="margin-top:2px;font-size:13px;color:#5F6673;">{{ selected.vendor }} · {{ selected.costLabel }} / year</div>
+        </div>
+        <div style="padding:16px 24px;display:flex;flex-direction:column;gap:8px;">
+          <button onClick="{{ recordDecisionRenew }}" style="height:40px;border:1px solid #D9DDE3;background:#FFFFFF;color:#171A1F;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;text-align:left;padding:0 14px;" style-hover="background:#F1F3F5;">Renew</button>
+          <button onClick="{{ recordDecisionRenegotiate }}" style="height:40px;border:1px solid #D9DDE3;background:#FFFFFF;color:#171A1F;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;text-align:left;padding:0 14px;" style-hover="background:#F1F3F5;">Renegotiate</button>
+          <button onClick="{{ recordDecisionCancel }}" style="height:40px;border:1px solid #D9DDE3;background:#FFFFFF;color:#171A1F;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;text-align:left;padding:0 14px;" style-hover="background:#F1F3F5;">Cancel</button>
+        </div>
+        <div style="padding:14px 24px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end;">
+          <button onClick="{{ closeModal }}" style="height:38px;padding:0 16px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:28px;right:28px;z-index:40;background:#171A1F;color:#FFFFFF;padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(23,26,31,0.28);display:flex;align-items:center;gap:10px;animation:toastIn 0.18s ease-out;max-width:360px;">
+      <span style="width:18px;height:18px;border-radius:50%;background:#2F7D5A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;">✓</span>
+      <span>{{ toast }}</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'overview',
+    drawerOpen: false,
+    selectedId: null,
+    askModalOpen: false,
+    decisionModalOpen: false,
+    toast: null,
+    rows: [
+      { id: 'sf', vendor: 'Salesforce', category: 'CRM', renewalTypeLabel: 'Auto-Renew', cost: 180000, seatsActive: 47, seatsTotal: 100, yoy: 15.0, renewalDateLabel: 'Nov 02, 2026', ownerName: 'Rahul Mehta', ownerInitials: 'RM', section: 'closing', decisionLabel: 'Closes in 3 days', askedReview: false, ownerResponded: false, decisionRecorded: false },
+      { id: 'adobe', vendor: 'Adobe Creative Cloud', category: 'Design', renewalTypeLabel: 'Auto-Renew', cost: 96000, seatsActive: 68, seatsTotal: 120, yoy: 8, renewalDateLabel: 'Nov 04, 2026', ownerName: 'Neha Shah', ownerInitials: 'NS', section: 'closing', decisionLabel: 'Closes in 5 days', askedReview: false, ownerResponded: false, decisionRecorded: false },
+      { id: 'datadog', vendor: 'Datadog', category: 'Monitoring', renewalTypeLabel: 'Manual', cost: 65000, seatsActive: 182, seatsTotal: 200, yoy: 3, renewalDateLabel: 'Nov 06, 2026', ownerName: 'Amit Joshi', ownerInitials: 'AJ', section: 'closing', decisionLabel: 'Closes in 7 days', askedReview: false, ownerResponded: false, decisionRecorded: false },
+      { id: 'figma', vendor: 'Figma', category: 'Design', renewalTypeLabel: 'Manual', cost: 45000, seatsActive: 42, seatsTotal: 100, yoy: 2, renewalDateLabel: 'Oct 31, 2026', ownerName: 'Sara Kulkarni', ownerInitials: 'SK', section: 'review', decisionLabel: '32 days to decide', askedReview: false, ownerResponded: false, decisionRecorded: false, actionLabel: 'Review' },
+      { id: 'slack', vendor: 'Slack', category: 'Communication', renewalTypeLabel: 'Auto-Renew', cost: 45000, seatsActive: 152, seatsTotal: 200, yoy: 4, renewalDateLabel: 'Nov 15, 2026', ownerName: 'Unassigned', ownerInitials: '—', section: 'review', decisionLabel: '47 days to decide', askedReview: false, ownerResponded: false, decisionRecorded: false, unassigned: true, actionLabel: 'Assign owner' },
+      { id: 'github', vendor: 'GitHub Enterprise', category: 'Developer tools', renewalTypeLabel: 'Manual', cost: 72000, seatsActive: 185, seatsTotal: 200, yoy: 0, renewalDateLabel: 'Dec 18, 2026', ownerName: 'Amit Deshmukh', ownerInitials: 'AD', section: 'review', decisionLabel: '50 days to decide', askedReview: false, ownerResponded: false, decisionRecorded: false, actionLabel: 'Review' },
+      { id: 'zoom', vendor: 'Zoom', category: 'Video conferencing', renewalTypeLabel: 'Auto-Renew', cost: 18000, seatsActive: 88, seatsTotal: 100, yoy: 1, renewalDateLabel: 'Dec 20, 2026', ownerName: 'Amit Deshmukh', ownerInitials: 'AD', section: 'upcoming', decisionLabel: '82 days to decide', askedReview: false, ownerResponded: false, decisionRecorded: false },
+      { id: 'notion', vendor: 'Notion', category: 'Productivity', renewalTypeLabel: 'Manual', cost: 24000, seatsActive: 94, seatsTotal: 100, yoy: 0, renewalDateLabel: 'Jan 15, 2027', ownerName: 'Meera Joshi', ownerInitials: 'MJ', section: 'upcoming', decisionLabel: '108 days to decide', askedReview: false, ownerResponded: false, decisionRecorded: false },
+    ]
+  };
+
+  fmtCost(n) { return '$' + n.toLocaleString('en-US'); }
+
+  decorate(r) {
+    const utilPct = Math.round((r.seatsActive / r.seatsTotal) * 100);
+    const yoyColor = r.yoy >= 10 ? '#B7791F' : '#3F4650';
+    const decisionBg = r.section === 'closing' ? '#FDECEC' : r.section === 'review' ? '#FFF7E6' : '#F1F3F5';
+    const decisionColor = r.section === 'closing' ? '#C73E3E' : r.section === 'review' ? '#B7791F' : '#5F6673';
+    return {
+      ...r,
+      costLabel: this.fmtCost(r.cost),
+      seatsLabel: r.seatsActive + ' / ' + r.seatsTotal + ' seats',
+      utilPct, yoyColor,
+      yoyLabel: (r.yoy >= 0 ? '+' : '') + r.yoy + '% YoY',
+      decisionBg, decisionColor,
+      ownerColor: r.unassigned ? '#C73E3E' : '#3F4650',
+      waitingOnOwner: r.askedReview && !r.ownerResponded,
+      canAsk: !r.ownerResponded,
+      nextStepText: r.decisionRecorded ? 'Decision recorded for this renewal.' : r.ownerResponded ? 'Use the owner response to record the current renewal decision.' : r.askedReview ? 'Waiting on the owner to respond before recording a decision.' : 'Get business context from the owner before recording the commercial decision.',
+      openDrawer: () => this.setState({ drawerOpen: true, selectedId: r.id })
+    };
+  }
+
+  showToast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: null }), 3200);
+  }
+
+  renderVals() {
+    const rows = this.state.rows.map(r => this.decorate(r));
+    const selected = rows.find(r => r.id === this.state.selectedId) || rows[0];
+    return {
+      isOverview: this.state.screen === 'overview',
+      isInbox: this.state.screen === 'inbox',
+      needAttentionCount: this.state.rows.filter(r => r.section === 'closing').length + 3,
+      attentionRows: rows.filter(r => r.section === 'closing'),
+      closingRows: rows.filter(r => r.section === 'closing'),
+      reviewRows: rows.filter(r => r.section === 'review'),
+      upcomingRows: rows.filter(r => r.section === 'upcoming'),
+      drawerOpen: this.state.drawerOpen,
+      askModalOpen: this.state.askModalOpen,
+      decisionModalOpen: this.state.decisionModalOpen,
+      selected,
+      toast: this.state.toast,
+      goOverview: () => this.setState({ screen: 'overview' }),
+      goInbox: () => this.setState({ screen: 'inbox' }),
+      goInboxLink: (e) => { e.preventDefault(); this.setState({ screen: 'inbox' }); },
+      closeDrawer: () => this.setState({ drawerOpen: false }),
+      closeModal: () => this.setState({ askModalOpen: false, decisionModalOpen: false }),
+      openAskModal: () => this.setState({ askModalOpen: true }),
+      openDecisionModal: () => this.setState({ decisionModalOpen: true }),
+      sendAskRequest: () => {
+        const id = this.state.selectedId;
+        this.setState(s => ({ askModalOpen: false, rows: s.rows.map(r => r.id === id ? { ...r, askedReview: true } : r) }));
+        this.showToast('Review request sent to ' + selected.ownerName);
+        clearTimeout(this._r);
+        this._r = setTimeout(() => {
+          this.setState(s => ({ rows: s.rows.map(r => r.id === id ? { ...r, ownerResponded: true } : r) }));
+          this.showToast(selected.ownerName + ' responded to your review request');
+        }, 3800);
+      },
+      recordDecisionRenew: () => this.recordDecision('Renew'),
+      recordDecisionRenegotiate: () => this.recordDecision('Renegotiate'),
+      recordDecisionCancel: () => this.recordDecision('Cancel')
+    };
+  }
+
+  recordDecision(value) {
+    const id = this.state.selectedId;
+    const rows = this.state.rows.map(r => r.id === id ? { ...r, decisionRecorded: true } : r);
+    const vendor = rows.find(r => r.id === id).vendor;
+    this.setState({ rows, decisionModalOpen: false, drawerOpen: false });
+    this.showToast('Decision recorded — ' + vendor + ' will ' + value.toLowerCase() + '.');
+  }
+}
+</script>
+</body>
+</html>

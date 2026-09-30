@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'SFMono'; src: local('SF Mono'); }
+  body { margin: 0; background: #F8F9FA; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  * { box-sizing: border-box; }
+  a { color: #0D6EFD; }
+  a:hover { color: #0B5ED7; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #DEE2E6; border-radius: 4px; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <div style="padding:32px 40px 24px;max-width:1280px;width:100%;margin:0 auto;">
+    <h1 style="font-size:28px;font-weight:600;line-height:1.2;letter-spacing:-0.5px;color:#212529;margin:0;">Renewal Inbox</h1>
+    <div style="margin-top:8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 16px;">
+      <div style="font-size:13px;color:#6C757D;">{{ statsLabel }}</div>
+      <div style="font-size:13px;color:#6C757D;">{{ dateRangeLabel }}</div>
+    </div>
+  </div>
+
+  <div style="flex:1;max-width:1280px;width:100%;margin:0 auto;padding:0 40px 60px;display:flex;flex-direction:column;gap:24px;">
+    <sc-for list="{{ sections }}" as="section" hint-placeholder-count="3">
+      <div>
+        <div style="background:#E9ECEF;border-radius:8px;padding:12px 16px;margin-bottom:12px;">
+          <div style="font-size:16px;font-weight:600;line-height:1.3;color:{{ section.color }};">{{ section.emoji }} {{ section.label }}</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">{{ section.sublabel }}</div>
+        </div>
+        <sc-if value="{{ section.items.length }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px;">
+            <sc-for list="{{ section.items }}" as="r" hint-placeholder-count="3">
+              <div onClick="{{ r.openDetail }}" style="background:#FFFFFF;border:1px solid #DEE2E6;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);cursor:pointer;display:flex;flex-direction:column;overflow:hidden;transition:box-shadow 0.15s ease;" style-hover="box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+                <div style="padding:16px 16px 12px;border-bottom:1px solid #DEE2E6;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                  <div>
+                    <div style="font-size:20px;font-weight:600;line-height:1.3;color:#212529;">{{ r.vendor }}</div>
+                    <div style="display:inline-block;margin-top:6px;background:#E9ECEF;color:#6C757D;font-size:11px;line-height:1.4;padding:3px 8px;border-radius:4px;font-weight:500;">{{ r.category }}</div>
+                  </div>
+                  <sc-if value="{{ r.approved }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:12px;font-weight:600;color:#28A745;white-space:nowrap;">✅ Approved</div>
+                  </sc-if>
+                </div>
+                <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px;flex:1;">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                    <div style="font-size:13px;color:#6C757D;">{{ r.renewalLabel }}</div>
+                    <div style="font-size:14px;font-weight:600;color:#212529;">{{ r.costLabel }}</div>
+                  </div>
+                  <div style="font-size:13px;color:{{ r.ownerColor }};">{{ r.ownerLabel }}</div>
+                  <sc-if value="{{ r.badges.length }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;">
+                      <sc-for list="{{ r.badges }}" as="b" hint-placeholder-count="2">
+                        <div style="font-size:11px;line-height:1.4;font-weight:500;padding:3px 8px;border-radius:4px;background:{{ b.bg }};color:{{ b.fg }};white-space:nowrap;">{{ b.label }}</div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+                <div style="padding:10px 16px;border-top:1px solid #DEE2E6;display:flex;gap:8px;" onClick="{{ r.stop }}">
+                  <sc-if value="{{ r.unassigned }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ r.assign }}" style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:12px;font-weight:500;cursor:pointer;" style-hover="background:#E9ECEF;">Assign Owner</button>
+                  </sc-if>
+                  <sc-if value="{{ r.assigned }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ r.approve }}" disabled="{{ r.approved }}" style="flex:1;padding:8px 12px;border-radius:6px;border:none;background:#0D6EFD;color:#fff;font-size:12px;font-weight:500;cursor:pointer;opacity:{{ r.approved }};" style-hover="background:#0B5ED7;">Approve</button>
+                    <button onClick="{{ r.route }}" style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:12px;font-weight:500;cursor:pointer;" style-hover="background:#E9ECEF;">Route to Owner</button>
+                  </sc-if>
+                  <button onClick="{{ r.openDetail }}" style="padding:8px 12px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:12px;font-weight:500;cursor:pointer;" style-hover="background:#E9ECEF;">More</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ section.items.length }}" hint-placeholder-val="{{ false }}" b-negate="true">
+          <div style="padding:24px;color:#6C757D;font-size:13px;">No renewals in this window.</div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<sc-if value="{{ activeId }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeDetail }}" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:50;display:flex;justify-content:flex-end;opacity:{{ overlayOpacity }};transition:opacity 0.2s ease;">
+    <div onClick="{{ stopProp }}" style="width:420px;max-width:100%;height:100%;background:#FFFFFF;box-shadow:0 4px 12px rgba(0,0,0,0.12);display:flex;flex-direction:column;transform:{{ panelTransform }};transition:transform 0.2s ease;">
+      <div style="padding:20px;border-bottom:1px solid #DEE2E6;display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font-size:20px;font-weight:600;line-height:1.3;color:#212529;">{{ active.vendor }}</div>
+          <div style="font-size:12px;color:#6C757D;margin-top:2px;">{{ active.category }}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:16px;font-weight:600;color:#212529;">{{ active.costLabel }}</div>
+          <button onClick="{{ closeDetail }}" style="margin-top:8px;background:none;border:none;color:#6C757D;font-size:13px;cursor:pointer;padding:0;">Close ✕</button>
+        </div>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:20px;">
+        <div>
+          <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;margin-bottom:10px;">Financial Context</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#212529;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Annual cost</span><span style="font-family:'IBM Plex Mono','SF Mono',monospace;font-weight:500;">{{ active.costLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Last year</span><span style="font-family:'IBM Plex Mono','SF Mono',monospace;font-weight:500;">{{ active.lastYearLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">YoY change</span><span style="font-family:'IBM Plex Mono','SF Mono',monospace;font-weight:500;color:{{ active.yoyColor }};">{{ active.yoyLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Price trend</span><span>{{ active.trendLabel }}</span></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #DEE2E6;padding-top:16px;">
+          <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;margin-bottom:10px;">Usage Context</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#212529;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Seats purchased</span><span style="font-family:'IBM Plex Mono','SF Mono',monospace;font-weight:500;">{{ active.seatsTotalLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Seats active</span><span style="font-family:'IBM Plex Mono','SF Mono',monospace;font-weight:500;color:{{ active.utilColor }};">{{ active.seatsActiveLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Utilization</span><span style="font-weight:500;color:{{ active.utilColor }};">{{ active.utilLabel }}</span></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #DEE2E6;padding-top:16px;">
+          <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;margin-bottom:10px;">Contract Context</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#212529;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Renewal date</span><span>{{ active.renewalDateLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Renewal type</span><span>{{ active.renewalType }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Notice period</span><span>{{ active.noticePeriodLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Notice window</span><span style="font-weight:500;color:{{ active.noticeColor }};">{{ active.noticeLabel }}</span></div>
+            <div style="margin-top:4px;color:#6C757D;">{{ active.paymentHistory }}</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #DEE2E6;padding-top:16px;">
+          <div style="font-size:16px;font-weight:600;line-height:1.3;color:#212529;margin-bottom:10px;">Owner Context</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#212529;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Owner</span><span style="font-weight:500;color:{{ active.ownerColor }};">{{ active.ownerLabel }}</span></div>
+            <sc-if value="{{ active.owner }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Email</span><a href="#" onClick="{{ stopLink }}">{{ active.emailLabel }}</a></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#6C757D;">Status</span><span style="color:{{ active.ownerStatusColor }};font-weight:500;">{{ active.ownerStatusLabel }}</span></div>
+            </sc-if>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:12px;font-weight:500;cursor:pointer;" style-hover="background:#E9ECEF;">Message Owner</button>
+            <button style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:12px;font-weight:500;cursor:pointer;" style-hover="background:#E9ECEF;">View Other Renewals</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px 20px;border-top:1px solid #DEE2E6;display:flex;gap:8px;">
+        <button onClick="{{ active.approve }}" disabled="{{ active.approved }}" style="flex:1;padding:10px 16px;border-radius:6px;border:none;background:#0D6EFD;color:#fff;font-size:13px;font-weight:500;cursor:pointer;opacity:{{ active.approved }};" style-hover="background:#0B5ED7;">{{ active.approveLabel }}</button>
+        <button onClick="{{ active.route }}" style="flex:1;padding:10px 16px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;font-weight:500;cursor:pointer;" style-hover="background:#E9ECEF;">Route to Owner</button>
+        <button onClick="{{ active.escalate }}" style="flex:1;padding:10px 16px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;font-weight:500;cursor:pointer;" style-hover="background:#E9ECEF;">Escalate to Finance</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#212529;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.12);z-index:100;">{{ toast }}</div>
+</sc-if>
+
+<sc-if value="{{ assignPickerFor }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeAssignPicker }}" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:60;display:flex;align-items:center;justify-content:center;">
+    <div onClick="{{ stopProp }}" style="width:320px;background:#FFFFFF;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.12);padding:20px;">
+      <div style="font-size:16px;font-weight:600;color:#212529;margin-bottom:12px;">Assign Owner</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <sc-for list="{{ teamRoster }}" as="person" hint-placeholder-count="4">
+          <button onClick="{{ person.select }}" style="text-align:left;padding:8px 10px;border-radius:6px;border:1px solid #DEE2E6;background:#F8F9FA;color:#212529;font-size:13px;cursor:pointer;" style-hover="background:#E9ECEF;">{{ person.name }}</button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RAW = [
+  {id:1,vendor:"Salesforce",category:"CRM",cost:180000,renewalDate:"2026-09-28",renewalType:"Auto-Renew",noticePeriod:30,noticeExpired:"2026-08-29",seatsTotal:100,seatsActive:47,owner:"John Martinez",ownerStatus:"active",priceChangePct:15,priceChangeAmount:23400,lastYear:156600,flags:["price_increase","low_utilization","notice_closed"],paymentHistory:"Auto-billed monthly; no issues"},
+  {id:2,vendor:"Slack",category:"Communication",cost:45000,renewalDate:"2026-10-01",renewalType:"Auto-Renew",noticePeriod:30,noticeExpired:"2026-09-01",seatsTotal:150,seatsActive:89,owner:null,ownerStatus:"unassigned",priceChangePct:8,priceChangeAmount:3200,lastYear:40000,flags:["unassigned"],paymentHistory:"Auto-billed monthly; flagged for negotiation last year"},
+  {id:3,vendor:"Datadog",category:"Monitoring",cost:65000,renewalDate:"2026-10-05",renewalType:"Auto-Renew",noticePeriod:60,noticeExpired:"2026-08-06",seatsTotal:50,seatsActive:34,owner:"Emma Chen",ownerStatus:"active",priceChangePct:0,priceChangeAmount:0,lastYear:65000,flags:[],paymentHistory:"Auto-billed monthly; locked-in discount until Jan 2026"},
+  {id:4,vendor:"GitHub Enterprise",category:"Dev Tools",cost:72000,renewalDate:"2026-11-15",renewalType:"Auto-Renew",noticePeriod:45,noticeExpired:"2026-10-01",seatsTotal:150,seatsActive:120,owner:"Rahul Verma",ownerStatus:"active",priceChangePct:5,priceChangeAmount:3600,lastYear:72000,flags:[],paymentHistory:"Annual prepay; no disputes"},
+  {id:5,vendor:"Figma",category:"Design",cost:25000,renewalDate:"2026-11-02",renewalType:"Manual",noticePeriod:30,noticeExpired:"2026-10-03",seatsTotal:20,seatsActive:8,owner:"Sara Patel",ownerStatus:"active",priceChangePct:12,priceChangeAmount:2400,lastYear:22000,flags:["low_utilization","price_increase"],paymentHistory:"Annual invoice; paid on time"},
+  {id:6,vendor:"Notion",category:"Documentation",cost:9000,renewalDate:"2026-12-01",renewalType:"Manual",noticePeriod:14,noticeExpired:"2026-11-17",seatsTotal:100,seatsActive:200,owner:null,ownerStatus:"unassigned",priceChangePct:0,priceChangeAmount:0,lastYear:9000,flags:["unassigned"],paymentHistory:"Team subscription; no payment issues"},
+  {id:7,vendor:"Adobe Creative Cloud",category:"Design Tools",cost:38000,renewalDate:"2026-12-10",renewalType:"Auto-Renew",noticePeriod:60,noticeExpired:"2026-10-11",seatsTotal:25,seatsActive:18,owner:"Sara Patel",ownerStatus:"active",priceChangePct:7,priceChangeAmount:2100,lastYear:35500,flags:[],paymentHistory:"Monthly billing; multiple POs across teams"},
+  {id:8,vendor:"Okta",category:"Security",cost:52000,renewalDate:"2026-12-20",renewalType:"Auto-Renew",noticePeriod:90,noticeExpired:"2026-09-20",seatsTotal:250,seatsActive:189,owner:"Michael Torres",ownerStatus:"departed",priceChangePct:18,priceChangeAmount:7800,lastYear:43200,flags:["departed_owner","price_increase"],paymentHistory:"Auto-billed; last renegotiation pending since June"},
+  {id:9,vendor:"Jira Cloud",category:"Project Mgmt",cost:35000,renewalDate:"2027-01-08",renewalType:"Auto-Renew",noticePeriod:30,noticeExpired:"2026-12-09",seatsTotal:200,seatsActive:145,owner:"Dev Team Lead",ownerStatus:"active",priceChangePct:10,priceChangeAmount:3000,lastYear:31800,flags:[],paymentHistory:"Annual prepay; stable relationship"},
+  {id:10,vendor:"Stripe",category:"Payments",cost:12000,renewalDate:"2026-10-15",renewalType:"Month-to-Month",noticePeriod:30,noticeExpired:null,seatsTotal:null,seatsActive:null,owner:"Finance Team",ownerStatus:"active",priceChangePct:null,priceChangeAmount:0,lastYear:11760,flags:[],paymentHistory:"Usage-based; last month $985 in processing fees"},
+  {id:11,vendor:"Microsoft 365",category:"Productivity",cost:48000,renewalDate:"2027-02-01",renewalType:"Auto-Renew",noticePeriod:60,noticeExpired:"2026-12-02",seatsTotal:250,seatsActive:201,owner:"IT Director",ownerStatus:"active",priceChangePct:6,priceChangeAmount:2500,lastYear:45200,flags:[],paymentHistory:"Volume licensing; EA terms under review"},
+  {id:12,vendor:"Looker",category:"Analytics",cost:28000,renewalDate:"2027-03-15",renewalType:"Auto-Renew",noticePeriod:90,noticeExpired:"2026-12-15",seatsTotal:15,seatsActive:12,owner:"Analytics Lead",ownerStatus:"active",priceChangePct:-3,priceChangeAmount:-840,lastYear:28840,flags:[],paymentHistory:"Annual contract; early commitment for 2027 lock"}
+];
+
+const TODAY = new Date("2026-09-29T00:00:00");
+const money = n => "$" + Math.abs(Math.round(n)).toLocaleString("en-US");
+const MONO = "'IBM Plex Mono', 'SF Mono', monospace";
+const daysUntil = dateStr => {
+  if (!dateStr) return null;
+  return Math.ceil((new Date(dateStr + "T00:00:00") - TODAY) / 86400000);
+};
+const fmtDate = dateStr => new Date(dateStr + "T00:00:00").toLocaleDateString("en-US", {month:"short",day:"numeric",year:"numeric"});
+const ROSTER = ["John Martinez","Emma Chen","Rahul Verma","Sara Patel","Michael Torres","Finance Team","Dev Team Lead","IT Director","Analytics Lead"];
+
+class Component extends DCLogic {
+  state = { activeId: null, closing: false, approvedIds: {}, owners: {}, toast: null, assignPickerFor: null };
+
+  buildRecord(base) {
+    const s = this.state;
+    const owner = s.owners[base.id] !== undefined ? s.owners[base.id] : base.owner;
+    const ownerStatus = s.owners[base.id] !== undefined ? "active" : base.ownerStatus;
+    const daysToRenewal = daysUntil(base.renewalDate);
+    const daysToNotice = daysUntil(base.noticeExpired);
+    const util = (base.seatsTotal && base.seatsActive != null) ? Math.round((base.seatsActive / base.seatsTotal) * 100) : null;
+    const unassigned = !owner;
+    const approved = !!s.approvedIds[base.id];
+    const noticeOpen = daysToNotice === null ? null : daysToNotice >= 0;
+
+    const badges = [];
+    if (base.priceChangePct != null && base.priceChangePct >= 10) badges.push({label:`🔴 Price +${base.priceChangePct}%`, bg:"#F8D7DA", fg:"#DC3545"});
+    else if (base.priceChangePct != null && base.priceChangePct > 0) badges.push({label:`🟡 Price +${base.priceChangePct}%`, bg:"#FFE5CC", fg:"#FD7E14"});
+    else if (base.priceChangePct != null && base.priceChangePct < 0) badges.push({label:`✅ Price ${base.priceChangePct}%`, bg:"#D4EDDA", fg:"#28A745"});
+    if (noticeOpen === false) badges.push({label:"🔴 Notice closed", bg:"#F8D7DA", fg:"#DC3545"});
+    else if (noticeOpen === true && daysToNotice <= 14) badges.push({label:"🟡 Notice closes soon", bg:"#FFE5CC", fg:"#FD7E14"});
+    if (unassigned) badges.push({label:"🔴 Unassigned", bg:"#F8D7DA", fg:"#DC3545"});
+    if (ownerStatus === "departed") badges.push({label:"🔴 Departed owner", bg:"#F8D7DA", fg:"#DC3545"});
+    if (util != null && util < 75) badges.push({label:`🟡 Low utilization ${util}%`, bg:"#FFE5CC", fg:"#FD7E14"});
+    else if (util != null) badges.push({label:`✅ Utilization ${util}%`, bg:"#D4EDDA", fg:"#28A745"});
+
+    const openDetail = () => this.setState({ activeId: base.id, closing: false });
+    const approve = () => { this.setState(s2 => ({ approvedIds: {...s2.approvedIds, [base.id]: true}, toast: `${base.vendor} approved` })); setTimeout(() => this.setState({ toast: null }), 2200); };
+    const route = () => { this.setState({ toast: `Routed ${base.vendor} to ${owner || "owner"}` }); setTimeout(() => this.setState({ toast: null }), 2200); };
+    const escalate = () => { this.setState({ toast: `${base.vendor} escalated to Finance` }); setTimeout(() => this.setState({ toast: null }), 2200); };
+    const assign = () => this.setState({ assignPickerFor: base.id });
+    const stop = e => e.stopPropagation();
+
+    const trendLabel = base.priceChangePct == null ? "— Usage-based" : base.priceChangePct > 0 ? "↗️ Increasing" : base.priceChangePct < 0 ? "↘️ Decreasing" : "→ Flat";
+
+    return {
+      id: base.id, vendor: base.vendor, category: base.category, assigned: !unassigned,
+      costLabel: money(base.cost), lastYearLabel: money(base.lastYear),
+      renewalLabel: `${fmtDate(base.renewalDate)} · ${daysToRenewal}d`,
+      renewalDateLabel: fmtDate(base.renewalDate), renewalType: base.renewalType,
+      noticePeriodLabel: `${base.noticePeriod} days`,
+      noticeLabel: noticeOpen === null ? "N/A" : noticeOpen ? "✅ OPEN" : `❌ CLOSED (expired ${fmtDate(base.noticeExpired)})`,
+      noticeColor: noticeOpen === false ? "#DC3545" : "#28A745",
+      ownerLabel: unassigned ? "⚠️ Unassigned" : ownerStatus === "departed" ? `🚨 ${owner} (departed)` : owner,
+      ownerColor: unassigned || ownerStatus === "departed" ? "#DC3545" : "#212529",
+      ownerStatusLabel: ownerStatus === "departed" ? "Departed" : "✅ Active",
+      ownerStatusColor: ownerStatus === "departed" ? "#DC3545" : "#28A745",
+      emailLabel: owner ? owner.toLowerCase().replace(/[^a-z]+/g, ".") + "@company.com" : "",
+      owner, unassigned, approved,
+      approveLabel: approved ? "✅ Approved" : "Approve",
+      seatsTotalLabel: base.seatsTotal != null ? base.seatsTotal : "—",
+      seatsActiveLabel: base.seatsActive != null ? base.seatsActive : "—",
+      utilLabel: util != null ? `${util}%` : "N/A",
+      utilColor: util != null && util < 75 ? "#FD7E14" : "#28A745",
+      yoyLabel: base.priceChangeAmount === 0 ? "$0 / 0%" : `${base.priceChangeAmount > 0 ? "+" : "-"}${money(base.priceChangeAmount)} / ${base.priceChangePct}%`,
+      yoyColor: base.priceChangeAmount > 0 ? "#DC3545" : base.priceChangeAmount < 0 ? "#28A745" : "#212529",
+      trendLabel, paymentHistory: base.paymentHistory,
+      badges, daysToRenewal,
+      openDetail, approve, route, escalate, assign, stop, stopProp: stop,
+      stopLink: e => { e.preventDefault(); e.stopPropagation(); }
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const records = RAW.map(r => this.buildRecord(r));
+    const urgent = records.filter(r => r.daysToRenewal <= 30);
+    const medium = records.filter(r => r.daysToRenewal > 30 && r.daysToRenewal <= 60);
+    const upcoming = records.filter(r => r.daysToRenewal > 60);
+    const needAction = records.filter(r => r.badges.some(b => b.fg === "#DC3545")).length;
+    const impact = records.reduce((sum, r) => sum + (RAW.find(x => x.id === r.id).cost), 0);
+
+    const sections = [
+      { label: "URGENT", emoji: "🔴", color: "#DC3545", sublabel: `Decide within 30 days (${urgent.length} renewals | ${money(urgent.reduce((a,r)=>a+RAW.find(x=>x.id===r.id).cost,0))})`, items: urgent },
+      { label: "MEDIUM", emoji: "🟡", color: "#FD7E14", sublabel: `Review within 31–60 days (${medium.length} renewals | ${money(medium.reduce((a,r)=>a+RAW.find(x=>x.id===r.id).cost,0))})`, items: medium },
+      { label: "UPCOMING", emoji: "🟢", color: "#28A745", sublabel: `On track, 60+ days out (${upcoming.length} renewals | ${money(upcoming.reduce((a,r)=>a+RAW.find(x=>x.id===r.id).cost,0))})`, items: upcoming }
+    ];
+
+    const active = s.activeId ? records.find(r => r.id === s.activeId) : null;
+
+    const teamRoster = ROSTER.map(name => ({
+      name,
+      select: () => {
+        const id = s.assignPickerFor;
+        this.setState(s2 => ({ owners: {...s2.owners, [id]: name}, assignPickerFor: null, toast: `${name} assigned` }));
+        setTimeout(() => this.setState({ toast: null }), 2200);
+      }
+    }));
+
+    return {
+      dateRangeLabel: "Sept 29 – Mar 2027",
+      statsLabel: `${records.length} renewals · ${money(impact)} total impact · ${needAction} require action`,
+      sections,
+      activeId: s.activeId,
+      active,
+      overlayOpacity: s.activeId ? 1 : 0,
+      panelTransform: s.activeId ? "translateX(0)" : "translateX(20px)",
+      closeDetail: () => this.setState({ activeId: null }),
+      stopProp: e => e.stopPropagation(),
+      toast: s.toast,
+      assignPickerFor: s.assignPickerFor,
+      closeAssignPicker: () => this.setState({ assignPickerFor: null }),
+      teamRoster
+    };
+  }
+}
+</script>
+</body>
+</html>

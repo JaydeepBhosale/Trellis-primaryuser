@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#171A1F">
+  <svg viewBox="0 0 120 56" xmlns="http://www.w3.org/2000/svg">
+    <rect x="14" y="14" width="92" height="6" fill="#fff"/>
+    <rect x="14" y="26" width="60" height="4" fill="#fff" opacity="0.8"/>
+    <rect x="14" y="34" width="45" height="4" fill="#fff" opacity="0.6"/>
+  </svg>
+</template>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#F8F9FA;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#171A1F;-webkit-font-smoothing:antialiased}
+  *{box-sizing:border-box;font-variant-numeric:tabular-nums}
+  a{color:#3B6EA8;text-decoration:none}a:hover{color:#171A1F;text-decoration:underline}
+</style>
+</helmet>
+
+<div style="width:1440px;min-height:1024px;display:grid;grid-template-columns:232px minmax(0,1fr);background:#F8F9FA;">
+
+  <nav style="background:#FFFFFF;border-right:1px solid #E5E7EB;padding:24px 0;display:flex;flex-direction:column;gap:28px;">
+    <div style="padding:0 24px;font-size:16px;font-weight:700;letter-spacing:0.04em;color:#171A1F;">TRELLIS</div>
+    <div style="display:flex;flex-direction:column;gap:2px;padding:0 12px;font-size:14px;">
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Overview</div>
+      <div style="padding:9px 12px;background:#F1F3F5;color:#171A1F;font-weight:600;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
+        <span>Renewal Inbox</span>
+        <span style="background:#C73E3E;color:#fff;font-size:11px;font-weight:600;border-radius:8px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px;">7</span>
+      </div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Subscriptions</div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Reports</div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Settings</div>
+    </div>
+    <div style="margin-top:auto;padding:16px 24px;border-top:1px solid #E5E7EB;display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;">JB</div>
+      <div style="display:flex;flex-direction:column;gap:1px;min-width:0;">
+        <span style="font-size:13px;font-weight:600;color:#171A1F;white-space:nowrap;">Jaydeep Bhosale</span>
+        <span style="font-size:11px;color:#8A919D;white-space:nowrap;">Finance &amp; Procurement</span>
+      </div>
+    </div>
+  </nav>
+
+  <main style="min-width:0;padding:24px 32px 48px;max-width:920px;">
+
+    <header style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:1px solid #E5E7EB;">
+      <div>
+        <h1 style="margin:0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">Ask Rahul to review this renewal</h1>
+        <div style="margin-top:4px;font-size:14px;line-height:20px;color:#5F6673;">Collect business context before deciding what to do with the Salesforce renewal.</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <button style="height:38px;padding:0 16px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#F1F3F5;">Cancel</button>
+        <button style="height:38px;padding:0 16px;border:none;background:#171A1F;color:#FFFFFF;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#303640;">Send review request</button>
+      </div>
+    </header>
+
+    <section style="margin-top:16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;padding:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Salesforce</div>
+          <div style="font-size:13px;color:#8A919D;">CRM · Auto-renew</div>
+        </div>
+        <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$180,000 / year</div>
+      </div>
+      <div style="margin-top:10px;font-size:13px;color:#5F6673;">Renews Sep 28, 2026</div>
+      <div style="margin-top:6px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;background:#FDECEC;color:#C73E3E;">Decision window closed</span>
+        <span style="font-size:12px;color:#5F6673;">Cancellation notice deadline: Aug 29, 2026</span>
+      </div>
+      <div style="margin-top:10px;font-size:13px;line-height:19px;color:#5F6673;">The standard cancellation window has passed. This review can still help inform commercial terms, budget allocation, or stakeholder decisions before renewal.</div>
+    </section>
+
+    <section style="margin-top:24px;">
+      <h2 style="margin:0;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Why this needs review</h2>
+      <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #E5E7EB;">
+          <span style="font-size:14px;font-weight:600;color:#171A1F;">$180K annual commitment</span>
+          <span style="font-size:13px;color:#5F6673;">Significant annual contract value</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #E5E7EB;">
+          <span style="font-size:14px;font-weight:600;color:#171A1F;">47% utilization</span>
+          <span style="font-size:13px;color:#5F6673;">47 of 100 seats active</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #E5E7EB;">
+          <span style="font-size:14px;font-weight:600;color:#B7791F;">+15.0% YoY price change</span>
+          <span style="font-size:13px;color:#5F6673;">+$23,478 compared with previous ACV</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;">
+          <span style="font-size:14px;font-weight:600;color:#C73E3E;">Decision window closed</span>
+          <span style="font-size:13px;color:#5F6673;">Standard cancellation notice deadline passed</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:24px;">
+      <h2 style="margin:0;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">What should Rahul review?</h2>
+      <div style="margin-top:6px;font-size:13px;line-height:19px;color:#5F6673;">Ask the owner to confirm whether Salesforce is still needed, whether the current seat count is appropriate, and whether there are commercial considerations Finance should know about.</div>
+
+      <div style="margin-top:14px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;padding:6px 16px;">
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #E5E7EB;font-size:14px;color:#171A1F;cursor:pointer;"><input type="checkbox" checked style="width:16px;height:16px;accent-color:#171A1F;"/>Current subscription is still required</label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #E5E7EB;font-size:14px;color:#171A1F;cursor:pointer;"><input type="checkbox" checked style="width:16px;height:16px;accent-color:#171A1F;"/>We need fewer seats</label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #E5E7EB;font-size:14px;color:#171A1F;cursor:pointer;"><input type="checkbox" style="width:16px;height:16px;accent-color:#171A1F;"/>We should discuss pricing or terms</label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #E5E7EB;font-size:14px;color:#171A1F;cursor:pointer;"><input type="checkbox" style="width:16px;height:16px;accent-color:#171A1F;"/>We may no longer need this subscription</label>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px;color:#171A1F;cursor:pointer;"><input type="checkbox" style="width:16px;height:16px;accent-color:#171A1F;"/>Other</label>
+      </div>
+
+      <div style="margin-top:20px;">
+        <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Message to Rahul</div>
+        <textarea style="margin-top:8px;width:100%;min-height:170px;padding:12px;border:1px solid #D9DDE3;border-radius:6px;background:#FFFFFF;font-family:inherit;font-size:14px;line-height:20px;color:#171A1F;resize:vertical;">Hi Rahul,
+
+We're reviewing the upcoming Salesforce renewal and need your business context before we record the next step.
+
+Salesforce renews on Sep 28 for $180K/year. 47 of 100 seats are currently active, and the annual price is up 15% from the previous contract.
+
+Please review the subscription and let us know whether the current subscription and seat count are still appropriate, or if there are commercial considerations we should account for.
+
+Thanks,
+Jaydeep</textarea>
+      </div>
+
+      <div style="margin-top:16px;background:#F1F3F5;border-radius:8px;padding:14px 16px;">
+        <div style="font-size:13px;font-weight:600;color:#3F4650;">What Rahul will be asked to provide</div>
+        <ul style="margin:8px 0 0;padding-left:18px;font-size:13px;line-height:19px;color:#5F6673;">
+          <li>Whether the subscription is still needed</li>
+          <li>Whether the current seat count is appropriate</li>
+          <li>Any business or commercial context</li>
+        </ul>
+        <div style="margin-top:10px;font-size:13px;color:#5F6673;">Trellis will record Rahul's response against this renewal for the portfolio review.</div>
+      </div>
+    </section>
+
+    <section style="margin-top:24px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;padding:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#8A919D;text-transform:uppercase;letter-spacing:0.03em;">Recipient</div>
+        <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;">RM</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#171A1F;">Rahul Mehta</div>
+            <div style="font-size:12px;color:#8A919D;">Sales Operations</div>
+            <div style="font-size:12px;color:#3B6EA8;">rahul.mehta@example.com</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:#8A919D;text-transform:uppercase;letter-spacing:0.03em;">Review requested by</div>
+        <div style="margin-top:8px;font-size:14px;font-weight:500;color:#171A1F;">Jaydeep Bhosale</div>
+        <div style="font-size:12px;color:#8A919D;">Finance &amp; Procurement</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

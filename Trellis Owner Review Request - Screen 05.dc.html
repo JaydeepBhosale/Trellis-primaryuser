@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1024px;background:#F8F9FA;display:grid;grid-template-columns:232px minmax(0,1fr);">
+
+  <nav style="background:#FFFFFF;border-right:1px solid #E5E7EB;padding:24px 0;display:flex;flex-direction:column;gap:28px;">
+    <div style="padding:0 24px;font-size:16px;font-weight:700;letter-spacing:0.04em;color:#171A1F;">TRELLIS</div>
+    <div style="display:flex;flex-direction:column;gap:2px;padding:0 12px;font-size:14px;">
+      <div style="padding:9px 12px;background:#F1F3F5;color:#171A1F;font-weight:600;border-radius:6px;">My requests</div>
+      <div style="position:relative;">
+        <div onClick="{{ toggleNotifications }}" style="padding:9px 12px;color:#3F4650;font-weight:400;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" style-hover="background:#F8F9FA;">
+          <span>Notifications</span>
+          <sc-if value="{{ unreadCount }}" hint-placeholder-val="{{ true }}">
+            <span style="background:#C73E3E;color:#fff;font-size:11px;font-weight:600;border-radius:8px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px;">{{ unreadCount }}</span>
+          </sc-if>
+        </div>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:0;left:100%;margin-left:8px;width:340px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;box-shadow:0 8px 24px rgba(23,26,31,0.14);z-index:10;overflow:hidden;">
+            <div style="padding:12px 16px;border-bottom:1px solid #E5E7EB;font-size:13px;font-weight:600;color:#171A1F;">Notifications</div>
+            <div style="padding:14px 16px;border-bottom:1px solid #E5E7EB;background:#F8F9FA;">
+              <div style="display:flex;justify-content:space-between;gap:8px;">
+                <span style="font-size:13px;font-weight:600;color:#171A1F;">Review requested</span>
+                <span style="font-size:11px;color:#8A919D;white-space:nowrap;">Today</span>
+              </div>
+              <div style="margin-top:4px;font-size:12px;line-height:17px;color:#5F6673;">Jaydeep Bhosale asked you to review the <span style="font-weight:600;color:#171A1F;">Salesforce</span> renewal before a decision is recorded.</div>
+              <a href="#" style="display:inline-block;margin-top:8px;font-size:12px;font-weight:600;color:#3B6EA8;">Review renewal →</a>
+            </div>
+            <div style="padding:14px 16px;">
+              <div style="display:flex;justify-content:space-between;gap:8px;">
+                <span style="font-size:13px;font-weight:500;color:#5F6673;">Renewal reminder</span>
+                <span style="font-size:11px;color:#8A919D;white-space:nowrap;">3 days ago</span>
+              </div>
+              <div style="margin-top:4px;font-size:12px;line-height:17px;color:#5F6673;">The Salesforce decision window closes soon. Your input is still needed.</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Subscriptions</div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Settings</div>
+    </div>
+    <div style="margin-top:auto;padding:16px 24px;border-top:1px solid #E5E7EB;display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;">RM</div>
+      <div style="display:flex;flex-direction:column;gap:1px;min-width:0;">
+        <span style="font-size:13px;font-weight:600;color:#171A1F;white-space:nowrap;">Rahul Mehta</span>
+        <span style="font-size:11px;color:#8A919D;white-space:nowrap;">Sales Operations</span>
+      </div>
+    </div>
+  </nav>
+
+  <div style="min-width:0;display:flex;justify-content:center;padding:48px 24px 60px;">
+    <div style="width:760px;">
+
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;color:#8A919D;text-transform:uppercase;">Renewal review request</div>
+      <h1 style="margin:6px 0 0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">Review the Salesforce renewal</h1>
+      <div style="margin-top:6px;font-size:14px;line-height:20px;color:#5F6673;">Jaydeep from Finance &amp; Procurement asked for your business context before the renewal decision is recorded.</div>
+      <div style="margin-top:6px;font-size:12px;color:#8A919D;">Requested today · Sep 25, 2026</div>
+
+      <div style="margin-top:24px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Salesforce</div>
+            <div style="font-size:13px;color:#8A919D;">CRM · Auto-renew</div>
+          </div>
+          <div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$180,000 / year</div>
+        </div>
+        <div style="margin-top:8px;font-size:13px;color:#5F6673;">Renews Sep 28, 2026</div>
+        <div style="margin-top:6px;display:flex;gap:16px;font-size:13px;color:#3F4650;">
+          <span>47 / 100 seats active · 47% utilization</span>
+          <span style="color:#B7791F;">+15.0% YoY price change</span>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;background:#FDECEC;border:1px solid #F3C9C9;border-radius:8px;padding:14px 16px;">
+        <div style="font-size:14px;font-weight:600;color:#171A1F;">Decision window closed</div>
+        <div style="margin-top:4px;font-size:13px;line-height:18px;color:#5F6673;">The standard cancellation notice deadline passed on Aug 29, 2026. This review is still useful for informing commercial terms, budget allocation, or stakeholder decisions.</div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <h2 style="margin:0;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Why this renewal is being reviewed</h2>
+        <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #E5E7EB;">
+            <span style="font-size:14px;font-weight:600;color:#171A1F;">$180K annual commitment</span>
+            <span style="font-size:13px;color:#5F6673;">Current annual contract value</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #E5E7EB;">
+            <span style="font-size:14px;font-weight:600;color:#171A1F;">47% utilization</span>
+            <span style="font-size:13px;color:#5F6673;">47 of 100 seats active</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;">
+            <span style="font-size:14px;font-weight:600;color:#B7791F;">+15.0% YoY price change</span>
+            <span style="font-size:13px;color:#5F6673;">+$23,478 compared with previous ACV</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:28px;">
+        <h2 style="margin:0;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">We need your input</h2>
+        <div style="margin-top:4px;font-size:14px;line-height:20px;color:#5F6673;">Please tell Finance what best describes the current business need for Salesforce.</div>
+
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
+          <label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid #D9DDE3;border-radius:8px;background:#FFFFFF;font-size:14px;color:#171A1F;cursor:pointer;">
+            <input type="radio" name="need" style="width:16px;height:16px;accent-color:#171A1F;"/>Salesforce is still required as-is
+          </label>
+          <label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid #D9DDE3;border-radius:8px;background:#FFFFFF;font-size:14px;color:#171A1F;cursor:pointer;">
+            <input type="radio" name="need" style="width:16px;height:16px;accent-color:#171A1F;"/>Salesforce is still required, but we need fewer seats
+          </label>
+          <label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid #D9DDE3;border-radius:8px;background:#FFFFFF;font-size:14px;color:#171A1F;cursor:pointer;">
+            <input type="radio" name="need" style="width:16px;height:16px;accent-color:#171A1F;"/>We'd like to discuss pricing or contract terms
+          </label>
+          <label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid #D9DDE3;border-radius:8px;background:#FFFFFF;font-size:14px;color:#171A1F;cursor:pointer;">
+            <input type="radio" name="need" style="width:16px;height:16px;accent-color:#171A1F;"/>We may no longer need Salesforce
+          </label>
+          <label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid #D9DDE3;border-radius:8px;background:#FFFFFF;font-size:14px;color:#171A1F;cursor:pointer;">
+            <input type="radio" name="need" style="width:16px;height:16px;accent-color:#171A1F;"/>I'm not sure
+          </label>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <h2 style="margin:0;font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">Anything Finance should know?</h2>
+          <span style="font-size:12px;color:#8A919D;">Optional</span>
+        </div>
+        <textarea placeholder="Add context about usage, upcoming changes, team needs, pricing, or other considerations." style="margin-top:8px;width:100%;min-height:110px;padding:12px;border:1px solid #D9DDE3;border-radius:6px;background:#FFFFFF;font-family:inherit;font-size:14px;line-height:20px;color:#171A1F;resize:vertical;"></textarea>
+      </div>
+
+      <div style="margin-top:28px;padding-top:20px;border-top:1px solid #E5E7EB;">
+        <div style="font-size:13px;line-height:18px;color:#5F6673;">Your response will be shared with Jaydeep and attached to the Salesforce renewal in Trellis.</div>
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <button style="height:40px;padding:0 20px;border:none;background:#171A1F;color:#FFFFFF;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#303640;">Submit review</button>
+          <button style="height:40px;padding:0 20px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#F1F3F5;">Save for later</button>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;text-align:center;font-size:12px;color:#8A919D;">Need help? Contact Finance &amp; Procurement.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { notifOpen: false };
+  renderVals() {
+    return {
+      notifOpen: this.state.notifOpen,
+      unreadCount: 1,
+      toggleNotifications: () => this.setState(s => ({ notifOpen: !s.notifOpen }))
+    };
+  }
+}
+</script>
+</body>
+</html>

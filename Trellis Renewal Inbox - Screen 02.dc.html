@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#171A1F">
+  <svg viewBox="0 0 120 56" xmlns="http://www.w3.org/2000/svg">
+    <rect x="14" y="14" width="92" height="6" fill="#fff"/>
+    <rect x="14" y="26" width="60" height="4" fill="#fff" opacity="0.8"/>
+    <rect x="14" y="34" width="45" height="4" fill="#fff" opacity="0.6"/>
+  </svg>
+</template>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#F8F9FA;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#171A1F;-webkit-font-smoothing:antialiased}
+  *{box-sizing:border-box;font-variant-numeric:tabular-nums}
+  a{color:#3B6EA8;text-decoration:none}a:hover{color:#171A1F;text-decoration:underline}
+</style>
+</helmet>
+
+<div style="width:1440px;min-height:1024px;display:grid;grid-template-columns:232px minmax(0,1fr);background:#F8F9FA;">
+
+  <nav style="background:#FFFFFF;border-right:1px solid #E5E7EB;padding:24px 0;display:flex;flex-direction:column;gap:28px;">
+    <div style="padding:0 24px;font-size:16px;font-weight:700;letter-spacing:0.04em;color:#171A1F;">TRELLIS</div>
+    <div style="display:flex;flex-direction:column;gap:2px;padding:0 12px;font-size:14px;">
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Overview</div>
+      <div style="padding:9px 12px;background:#F1F3F5;color:#171A1F;font-weight:600;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
+        <span>Renewal Inbox</span>
+        <span style="background:#C73E3E;color:#fff;font-size:11px;font-weight:600;border-radius:8px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px;">7</span>
+      </div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Subscriptions</div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Reports</div>
+      <div style="padding:9px 12px;color:#3F4650;font-weight:400;">Settings</div>
+    </div>
+    <div style="margin-top:auto;padding:16px 24px;border-top:1px solid #E5E7EB;display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;border-radius:6px;background:#F1F3F5;color:#5F6673;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;">JB</div>
+      <div style="display:flex;flex-direction:column;gap:1px;min-width:0;">
+        <span style="font-size:13px;font-weight:600;color:#171A1F;white-space:nowrap;">Jaydeep Bhosale</span>
+        <span style="font-size:11px;color:#8A919D;white-space:nowrap;">Finance &amp; Procurement</span>
+      </div>
+    </div>
+  </nav>
+
+  <main style="min-width:0;padding:28px 32px 48px;">
+
+    <header style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:1px solid #E5E7EB;">
+      <div>
+        <h1 style="margin:0;font-size:28px;line-height:34px;font-weight:600;color:#171A1F;">Renewal Inbox</h1>
+        <div style="margin-top:4px;font-size:14px;line-height:20px;font-weight:400;color:#5F6673;">Prioritized renewals that need attention before their decision windows close.</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:13px;font-weight:600;color:#171A1F;">Q3 renewal review</div>
+        <div style="margin-top:2px;font-size:12px;color:#8A919D;">23 upcoming renewals · $486K annual spend</div>
+      </div>
+    </header>
+
+    <section style="padding-top:14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <input placeholder="Search vendor, owner, or category" style="width:240px;height:34px;padding:0 12px;border:1px solid #D9DDE3;border-radius:6px;background:#FFFFFF;font-size:13px;color:#171A1F;font-family:inherit;"/>
+        <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Status ▾</button>
+        <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Decision window ▾</button>
+        <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Owner ▾</button>
+        <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Category ▾</button>
+        <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Renewal type ▾</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button style="height:34px;padding:0 12px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;">Sort: Priority ▾</button>
+        <button style="width:34px;height:34px;border:1px solid #D9DDE3;background:#FFFFFF;color:#3F4650;border-radius:6px;font-size:14px;cursor:pointer;">▤</button>
+      </div>
+    </section>
+
+    <section style="padding-top:12px;padding-bottom:16px;border-bottom:1px solid #E5E7EB;">
+      <div style="font-size:13px;color:#3F4650;">
+        <span style="font-weight:600;color:#C73E3E;">7 need attention</span>
+        <span style="color:#D9DDE3;"> · </span>
+        <span>3 decision windows closing</span>
+        <span style="color:#D9DDE3;"> · </span>
+        <span>16 upcoming</span>
+      </div>
+    </section>
+
+    <!-- ROW TEMPLATE STYLE NOTE: left vendor/category, center 3-stat block, right decision/owner/status, far-right action -->
+
+    <section style="padding-top:20px;">
+      <div style="font-size:13px;font-weight:600;color:#C73E3E;text-transform:uppercase;letter-spacing:0.03em;">Decision window closing</div>
+      <div style="margin-top:2px;font-size:13px;color:#5F6673;">Act before the notice period expires.</div>
+
+      <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#C73E3E;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Salesforce</div><div style="font-size:13px;color:#8A919D;">CRM</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$180,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">47 / 100 seats</div><div style="font-size:12px;color:#8A919D;">47% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#B7791F;">+15% YoY</div><div style="font-size:12px;color:#8A919D;">Auto-renew</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#FDECEC;color:#C73E3E;">Closes in 3 days</span>
+              <div style="margin-top:3px;font-size:12px;color:#8A919D;">Rahul Mehta</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">Review</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>High annual spend + low utilization + material price increase</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#C73E3E;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Adobe Creative Cloud</div><div style="font-size:13px;color:#8A919D;">Design</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$96,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">68 / 120 seats</div><div style="font-size:12px;color:#8A919D;">57% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#B7791F;">+8% YoY</div><div style="font-size:12px;color:#8A919D;">Auto-renew</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#FDECEC;color:#C73E3E;">Closes in 5 days</span>
+              <div style="margin-top:3px;font-size:12px;color:#8A919D;">Priya Shah</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">Review</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>Meaningful unused capacity + material price increase</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#C73E3E;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Datadog</div><div style="font-size:13px;color:#8A919D;">Monitoring</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$65,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">182 / 200 seats</div><div style="font-size:12px;color:#8A919D;">91% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#3F4650;">+3% YoY</div><div style="font-size:12px;color:#8A919D;">Manual</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#FDECEC;color:#C73E3E;">Closes in 7 days</span>
+              <div style="margin-top:3px;font-size:12px;color:#8A919D;">Arjun Nair</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">Review</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>Renewal decision approaching; a manual, high-utilization contract that still needs a timely call</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section style="padding-top:24px;">
+      <div style="font-size:13px;font-weight:600;color:#B7791F;text-transform:uppercase;letter-spacing:0.03em;">Review recommended</div>
+      <div style="margin-top:2px;font-size:13px;color:#5F6673;">Signals suggest these renewals are worth reviewing, but decision time remains.</div>
+
+      <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#B7791F;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Figma</div><div style="font-size:13px;color:#8A919D;">Design</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$45,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">42 / 100 seats</div><div style="font-size:12px;color:#8A919D;">42% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#3F4650;">+2% YoY</div><div style="font-size:12px;color:#8A919D;">Manual</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#FFF7E6;color:#B7791F;">32 days to decide</span>
+              <div style="margin-top:3px;font-size:12px;color:#8A919D;">Sara Kulkarni</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">Review</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>Low seat utilization</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#B7791F;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Slack</div><div style="font-size:13px;color:#8A919D;">Communication</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$45,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">152 / 200 seats</div><div style="font-size:12px;color:#8A919D;">76% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#3F4650;">+4% YoY</div><div style="font-size:12px;color:#8A919D;">Auto-renew</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#FFF7E6;color:#B7791F;">47 days to decide</span>
+              <div style="margin-top:3px;font-size:12px;color:#C73E3E;font-weight:500;">Unassigned</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">Assign owner</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>No assigned owner to confirm usage before the decision date</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#B7791F;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">GitHub Enterprise</div><div style="font-size:13px;color:#8A919D;">Developer tools</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$72,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">185 / 200 seats</div><div style="font-size:12px;color:#8A919D;">93% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#3F4650;">0% YoY</div><div style="font-size:12px;color:#8A919D;">Manual</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#FFF7E6;color:#B7791F;">50 days to decide</span>
+              <div style="margin-top:3px;font-size:12px;color:#8A919D;">Amit Deshmukh</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">Review</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>Manual renewal review upcoming; high utilization, stable price</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section style="padding-top:24px;">
+      <div style="font-size:13px;font-weight:600;color:#5F6673;text-transform:uppercase;letter-spacing:0.03em;">Upcoming</div>
+      <div style="margin-top:2px;font-size:13px;color:#5F6673;">No immediate review signals.</div>
+
+      <div style="margin-top:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;">
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-bottom:1px solid #E5E7EB;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#D9DDE3;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Zoom</div><div style="font-size:13px;color:#8A919D;">Video conferencing</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$18,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">88 / 100 seats</div><div style="font-size:12px;color:#8A919D;">88% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#3F4650;">+1% YoY</div><div style="font-size:12px;color:#8A919D;">Manual</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#F1F3F5;color:#5F6673;">82 days to decide</span>
+              <div style="margin-top:3px;font-size:12px;color:#8A919D;">Amit Deshmukh</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">View</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>No immediate review signals</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px 16px;">
+          <div style="display:grid;grid-template-columns:4px 190px repeat(3,1fr) 150px 90px;gap:16px;align-items:center;">
+            <div style="width:4px;height:32px;border-radius:2px;background:#D9DDE3;"></div>
+            <div><div style="font-size:15px;line-height:20px;font-weight:600;color:#171A1F;">Notion</div><div style="font-size:13px;color:#8A919D;">Productivity</div></div>
+            <div><div style="font-size:18px;line-height:24px;font-weight:600;color:#171A1F;">$24,000</div><div style="font-size:12px;color:#8A919D;">/ year</div></div>
+            <div><div style="font-size:14px;color:#171A1F;">94 / 100 seats</div><div style="font-size:12px;color:#8A919D;">94% active</div></div>
+            <div><div style="font-size:14px;font-weight:500;color:#3F4650;">0% YoY</div><div style="font-size:12px;color:#8A919D;">Manual</div></div>
+            <div>
+              <span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:#F1F3F5;color:#5F6673;">108 days to decide</span>
+              <div style="margin-top:3px;font-size:12px;color:#8A919D;">Meera Joshi</div>
+            </div>
+            <button style="height:34px;padding:0 14px;border:1px solid #D9DDE3;background:#FFFFFF;color:#303640;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;justify-self:end;" style-hover="background:#F1F3F5;">View</button>
+          </div>
+          <div style="padding-left:20px;font-size:12px;color:#5F6673;"><span style="font-weight:600;color:#3F4650;">Why review — </span>No immediate review signals</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section style="padding-top:20px;">
+      <div style="background:#F1F3F5;border-radius:8px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start;">
+        <span style="font-size:13px;color:#8A919D;flex-shrink:0;">ⓘ</span>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:#3F4650;">Example: decision window closed — Zendesk</div>
+          <div style="margin-top:2px;font-size:12px;line-height:17px;color:#5F6673;max-width:70ch;">The renewal is still upcoming, but the cancellation notice window has already closed. This is different from a renewal that's closing soon — it means cancellation may no longer be possible through the normal process. You can still review commercial terms, budget allocation, and stakeholder decisions before the renewal date.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</x-dc>
+</body>
+</html>
